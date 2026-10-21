@@ -1,0 +1,4 @@
+# Windows 실행 파일: 어느 OS에서 받아도 줄바꿈 CRLF 유지
+*.bat text eol=crlf
+# UTF-16으로 저장한 VBS (한글 경로용): 그대로 보관
+*.vbs -text

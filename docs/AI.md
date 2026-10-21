@@ -45,6 +45,20 @@ run_ai.bat                    # Mac/Linux: ./run_ai.sh
 
 서버 상태 확인: http://localhost:8000/api/health → 백엔드, 모델, 장소 검색 종류
 
+### 컴퓨터를 켜면 자동으로 (Windows)
+
+`run_ai.bat`을 한 번 실행해 설치를 마친 뒤 `server/autostart_on.bat`을 더블클릭하면, 그다음부터는 Windows를 켤 때 AI 서버가 **창 없이** 자동으로 켜져요.
+Ollama는 설치할 때 이미 시작 프로그램에 들어가 있어서, 브라우저에서 http://localhost:8000 만 열면 돼요.
+
+| 파일 | 하는 일 |
+|---|---|
+| `autostart_on.bat` | 시작 프로그램에 `dul-ai-server` 바로가기를 넣고 지금 바로 켬 |
+| `autostart_off.bat` | 바로가기를 지우고 켜져 있는 AI 서버(8000번 포트)를 끔 |
+| `start_ai.bat` / `start_ai_hidden.vbs` | 자동 시작이 실제로 실행하는 파일 (시연판 다시 빌드 → 서버 실행) |
+| `ai_server.log` | 서버 기록. AI가 안 될 때 여기부터 확인 |
+
+AI 서버는 `server/.venv`의 Python만 써요. PC에 Python이 여러 개 있어도 패키지를 못 찾는 일이 없게 하려고요.
+
 ### .env 설정
 
 | 이름 | 설명 |

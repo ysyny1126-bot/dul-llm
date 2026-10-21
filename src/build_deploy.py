@@ -210,9 +210,9 @@ GitHub 저장소에는 `gh-pages` 브랜치에 사이트 파일이 올라가 있
 
 1. GitHub 저장소 → **Settings → Pages**
 2. **Source: Deploy from a branch**, **Branch: `gh-pages` / `(root)`** → Save
-3. 1~2분 뒤 `https://ysyny1126-bot.github.io/dul/` 에서 열려요.
-   - `.../dul/demo.html` : 가상 회원 500명 시연판 (설정 없이 바로 동작, 새로고침하면 기록이 사라짐)
-   - `.../dul/` : 실제 서비스. 아래 설정을 넣기 전에는 "서버 연결 전" 안내가 나와요.
+3. 1~2분 뒤 `https://ysyny1126-bot.github.io/dul-llm/` 에서 열려요.
+   - `.../dul-llm/demo.html` : 가상 회원 500명 시연판 (설정 없이 바로 동작, 새로고침하면 기록이 사라짐)
+   - `.../dul-llm/` : 실제 서비스. 아래 설정을 넣기 전에는 "서버 연결 전" 안내가 나와요.
 
 실제 서비스를 GitHub Pages에서 쓰려면 (Firebase 콘솔만 쓰고 터미널은 필요 없어요):
 1. 위 "1. Firebase 콘솔에서 준비"를 해요 (이메일/비밀번호 로그인, Firestore).
