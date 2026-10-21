@@ -107,6 +107,12 @@ python3 build_app.py              # 시연판 gyeol_app.html (가상 회원 500�
 python3 build_deploy.py ..        # 배포판 public/index.html (실제 회원 전용)
 ```
 
+## 가장 쉬운 실행 (Windows)
+
+폴더 맨 위의 **`둘 실행.bat`**을 더블클릭하면 Ollama와 AI 서버를 켜고 브라우저로 http://localhost:8000 을 열어요 (이미 켜져 있으면 바로 열어요).
+처음 한 번은 AI 서버용 Python 환경을 만드느라 1~2분 걸려요. 끄려면 **`둘 끄기.bat`**.
+컴퓨터를 켤 때 자동으로 켜지게 하려면 `server/autostart_on.bat`을 한 번 실행하세요.
+
 ## AI 기능까지 켜서 실행 (내 컴퓨터)
 
 ```bash
