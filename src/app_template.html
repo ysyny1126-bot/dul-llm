@@ -313,6 +313,7 @@ tr.pen td { color: var(--bad); }
 .pc-head { display: flex; align-items: flex-end; gap: 10px; padding-left: 4px; }
 .pc-letter { font-family: var(--font-display); font-size: 54px; line-height: .78; font-weight: 800; background: linear-gradient(180deg, var(--accent), var(--mint)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .pc-kind { font-size: 13px; font-weight: 700; color: var(--accent); padding-bottom: 1px; }
+.pc-head .tier { margin-bottom: 2px; }
 .pc-head .new { background: var(--pink); color: var(--pink-ink); border-radius: 6px; padding: 1px 6px; font-size: 11px; font-weight: 700; margin-bottom: 2px; }
 .pc-box { background: var(--surface); border-radius: 24px; padding: 18px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; }
 .pc-top { display: flex; gap: 14px; align-items: center; }
@@ -339,44 +340,75 @@ tr.pen td { color: var(--bad); }
 .state.wait::after { content: ""; animation: aidots 1.2s steps(4) infinite; }
 .note-in { width: 100%; border: 1px solid var(--line); background: var(--paper); border-radius: 999px; padding: 10px 16px; margin-bottom: 10px; }
 .msg-sys.note { color: var(--pink-ink); background: var(--pink); font-weight: 400; max-width: 90%; text-align: center; }
-/* ---------- 매칭 성사 ---------- */
+/* ---------- 매칭 성사: 상대 얼굴 크게, 궁합 점수, 키워드 작게 ---------- */
 .overlay.celeb { align-items: center; z-index: 25; }
-.celeb .scrim { background: radial-gradient(circle at 50% 40%, rgba(255, 211, 226, .5), rgba(31, 33, 71, .72)); }
-.celeb-card { position: relative; width: min(440px, calc(100% - 32px)); max-height: calc(100% - 32px); overflow-y: auto; overscroll-behavior: contain; background: var(--app); border-radius: 28px; padding: 26px 20px 20px; display: flex; flex-direction: column; gap: 12px; text-align: center; box-shadow: 0 20px 60px rgba(31, 33, 71, .4); }
-.celeb-card.anim { animation: celebIn .45s cubic-bezier(.2, 1.3, .4, 1) both; }   /* 처음 뜰 때만 (다시 그릴 때마다 반복되지 않게) */
-.celeb-card h2 { font-size: 28px; color: var(--accent); }
-.celeb-card > p { margin: 0; color: var(--muted); font-size: 14px; }
-.celeb-pair { display: flex; justify-content: center; align-items: center; height: 104px; position: relative; }
-.celeb-av { width: 96px; height: 96px; border-radius: 50%; box-shadow: 0 0 0 4px var(--surface), 0 8px 24px rgba(91, 95, 224, .3); }
-.celeb-av .ini { font-size: 38px; }
-.celeb-av.l { margin-right: -6px; }
-.anim .celeb-av.l { animation: slideL .6s .1s cubic-bezier(.2, 1.2, .4, 1) both; }
-.celeb-av.r { margin-left: -6px; }
-.anim .celeb-av.r { animation: slideR .6s .1s cubic-bezier(.2, 1.2, .4, 1) both; }
-.celeb-heart { position: absolute; left: 50%; top: 50%; width: 46px; height: 46px; margin: -23px 0 0 -23px; border-radius: 50%; background: var(--pink); color: var(--heart); display: grid; place-items: center; z-index: 1; box-shadow: 0 4px 14px rgba(214, 51, 108, .35); }
-.anim .celeb-heart { animation: pop .5s .55s cubic-bezier(.2, 1.6, .4, 1) both; }
-.celeb-heart svg { width: 24px; height: 24px; fill: currentColor; }
-.celeb-spark { position: absolute; inset: 0; pointer-events: none; overflow: hidden; border-radius: inherit; }
-.celeb-spark i { position: absolute; top: -14px; width: 8px; height: 12px; border-radius: 2px; opacity: .9; animation: fall 2.6s linear infinite; }
-.celeb-open { display: flex; flex-direction: column; gap: 6px; text-align: left; background: var(--accent-soft); border-radius: 18px; padding: 12px; }
-.celeb-open b { font-size: 13px; color: var(--accent); }
-.celeb-open button { border: 0; background: var(--surface); color: var(--ink); border-radius: 14px; padding: 10px 12px; min-height: 44px; text-align: left; font-size: 14px; cursor: pointer; }
-.celeb-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.celeb-next { text-align: left; font-size: 13px; }
+.celeb .scrim { background: radial-gradient(circle at 50% 35%, rgba(142, 145, 238, .55), rgba(15, 16, 36, .9) 72%); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.celeb2 { position: relative; z-index: 1; width: min(400px, calc(100% - 32px)); max-height: calc(100% - 20px); overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; padding: 6px 2px 14px; color: #FFFFFF; }
+.celeb-tag { font-family: var(--font-logo); font-size: 38px; line-height: 1.1; font-weight: 700; text-shadow: 0 0 18px rgba(255, 141, 181, .8), 0 2px 0 rgba(0, 0, 0, .15); }
+.celeb-tag span { color: #FF8DB5; }
+.celeb-photo { position: relative; width: 100%; aspect-ratio: 4 / 5; max-height: 50vh; border-radius: 30px; overflow: hidden; flex: none; box-shadow: 0 0 0 3px rgba(255, 255, 255, .85), 0 0 46px rgba(255, 141, 181, .55), 0 24px 60px rgba(0, 0, 0, .45); transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .2s ease-out; touch-action: pan-y; }
+.celeb-photo .celeb-big { width: 100%; height: 100%; }
+.celeb-big .ini { font-size: 150px; }
+.celeb-shine { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at var(--mx, 30%) var(--my, 18%), rgba(255, 255, 255, .5), transparent 42%); mix-blend-mode: soft-light; }
+.celeb-shine::after { content: ""; position: absolute; inset: -20% -60%; background: linear-gradient(110deg, transparent 40%, rgba(255, 255, 255, .45) 50%, transparent 60%); transform: translateX(-60%); }
+.anim .celeb-shine::after { animation: sweep 1.4s .7s ease-out both; }
+.celeb-who { position: absolute; left: 0; right: 0; bottom: 0; padding: 70px 18px 16px; background: linear-gradient(transparent, rgba(15, 16, 36, .82)); text-align: left; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.celeb-who b { font-size: 30px; font-weight: 800; line-height: 1.2; }
+.celeb-who > span:not(.tier) { font-size: 15px; opacity: .92; }
+.celeb-me { position: absolute; top: 14px; left: 14px; display: flex; align-items: center; gap: 6px; background: rgba(15, 16, 36, .45); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-radius: 999px; padding: 4px 12px 4px 4px; font-size: 12px; }
+.celeb-me > span { color: #FF8DB5; }
+.celeb-score { display: flex; align-items: baseline; justify-content: center; gap: 6px; margin-top: 2px; }
+.celeb-score b { font-size: 68px; line-height: 1; font-weight: 800; background: linear-gradient(180deg, #FFFFFF 30%, #FFC2D6); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 4px 18px rgba(255, 141, 181, .65)); }
+.celeb-score small { font-size: 15px; font-weight: 700; opacity: .9; }
+.celeb-kw { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.celeb-kw span { font-size: 12px; padding: 3px 10px; border-radius: 999px; background: rgba(255, 255, 255, .14); border: 1px solid rgba(255, 255, 255, .28); }
+.celeb-note { margin: 0; font-size: 13px; color: #FFE3EC; }
+.celeb-go { width: 100%; min-height: 52px; font-size: 16px; border: 0; color: #FFFFFF; background: linear-gradient(120deg, #FF8DB5, #A3A6FF); box-shadow: 0 10px 30px rgba(255, 141, 181, .45); }
+.celeb-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
+.celeb2 .btn.line { color: #FFFFFF; border-color: rgba(255, 255, 255, .45); background: rgba(255, 255, 255, .08); }
+.celeb-next { text-align: left; font-size: 13px; width: 100%; }
 .celeb-next summary { cursor: pointer; color: var(--accent); font-weight: 700; padding: 8px 0; }
+.celeb2 .celeb-next summary { color: #C3C5FF; }
 .rules { margin: 4px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; line-height: 1.5; }
 .rules b { color: var(--accent); }
+.celeb2 .rules b { color: #FFC2D6; }
+.anim .celeb-tag { animation: tagIn .6s cubic-bezier(.2, 1.5, .4, 1) both; }
+.anim .celeb-photo { animation: photoIn .8s .1s cubic-bezier(.2, 1.2, .3, 1) both; }
+.anim .celeb-score, .anim .celeb-kw, .anim .celeb-go { animation: upIn .5s .55s ease-out both; }
+#burst { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 45; }
+/* ---------- 프로필 등급 ---------- */
+.tier { display: inline-flex; align-items: center; gap: 3px; font-size: 11.5px; font-weight: 800; padding: 1px 9px; border-radius: 999px; color: #FFFFFF; background: linear-gradient(120deg, var(--tc), color-mix(in srgb, var(--tc) 55%, #FFFFFF)); box-shadow: 0 2px 8px color-mix(in srgb, var(--tc) 40%, transparent); white-space: nowrap; vertical-align: 2px; }
+.tier-card { display: flex; flex-direction: column; gap: 10px; position: relative; overflow: hidden; }
+.tier-card::before { content: ""; position: absolute; inset: 0 0 auto; height: 6px; background: linear-gradient(90deg, var(--tc), color-mix(in srgb, var(--tc) 40%, #FFFFFF)); }
+.tier-top { display: flex; align-items: center; gap: 12px; }
+.tier-gem { width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; font-size: 26px; color: #FFFFFF; background: linear-gradient(140deg, var(--tc), color-mix(in srgb, var(--tc) 45%, #FFFFFF)); box-shadow: 0 6px 18px color-mix(in srgb, var(--tc) 45%, transparent); flex: none; }
+.tier-top > div { flex: 1; display: flex; flex-direction: column; }
+.tier-top small { font-size: 12px; color: var(--muted); }
+.tier-top b { font-size: 22px; }
+.tier-score { font-size: 28px; font-weight: 800; color: var(--accent); }
+.tier-score small { font-size: 13px; color: var(--muted); }
+.tier-track { position: relative; height: 10px; border-radius: 99px; background: var(--accent-soft); }
+.tier-track i { position: absolute; inset: 0 auto 0 0; border-radius: inherit; background: linear-gradient(90deg, var(--mint), var(--tc)); }
+.tier-track span { position: absolute; top: -3px; width: 2px; height: 16px; background: var(--surface); }
+.tier-steps { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-top: -4px; }
+.tier-items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.tier-items li { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.tier-items li b { color: var(--accent); }
+.tier-items li.done b::after { content: " ✓"; color: var(--good); }
+.tier-items li small { grid-column: 1 / -1; font-size: 12px; color: var(--heart); }
+/* ---------- 움직이는 배경 (WebGL) ---------- */
+#bg-gl { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+html.gl #app { background: color-mix(in srgb, var(--app) 52%, transparent); box-shadow: none; }
 .typing { display: flex; gap: 4px; padding: 14px; }
 .typing i { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); animation: blink 1.2s infinite; }
 .typing i:nth-child(2) { animation-delay: .2s; }
 .typing i:nth-child(3) { animation-delay: .4s; }
-@keyframes celebIn { from { transform: scale(.85); opacity: 0; } }
-@keyframes slideL { from { transform: translateX(-80px); opacity: 0; } }
-@keyframes slideR { from { transform: translateX(80px); opacity: 0; } }
-@keyframes pop { from { transform: scale(0); } }
-@keyframes fall { to { transform: translateY(620px) rotate(540deg); } }
+@keyframes tagIn { from { transform: scale(.4); opacity: 0; } }
+@keyframes photoIn { from { transform: perspective(900px) rotateY(-40deg) scale(.7); opacity: 0; } }
+@keyframes upIn { from { transform: translateY(14px); opacity: 0; } }
+@keyframes sweep { to { transform: translateX(60%); } }
 @keyframes blink { 0%, 80%, 100% { opacity: .25; } 40% { opacity: 1; } }
-@media (prefers-reduced-motion: reduce) { .celeb-card, .celeb-av, .celeb-heart { animation: none; } .celeb-spark { display: none; } }
+@media (prefers-reduced-motion: reduce) { .anim .celeb-tag, .anim .celeb-photo, .anim .celeb-score, .anim .celeb-kw, .anim .celeb-go, .anim .celeb-shine::after { animation: none; } }
 
 /* ---------- 취향 핫플 지도 ---------- */
 .hot-entry { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; border: 0; cursor: pointer; border-radius: 20px; padding: 12px 14px; color: #FFFFFF; background: linear-gradient(120deg, #5B5FE0, #9C7BEA 60%, #F08DB0); box-shadow: 0 8px 20px rgba(91, 95, 224, .28); flex: none; }
@@ -865,7 +897,10 @@ function world() {
   if (cache && cache.ver === ver && cache.uid === S.uid) return cache;
   const list = allProfiles().filter(p => !isSuspended(p.id) || p.id === S.uid);
   const byId = Object.fromEntries(list.map(p => [p.id, p]));
-  cache = { ver, uid: S.uid, list, byId, ...E.computeAll(list, settingsOf, { isBlocked: (a, b) => isBlocked(a, b) || hiddenPair(a, b) }) };
+  // 비슷한 등급끼리: 등급이 2단계 이상 차이 나면 서로 추천하지 않음 (회원이 TIER_MIN명 이상일 때만)
+  const tierOn = list.length >= TIER_MIN, ti = tierOn ? Object.fromEntries(list.map(p => [p.id, tierOf(p).i])) : {};
+  const tierGap = (a, b) => tierOn && Math.abs(ti[a] - ti[b]) >= 2;
+  cache = { ver, uid: S.uid, list, byId, tierOn, ...E.computeAll(list, settingsOf, { isBlocked: (a, b) => isBlocked(a, b) || hiddenPair(a, b) || tierGap(a, b) }) };
   return cache;
 }
 // 화면에 보이는 추천만 근거를 자세히 계산해서 붙임 (같은 계산 결과 안에서는 다시 안 함)
@@ -889,6 +924,33 @@ function matchesOf(uid) {
   return out.filter(x => w.byId[x.id]);
 }
 const isMatched = (a, b) => matchesOf(a).some(x => x.id === b);
+
+// ---------------- 프로필 등급 ----------------
+// 얼굴이 아니라 '프로필을 얼마나 정성껏 채우고 관리하는지'로 매기는 100점짜리 점수.
+// 비슷한 등급(±1)끼리 추천해서, 좋은 사람을 만나려면 내 프로필부터 관리하게 함.
+const TIERS = [["브론즈", 0, "#B98A5E"], ["실버", 50, "#8D97AD"], ["골드", 65, "#D9A521"], ["플래티넘", 80, "#33B5BD"], ["다이아", 90, "#8E7CFF"]];
+function profileScore(p) {
+  const base = !REAL && BASE.profiles.some(b => b.id === p.id);   // 시연판 가상 회원은 인증·접속 기록이 없어서 번호로 정해 둠
+  const items = [], add = (label, got, max, tip) => items.push({ label, got, max, tip });
+  add("프로필 사진", p.photo || p.has_photo ? 20 : 0, 20, "사진을 올리면 +20");
+  add("사진 인증", isVerified(p.id) || (base && unit("v" + p.id) < 0.35) ? 20 : 0, 20, "셀카로 사진 인증을 하면 +20");
+  const bl = (p.bio || "").trim().length;
+  add("자기소개", bl >= 60 ? 20 : bl >= 30 ? 14 : bl >= 15 ? 8 : bl ? 4 : 0, 20, `자기소개를 ${bl >= 30 ? 60 : bl >= 15 ? 30 : 15}자 넘게 쓰면 올라가요 (지금 ${bl}자)`);
+  const ni = p.interests.length;
+  add("관심사", (ni >= 5 ? 10 : ni >= 4 ? 8 : ni >= 3 ? 6 : ni >= 2 ? 3 : 0) + (p.favorite_tag ? 5 : 0), 15, "관심사를 5개까지 고르고, 가장 좋아하는 하나에 ★★★을 주세요");
+  add("기본 정보", (p.job ? 5 : 0) + (p.height ? 5 : 0) + (p.mbti ? 5 : 0), 15, "직업·키·MBTI를 채우면 하나에 +5");
+  const seen = p.id === S.uid ? Date.now() : S.users[p.id]?.seenAt || (base ? Date.now() - unit("s" + p.id) * 10 * 864e5 : 0);
+  const days = (Date.now() - seen) / 864e5;
+  add("최근 활동", days <= 3 ? 10 : days <= 7 ? 6 : seen ? 2 : 0, 10, "자주 들어오면 +10");
+  return { score: items.reduce((t, x) => t + x.got, 0), items };
+}
+function tierOf(p) {
+  const { score, items } = profileScore(p);
+  let i = 0; TIERS.forEach((t, k) => { if (score >= t[1]) i = k; });
+  return { i, name: TIERS[i][0], color: TIERS[i][2], score, items, next: TIERS[i + 1] || null };
+}
+const tierBadge = p => { const t = tierOf(p); return `<span class="tier" style="--tc:${t.color}" title="프로필 등급 ${t.name}">◆ ${t.name}</span>`; };
+const TIER_MIN = 40;   // 회원이 이만큼은 있어야 등급으로 나눠 추천 (적을 때 나누면 추천할 사람이 없어짐)
 
 // ---------------- 매칭 후 다음 매칭 ----------------
 // 동시에 대화하는 매칭은 MATCH_CAP명까지. 꽉 차면 새 좋아요는 한 명과 대화를 마친 뒤에.
@@ -977,29 +1039,86 @@ function openersFor(me, o, r) {
   out.push(`${o.weekend === "out" ? "주말엔 밖으로 나가는 편" : "주말엔 집에서 쉬는 편"}이시죠? 이번 주말엔 뭐 하세요?`);
   return out.slice(0, 3);
 }
+// 공통점을 짧은 키워드로 (성사 화면은 얼굴과 점수가 주인공이라 나머지는 작게)
+function matchKeywords(o, r) {
+  const kw = [...(r?.reasons.find(x => x.key === "interests")?.hits.slice(0, 2).map(h => h.theirs) || [])];   // 같이 좋아하는 관심사를 맨 앞에
+  for (const x of r ? r.reasons : []) {
+    if (x.key === "interests") continue;
+    else if (x.key === "chronotype") kw.push(`둘다${KO[x.value]}`);
+    else if (x.key === "weekend") kw.push(x.value === "home" ? "주말엔집콕" : "주말엔밖으로");
+    else if (x.key === "contact_style") kw.push(x.value === "frequent" ? "연락자주" : "연락은가끔");
+    else if (x.key === "marriage_view") kw.push("결혼관일치");
+    else if (x.key === "drinking") kw.push(x.value === "none" ? "둘다논알콜" : "술취향비슷");
+    else if (x.key === "spending") kw.push("소비성향비슷");
+    else if (x.key === "distance") kw.push(`${Math.max(1, Math.round(x.value))}km거리`);
+    else if (x.key === "taste") kw.push("취향결비슷");
+  }
+  kw.push(personaOf(o).type.replace(/ /g, ""));
+  return [...new Set(kw)].slice(0, 6);
+}
 function celebrateView(me) {
   const w = world(), c = S.celebrate, o = c && w.byId[c.id];
   if (!o) return "";
   const r0 = w.lists[me.id].recs.find(x => x.id === o.id), r = r0 ? full(me.id, r0) : null;
-  const reasons = r ? r.reasons.slice(0, 3).map(reasonText).filter(Boolean) : [];
-  const how = c.via === "auto" ? "서로가 서로의 1순위 추천이라 자동으로 연결됐어요" : `${o.nickname}님도 ${me.nickname}님에게 좋아요를 눌렀어요`;
-  const note = S.likes[`${o.id}_${me.id}`]?.note;
-  const spark = Array.from({ length: 14 }, (_, i) => `<i style="left:${(i * 7.3 + 3) % 100}%;animation-delay:${(i % 7) * .35}s;background:${i % 3 ? "var(--pink)" : "var(--mint)"}"></i>`).join("");
-  return `<div class="overlay celeb" role="dialog" aria-modal="true" aria-label="매칭 성사">
+  const score = r ? Math.round(r.score) : null, note = S.likes[`${o.id}_${me.id}`]?.note;
+  return `<div class="overlay celeb" role="dialog" aria-modal="true" aria-label="${esc(o.nickname)}님과 매칭 성사">
     <div class="scrim" data-act="celeb-close"></div>
-    <div class="celeb-card${c.fresh ? " anim" : ""}">
-      <div class="celeb-spark" aria-hidden="true">${spark}</div>
-      <div class="celeb-pair">${photo(me, "celeb-av l")}<span class="celeb-heart" aria-hidden="true">${ICON.heart}</span>${photo(o, "celeb-av r")}</div>
-      <h2>매칭 성사!</h2>
-      <p>${esc(how)}</p>
-      ${note ? `<div class="msg-sys note" style="align-self:center">♥ ${esc(o.nickname)}님의 한마디 · “${esc(note)}”</div>` : ""}
-      ${reasons.length ? `<div class="pc-tags" style="justify-content:center">${reasons.map(x => `<span class="hit">${esc(x)}</span>`).join("")}</div>` : ""}
-      ${hotEntry(me, o)}
-      <div class="celeb-open"><b>첫 인사, 이렇게 해보세요 (누르면 입력창에 들어가요)</b>${openersFor(me, o, r).map((t, i) => `<button type="button" data-act="celeb-say" data-id="${o.id}" data-i="${i}">${esc(t)}</button>`).join("")}</div>
-      <button class="btn" data-act="celeb-chat" data-id="${o.id}">대화 시작하기</button>
-      <div class="celeb-row"><button class="btn line sm" data-act="focus" data-id="${o.id}">이 사람에게 집중하기</button><button class="btn line sm" data-act="celeb-close">계속 둘러보기</button></div>
-      <details class="celeb-next"><summary>다음 매칭은 어떻게 되나요?</summary>${nextRules(matchesOf(me.id).length)}</details>
+    <div class="celeb2${c.fresh ? " anim" : ""}">
+      <div class="celeb-tag">It's a Match <span>♥</span></div>
+      <div class="celeb-photo" id="celeb-photo">${photo(o, "celeb-big")}<span class="celeb-shine" aria-hidden="true"></span>
+        <div class="celeb-me">${photo(me, "av mini")}<span>♥</span>${c.via === "auto" ? "서로의 1순위라 자동 연결" : "서로 좋아요"}</div>
+        <div class="celeb-who"><b>${esc(o.nickname)}</b><span>${o.age}세 · ${esc(o.region.replace(/^(서울|경기|인천) /, ""))}</span>${tierBadge(o)}</div>
+      </div>
+      ${score != null ? `<div class="celeb-score"><small>궁합</small><b class="num" data-count="${score}">${c.fresh ? 0 : score}</b><small>점</small></div>` : ""}
+      <div class="celeb-kw">${matchKeywords(o, r).map(k => `<span>#${esc(k)}</span>`).join("")}</div>
+      ${note ? `<p class="celeb-note">“${esc(note)}”</p>` : ""}
+      <button class="btn celeb-go" data-act="celeb-chat" data-id="${o.id}">대화 시작하기</button>
+      <div class="celeb-row"><button class="btn line sm" data-act="hotopen" data-id="${o.id}">📍 취향 핫플</button><button class="btn line sm" data-act="celeb-close">나중에</button></div>
+      <details class="celeb-next"><summary>다음 매칭은 어떻게 되나요?</summary>${nextRules(matchesOf(me.id).length)}<button class="btn line sm" style="margin-top:10px" data-act="focus" data-id="${o.id}">이 사람에게 집중하기</button></details>
     </div></div>`;
+}
+// 성사 화면 효과: 사진이 손가락을 따라 3D로 기울고 빛이 반사됨. 처음 뜰 때는 점수가 0부터 올라가고 하트가 터짐
+function celebFx(fresh) {
+  const card = document.getElementById("celeb-photo");
+  if (!card) return;
+  const tilt = (x, y) => { card.style.setProperty("--ry", (x - .5) * 18 + "deg"); card.style.setProperty("--rx", (.5 - y) * 14 + "deg"); card.style.setProperty("--mx", x * 100 + "%"); card.style.setProperty("--my", y * 100 + "%"); };
+  card.onpointermove = e => { const b = card.getBoundingClientRect(); tilt((e.clientX - b.left) / b.width, (e.clientY - b.top) / b.height); };
+  card.onpointerleave = () => tilt(.5, .5);
+  if (!fresh) return;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const num = document.querySelector(".celeb-score b[data-count]");
+  if (num) {
+    const to = +num.dataset.count, t0 = performance.now();
+    const step = now => { if (!num.isConnected) return; const k = Math.min(1, (now - t0) / 1200); num.textContent = Math.round(to * (1 - (1 - k) ** 3)); if (k < 1) requestAnimationFrame(step); };
+    if (reduce) num.textContent = to; else setTimeout(() => requestAnimationFrame(step), 500);
+  }
+  if (!reduce) { const b = card.getBoundingClientRect(); burst(b.left + b.width / 2, b.top + b.height * .45); }
+}
+// 하트·반짝이 터뜨리기 (화면을 다시 그려도 끊기지 않게 #app 밖의 캔버스에)
+function burst(cx, cy) {
+  let cv = document.getElementById("burst");
+  if (!cv) { cv = document.createElement("canvas"); cv.id = "burst"; cv.setAttribute("aria-hidden", "true"); document.body.appendChild(cv); }
+  const k = Math.min(devicePixelRatio || 1, 2), ctx = cv.getContext("2d");
+  cv.width = innerWidth * k; cv.height = innerHeight * k; ctx.setTransform(k, 0, 0, k, 0, 0);
+  const COLORS = ["#FF8DB5", "#FFC2D6", "#A3A6FF", "#FFFFFF", "#C3C5FF", "#FFD36E"];
+  const parts = Array.from({ length: 70 }, (_, i) => { const a = Math.random() * Math.PI * 2, v = 4 + Math.random() * 9;
+    return { x: cx, y: cy, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 4, s: 6 + Math.random() * 10, r: Math.random() * 6, vr: (Math.random() - .5) * .3, c: COLORS[i % COLORS.length], heart: i % 3 !== 2 }; });
+  const heart = s => { ctx.beginPath(); ctx.moveTo(0, s * .3); ctx.bezierCurveTo(0, 0, -s * .5, 0, -s * .5, s * .3); ctx.bezierCurveTo(-s * .5, s * .6, 0, s * .75, 0, s); ctx.bezierCurveTo(0, s * .75, s * .5, s * .6, s * .5, s * .3); ctx.bezierCurveTo(s * .5, 0, 0, 0, 0, s * .3); ctx.fill(); };
+  const t0 = performance.now();
+  const frame = now => {
+    const life = (now - t0) / 1900;
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    if (life >= 1) return cv.remove();
+    ctx.globalAlpha = 1 - life ** 2;
+    for (const p of parts) {
+      p.vy += .22; p.vx *= .985; p.vy *= .985; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c;
+      if (p.heart) heart(p.s); else { ctx.beginPath(); ctx.arc(0, 0, p.s / 4, 0, 7); ctx.fill(); }
+      ctx.restore();
+    }
+    requestAnimationFrame(frame);
+  };
+  requestAnimationFrame(frame);
 }
 
 // ---------------- 저장 ----------------
@@ -1938,7 +2057,7 @@ function homeView(me) {
       ${passed.length ? `<button class="btn line sm" data-act="unpass">넘긴 ${passed.length}명 다시 보기</button>` : ""}</div>` : "";
   const fewNote = recs.length && recs.length < REC_LIMIT ? relaxHtml(me, true) : "";
   const unpassNote = !doneNote && passed.length ? `<div class="daily-note"><button class="btn line sm" data-act="unpass">넘긴 ${passed.length}명 다시 보기</button></div>` : "";
-  return `${title}<span class="muted">${dayLabel} 오늘의 추천 · 매일 새로 골라드려요</span></div>${searchBar}
+  return `${title}<span class="muted">${dayLabel} 오늘의 추천 · 내 등급 ${tierBadge(me)}${w.tierOn ? " · 비슷한 등급끼리 골랐어요" : ""}</span></div>${searchBar}
     ${recs.length ? `<button class="sim-entry" data-act="simopen"><b>만약에?</b><span>관심사를 더 보면, 거리를 덜 보면… 순위가 어떻게 바뀌는지 미리 보기</span>${ICON.back}</button>` : ""}
     ${top}${cards}${doneNote}${unpassNote}${fewNote}`;
 }
@@ -2046,7 +2165,7 @@ function recCard(me, o, r, fresh, idx = 0) {
   const lk = S.likes[`${o.id}_${me.id}`], mine = liked(me.id, o.id), matched = isMatched(me.id, o.id);
   const tags = [...o.interests.map(t => [t + (E.levelOf(o, t) === 3 ? "★" : ""), common.has(t)]), [KO[o.chronotype], false], [o.weekend === "out" ? "주말엔밖으로" : "주말엔집콕", false], ...(o.mbti ? [[o.mbti, false]] : [])];
   return `<article class="pcard" data-act="open" data-id="${o.id}">
-    <div class="pc-head"><span class="pc-letter" aria-hidden="true">${"ABCDEFGH"[idx] || "+"}</span><span class="pc-kind">${esc(g)} · 궁합 <span class="num">${Math.round(r.score)}</span>점</span>${isNew(o) ? `<span class="new">NEW</span>` : ""}</div>
+    <div class="pc-head"><span class="pc-letter" aria-hidden="true">${"ABCDEFGH"[idx] || "+"}</span><span class="pc-kind">${esc(g)} · 궁합 <span class="num">${Math.round(r.score)}</span>점</span>${tierBadge(o)}${isNew(o) ? `<span class="new">NEW</span>` : ""}</div>
     <div class="pc-box">
       <div class="pc-top">${photo(o, "pc-av")}<div class="pc-id"><p class="pc-line">${pz.line}</p><b class="pc-type">${esc(pz.type)} ${esc(o.nickname)}${vb(o)}</b></div></div>
       <div class="muted pc-sub">${o.age}세 · ${esc(o.region)} ${Math.max(1, Math.round(r.distance))}km 이내 · ${esc(o.job)}</div>
@@ -2081,7 +2200,7 @@ function detailView(me) {
       <div class="sheet-body">
         <div class="detail-frame">${photo(o, "detail-ph")}${r ? `<span class="ph-tag">${g}</span>` : ""}</div>
         <div class="pad" style="display:flex;flex-direction:column;gap:14px">
-          <div><h2 style="font-size:26px">${esc(o.nickname)}${vb(o)} <span class="muted" style="font-family:var(--font-body);font-size:16px;font-weight:400">${o.age}세</span></h2>
+          <div><h2 style="font-size:26px">${esc(o.nickname)}${vb(o)} <span class="muted" style="font-family:var(--font-body);font-size:16px;font-weight:400">${o.age}세</span> ${tierBadge(o)}</h2>
             <div class="muted" style="font-size:14px">${esc(o.region)}${r ? ` · 약 ${Math.max(1, Math.round(r.distance))}km` : ""}</div></div>
           ${o.bio ? `<p style="margin:0">${esc(o.bio)}</p>` : ""}
           ${r ? `<div class="panel" style="display:flex;flex-direction:column;gap:8px"><div><span class="grade${topg ? " top" : ""}">${g}</span></div>
@@ -2274,7 +2393,15 @@ function meView(me) {
   const lifestyle = ["purpose", "marriage_view", "contact_style", "chronotype", "weekend", "drinking", "smoking", "pet", "spending", "religion"];
   const a = me.appearance || {};
   const tg = (key, v, label, on) => `<button type="button" class="tgl${on ? " on" : ""}" data-act="ap-${key}" data-v="${v}" aria-pressed="${on}">${label}</button>`;
-  return `<div class="screen-title"><h2>내 정보</h2><button class="btn line sm" data-act="logout">로그아웃</button></div>
+  const tr = tierOf(me);
+  const tierHtml = `<section class="panel tier-card" style="--tc:${tr.color}">
+      <div class="tier-top"><span class="tier-gem" aria-hidden="true">◆</span><div><small>내 프로필 등급</small><b>${tr.name}</b></div><span class="tier-score num">${tr.score}<small>/100</small></span></div>
+      <div class="tier-track" role="img" aria-label="프로필 점수 ${tr.score}점"><i style="width:${tr.score}%"></i>${TIERS.slice(1).map(t => `<span style="left:${t[1]}%"></span>`).join("")}</div>
+      <div class="tier-steps">${TIERS.map(t => `<span>${t[0]}</span>`).join("")}</div>
+      <span style="font-size:14px">${tr.next ? `<b>${tr.next[0]}</b>까지 <b class="num">${tr.next[1] - tr.score}점</b> 남았어요.` : "최고 등급이에요!"} 비슷한 등급(±1)끼리 추천돼서, 등급이 오르면 더 정성스러운 프로필의 사람을 만나요.</span>
+      <ul class="tier-items">${tr.items.map(x => `<li class="${x.got >= x.max ? "done" : ""}"><span>${x.label}</span><b class="num">${x.got}/${x.max}</b>${x.got < x.max ? `<small>${esc(x.tip)}</small>` : ""}</li>`).join("")}</ul>
+      <span class="muted" style="font-size:12px">등급은 외모가 아니라 프로필을 얼마나 채우고 관리하는지로만 매겨요.</span></section>`;
+  return `<div class="screen-title"><h2>내 정보</h2><button class="btn line sm" data-act="logout">로그아웃</button></div>${tierHtml}
     <section class="panel"><div class="photo-pick">${photo(me)}<div style="display:flex;flex-direction:column;gap:8px">
       <b style="font-family:var(--font-display);font-size:20px">${esc(me.nickname)}</b>
       <span class="muted" style="font-size:13px">${me.age}세 · ${esc(me.region)}</span>
@@ -2574,8 +2701,9 @@ function render() {
   const scrollY = window.scrollY;
   S.enter = screen !== lastScreen;
   if (authed && !isSuspended(S.uid)) checkNewMatch(world().byId[S.uid]);
+  if (authed && S.fb && S.usersLoaded && !S.seenSaved && Date.now() - (S.users[S.uid]?.seenAt || 0) > 12 * 36e5) { S.seenSaved = true; setTimeout(() => saveUser(S.uid, { seenAt: Date.now() }), 0); }
   app.innerHTML = (authed ? (isSuspended(S.uid) ? suspendedView() : shell() + (S.hot ? hotView(world().byId[S.uid]) : "") + (S.celebrate ? celebrateView(world().byId[S.uid]) : "")) : authView()) + (S.legal ? legalView() : "");
-  if (S.celebrate) S.celebrate.fresh = false;
+  if (S.celebrate) { celebFx(S.celebrate.fresh); S.celebrate.fresh = false; }
   if (S.hot) mountHotMap();
   if (S.prefill != null) { const ci = document.getElementById("chat-input"); if (ci) { ci.value = S.prefill; S.prefill = null; ci.focus({ preventScroll: true }); } }
   if (authed && !isSuspended(S.uid)) browserNotify(world().byId[S.uid]);
@@ -2728,9 +2856,9 @@ document.addEventListener("click", e => {
       sendMsg(pk(me, c.o.id), me, `[핫플 제안] ${h.n} 어때요? ${h.line}`, { hot: h.id, q: h.query });
       S.hot = null; S.chat = c.o.id; toast("핫플을 제안했어요"); botAnswer(me, c.o.id); break;
     }
-    case "celeb-chat": S.celebrate = null; S.chat = id; S.detail = null; render(); break;
-    case "celeb-say": { const meP = world().byId[me], o = world().byId[id], r0 = world().lists[me].recs.find(x => x.id === id);
-      S.prefill = openersFor(meP, o, r0 ? full(me, r0) : null)[+t.dataset.i] || ""; S.celebrate = null; S.chat = id; S.detail = null; render(); break; }
+    case "celeb-chat": { const o = world().byId[id], r0 = world().lists[me].recs.find(x => x.id === id);   // 첫 인사 추천 하나를 입력창에 미리 넣어 둠
+      if (!(S.chats[pk(me, id)]?.messages || []).length) S.prefill = openersFor(world().byId[me], o, r0 ? full(me, r0) : null)[0] || "";
+      S.celebrate = null; S.chat = id; S.detail = null; render(); break; }
     case "focus": S.celebrate = null; S.menu = null; saveUser(me, { focus: focusKey(me, id) }); toast(`${world().byId[id].nickname}님에게 집중할게요. 새 추천은 잠시 쉬어요`); break;
     case "focus-off": S.menu = null; saveUser(me, { focus: null }); toast("집중 모드를 껐어요. 다시 추천해드릴게요"); break;
     case "endask": S.menuEnd = true; render(); break;
@@ -3034,6 +3162,67 @@ if (window.visualViewport) {
   vv.addEventListener("scroll", fit);
   fit();
 }
+
+// ---------------- 움직이는 배경 (WebGL) ----------------
+// 오로라처럼 천천히 흐르는 파스텔 빛 + 반짝이, 손가락이 닿는 곳에 빛이 따라옴. 게임 엔진 없이 셰이더 하나로 (몇 KB).
+// 화면 해상도의 절반으로 초당 30번까지만 그리고, 탭이 안 보이면 멈춤. '동작 줄이기' 설정이면 한 장만. WebGL이 없으면 원래 그라데이션.
+(function bgGL() {
+  const cv = document.createElement("canvas"); cv.id = "bg-gl"; cv.setAttribute("aria-hidden", "true");
+  let gl = null; try { gl = cv.getContext("webgl", { antialias: false, alpha: false, powerPreference: "low-power" }); } catch (e) {}
+  if (!gl) return;
+  const FS = `precision mediump float;
+uniform vec2 r; uniform float t; uniform vec2 p; uniform vec3 c1, c2, c3, bg;
+float h(vec2 q) { return fract(sin(dot(q, vec2(127.1, 311.7))) * 43758.5453); }
+float n(vec2 q) { vec2 i = floor(q), f = fract(q); f = f * f * (3. - 2. * f);
+  return mix(mix(h(i), h(i + vec2(1, 0)), f.x), mix(h(i + vec2(0, 1)), h(i + vec2(1, 1)), f.x), f.y); }
+float fbm(vec2 q) { float s = 0., a = .5; for (int i = 0; i < 4; i++) { s += a * n(q); q *= 2.03; a *= .5; } return s; }
+void main() {
+  vec2 uv = gl_FragCoord.xy / r, q = uv * vec2(r.x / r.y, 1.) * 1.7;
+  float tt = t * .05;
+  vec2 w = vec2(fbm(q + tt), fbm(q + vec2(5.2, 1.3) - tt));
+  float f = fbm(q + 2.2 * w + vec2(tt * .7, -tt * .4));
+  vec3 col = mix(c1, c2, smoothstep(.25, .8, f));
+  col = mix(col, c3, smoothstep(.5, .95, w.y) * .8);
+  vec2 d = (uv - p) * vec2(r.x / r.y, 1.);
+  col += c3 * .35 * exp(-dot(d, d) * 9.);
+  vec2 cell = gl_FragCoord.xy / (34. * r.y / 900.), id = floor(cell), fr = fract(cell) - .5;
+  float s = h(id), tw = step(.975, s) * (.5 + .5 * sin(t * 1.7 + s * 60.));
+  col += tw * smoothstep(.16, 0., length(fr)) * .7;
+  gl_FragColor = vec4(mix(bg, col, .8), 1.);
+}`;
+  const sh = (type, src) => { const x = gl.createShader(type); gl.shaderSource(x, src); gl.compileShader(x); return x; };
+  const pr = gl.createProgram();
+  gl.attachShader(pr, sh(gl.VERTEX_SHADER, "attribute vec2 a; void main() { gl_Position = vec4(a, 0., 1.); }"));
+  gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, FS));
+  gl.linkProgram(pr);
+  if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) return;
+  gl.useProgram(pr);
+  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(pr, "a"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  const U = {}; for (const k of ["r", "t", "p", "c1", "c2", "c3", "bg"]) U[k] = gl.getUniformLocation(pr, k);
+  // 라이트: 라벤더·연핑크·인디고 / 다크: 남색·자주·보라
+  const PAL = { light: [[.80, .79, 1], [.98, .80, .88], [.55, .57, .94], [.95, .95, 1]], dark: [[.13, .14, .40], [.33, .15, .32], [.40, .42, .90], [.05, .05, .13]] };
+  const isDark = () => { const th = document.documentElement.dataset.theme; return th ? th === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; };
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let px = .5, py = .7, tx = .5, ty = .7, last = 0;
+  const aim = e => { tx = e.clientX / innerWidth; ty = 1 - e.clientY / innerHeight; };
+  addEventListener("pointermove", aim, { passive: true }); addEventListener("pointerdown", aim, { passive: true });
+  const t0 = performance.now();
+  const draw = now => {
+    px += (tx - px) * .05; py += (ty - py) * .05;
+    const c = PAL[isDark() ? "dark" : "light"];
+    gl.uniform2f(U.r, cv.width, cv.height); gl.uniform1f(U.t, (now - t0) / 1000); gl.uniform2f(U.p, px, py);
+    gl.uniform3fv(U.c1, c[0]); gl.uniform3fv(U.c2, c[1]); gl.uniform3fv(U.c3, c[2]); gl.uniform3fv(U.bg, c[3]);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  };
+  const fit = () => { const k = Math.min(devicePixelRatio || 1, 2) * .5; cv.width = Math.round(innerWidth * k); cv.height = Math.round(innerHeight * k); gl.viewport(0, 0, cv.width, cv.height); draw(performance.now()); };
+  document.body.prepend(cv); document.documentElement.classList.add("gl");
+  addEventListener("resize", fit); fit();
+  if (reduce) { matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => draw(performance.now())); return; }
+  const loop = now => { if (!document.hidden && now - last > 33) { last = now; draw(now); } requestAnimationFrame(loop); };
+  requestAnimationFrame(loop);
+})();
 
 // ---------------- 시작 ----------------
 function subscribe(db, fail) {
