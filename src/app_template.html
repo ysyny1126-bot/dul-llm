@@ -721,15 +721,8 @@ const OPTS = {
 };
 const FIELD_KO = { purpose: "만남 목적", marriage_view: "결혼관", contact_style: "연락 빈도", chronotype: "활동 시간", weekend: "주말", drinking: "음주", smoking: "흡연", pet: "반려동물", spending: "소비 성향", religion: "종교" };
 const optLabel = (f, v) => f === "religion" ? RELIGION_KO[v] : f === "smoking" ? SMOKE_KO[v] : (KO[v] ?? v);
-const REGIONS = [
-  ["서울 강서구", 37.5509, 126.8495], ["서울 양천구", 37.5170, 126.8665], ["서울 마포구", 37.5663, 126.9019],
-  ["서울 영등포구", 37.5264, 126.8963], ["서울 서대문구", 37.5791, 126.9368], ["서울 은평구", 37.6027, 126.9291],
-  ["서울 종로구", 37.5735, 126.9790], ["서울 용산구", 37.5326, 126.9905], ["서울 동작구", 37.5124, 126.9393],
-  ["서울 관악구", 37.4784, 126.9516], ["서울 성동구", 37.5634, 127.0369], ["서울 광진구", 37.5385, 127.0823],
-  ["서울 강남구", 37.5172, 127.0473], ["서울 송파구", 37.5145, 127.1059], ["서울 노원구", 37.6542, 127.0568],
-  ["경기 고양시", 37.6584, 126.8320], ["경기 성남시 분당구", 37.3826, 127.1189], ["경기 수원시", 37.2636, 127.0286],
-  ["인천 연수구", 37.4100, 126.6783],
-];
+const REGIONS = BASE.cfg.regions;   // 전국 시·군·구 (src/regions.py)
+const shortRegion = r => r.includes(" ") ? r.replace(/^\S+ /, "") : r;   // "부산 해운대구" → "해운대구"
 const CATS = BASE.cfg.categories;
 const CAT_NAMES = Object.keys(CATS);
 const ALL_TAGS = Object.values(CATS).flat();
@@ -899,10 +892,17 @@ function world() {
   if (cache && cache.ver === ver && cache.uid === S.uid) return cache;
   const list = allProfiles().filter(p => !isSuspended(p.id) || p.id === S.uid);
   const byId = Object.fromEntries(list.map(p => [p.id, p]));
-  // 비슷한 등급끼리: 등급이 2단계 이상 차이 나면 서로 추천하지 않음 (회원이 TIER_MIN명 이상일 때만)
-  const tierOn = list.length >= TIER_MIN, ti = tierOn ? Object.fromEntries(list.map(p => [p.id, tierOf(p).i])) : {};
-  const tierGap = (a, b) => tierOn && Math.abs(ti[a] - ti[b]) >= 2;
-  cache = { ver, uid: S.uid, list, byId, tierOn, ...E.computeAll(list, settingsOf, { isBlocked: (a, b) => isBlocked(a, b) || hiddenPair(a, b) || tierGap(a, b) }) };
+  // 비슷한 등급끼리: 등급이 2단계 이상 차이 나면 서로 추천하지 않음.
+  // 단, 내가 원하는 거리 안에 회원이 TIER_MIN명 이상 있는 사람끼리만 (지방처럼 사람이 적은 곳은 등급으로 나누면 추천이 없어짐)
+  const tierOn = list.length >= TIER_MIN, ti = {}, dense = {};
+  if (tierOn) for (const p of list) {
+    ti[p.id] = tierOf(p).i;
+    const lim = p.preference?.max_distance_km || 30;
+    let n = 0; for (const q of list) if (q !== p && E.dist(p, q) <= lim && ++n >= TIER_MIN) break;
+    dense[p.id] = n >= TIER_MIN;
+  }
+  const tierGap = (a, b) => tierOn && dense[a] && dense[b] && Math.abs(ti[a] - ti[b]) >= 2;
+  cache = { ver, uid: S.uid, list, byId, tierOn: tierOn && !!dense[S.uid], ...E.computeAll(list, settingsOf, { isBlocked: (a, b) => isBlocked(a, b) || hiddenPair(a, b) || tierGap(a, b) }) };
   return cache;
 }
 // 화면에 보이는 추천만 근거를 자세히 계산해서 붙임 (같은 계산 결과 안에서는 다시 안 함)
@@ -952,7 +952,7 @@ function tierOf(p) {
   return { i, name: TIERS[i][0], color: TIERS[i][2], score, items, next: TIERS[i + 1] || null };
 }
 const tierBadge = p => { const t = tierOf(p); return `<span class="tier" style="--tc:${t.color}" title="프로필 등급 ${t.name}">◆ ${t.name}</span>`; };
-const TIER_MIN = 40;   // 회원이 이만큼은 있어야 등급으로 나눠 추천 (적을 때 나누면 추천할 사람이 없어짐)
+const TIER_MIN = 40;   // 원하는 거리 안에 회원이 이만큼은 있어야 등급으로 나눠 추천 (적을 때 나누면 추천할 사람이 없어짐)
 
 // ---------------- 매칭 후 다음 매칭 ----------------
 // 동시에 대화하는 매칭은 MATCH_CAP명까지. 꽉 차면 새 좋아요는 한 명과 대화를 마친 뒤에.
@@ -1069,7 +1069,7 @@ function celebrateView(me) {
       <div class="celeb-tag">It's a Match <span>♥</span></div>
       <div class="celeb-photo" id="celeb-photo">${photo(o, "celeb-big")}<span class="celeb-shine" aria-hidden="true"></span>
         <div class="celeb-me">${photo(me, "av mini")}<span>♥</span>${c.via === "auto" ? "서로의 1순위라 자동 연결" : "서로 좋아요"}</div>
-        <div class="celeb-who"><b>${esc(o.nickname)}</b><span>${o.age}세 · ${esc(o.region.replace(/^(서울|경기|인천) /, ""))}</span>${tierBadge(o)}</div>
+        <div class="celeb-who"><b>${esc(o.nickname)}</b><span>${o.age}세 · ${esc(o.region)}</span>${tierBadge(o)}</div>
       </div>
       ${score != null ? `<div class="celeb-score"><small>궁합</small><b class="num" data-count="${score}">${c.fresh ? 0 : score}</b><small>점</small></div>` : ""}
       <div class="celeb-kw">${matchKeywords(o, r).map(k => `<span>#${esc(k)}</span>`).join("")}</div>
@@ -1295,9 +1295,11 @@ function authView() {
   const isLogin = S.authTab === "login";
   const hero = `<div class="hero">${LOGO}<p>좋은 사람과, 더 좋은 날을<br>동네친구 · 데이트 · 새로운 시작</p>${SKYLINE}</div>`;
   if (S.booting) return `<div class="auth pad">${hero}<p class="status">불러오는 중…</p></div>`;
-  const demo = REAL ? "" : BASE.profiles.slice(0, 12).map(p => {
+  // 서울 8명 + 지방 4명 (부산·대구·광주·제주에서 추천이 가장 많이 나오는 사람, build_app.py가 골라 줌)
+  const demoList = [...BASE.profiles.slice(0, 8), ...(BASE.showcase || []).map(id => BASE.profiles.find(p => p.id === id)).filter(Boolean)];
+  const demo = REAL ? "" : demoList.map(p => {
     const m = merge(p, S.users[p.id]);
-    return `<button type="button" class="demo" data-act="demo" data-id="${p.id}">${photo(m, "av")}<span style="min-width:0"><b>${esc(m.nickname)}</b><small>${p.login_id}</small></span></button>`;
+    return `<button type="button" class="demo" data-act="demo" data-id="${p.id}">${photo(m, "av")}<span style="min-width:0"><b>${esc(m.nickname)}</b><small>${p.login_id} · ${esc(p.region.split(" ")[0])}</small></span></button>`;
   }).join("");
   return `<div class="auth pad">
     ${hero}
@@ -1321,7 +1323,11 @@ function authView() {
     <p class="status">${statusText()}</p>
   </div>`;
 }
-function regionOptions(sel) { return REGIONS.map(([r]) => `<option value="${esc(r)}"${r === sel ? " selected" : ""}>${esc(r)}</option>`).join(""); }
+function regionOptions(sel) {   // 시·도별로 묶어서 (서울 / 경기 / 부산 …)
+  const groups = {};
+  for (const [r] of REGIONS) (groups[r.split(" ")[0]] ||= []).push(r);
+  return Object.entries(groups).map(([g, rs]) => `<optgroup label="${esc(g)}">${rs.map(r => `<option value="${esc(r)}"${r === sel ? " selected" : ""}>${esc(shortRegion(r))}</option>`).join("")}</optgroup>`).join("");
+}
 function selectReq(f) { return `<option value="">골라주세요</option>` + OPTS[f].map(v => `<option value="${v}">${esc(optLabel(f, v))}</option>`).join(""); }
 const LIFE = ["marriage_view", "contact_style", "chronotype", "weekend", "drinking", "smoking", "pet", "spending", "religion"];
 function selectOpts(f, sel) { return OPTS[f].map(v => `<option value="${v}"${v === sel ? " selected" : ""}>${esc(optLabel(f, v))}</option>`).join(""); }
@@ -1697,7 +1703,7 @@ function courseWhy(c, me, o) {
 function meetPlan(me, o, mood = "auto") {
   const mid = { lat: (me.lat + o.lat) / 2, lng: (me.lng + o.lng) / 2 };
   const near = REGIONS.map(r => ({ r: r[0], d: E.dist(mid, { lat: r[1], lng: r[2] }) })).sort((a, b) => a.d - b.d)[0].r;
-  const area = near.replace(/^(서울|경기|인천) /, "");
+  const area = near;
   const ov = E.personVec(o), vec = E.personVec(me).map((x, i) => x + ov[i]);
   const both = (f, v) => me[f] === v && o[f] === v;
   const courses = COURSES.filter(c => mood === "auto" || c.m.includes(mood))
@@ -1731,7 +1737,7 @@ function planCard(me, o) {
 }
 
 // ---------- 취향 핫플 지도 ----------
-// 매칭된 두 사람의 공통 취향 + 두 집의 중간 지점 + 이동 거리 공평함으로 요즘 핫플 동네를 골라,
+// 매칭된 두 사람의 공통 취향 + 두 집의 중간 지점 + 이동 거리 공평함으로 전국 핫플 동네를 골라,
 // 지도에 두 사람과 함께 핀으로 보여주고 네이버 지도·카카오맵에서 바로 열어요. (가게 이름은 지도 앱의 최신 검색 결과로)
 // e: 그림, q: 지도 검색에 붙일 동네 이름, out: 야외, drink: 술이 중심
 const HOTSPOTS = [
@@ -1762,6 +1768,40 @@ const HOTSPOTS = [
   { id: "jeongja", n: "정자동 카페거리", q: "정자동 카페거리", lat: 37.3670, lng: 127.1085, e: "🥐", tags: ["카페", "베이킹", "맛집", "강아지", "산책"], line: "탄천 산책로 옆 테라스 카페" },
   { id: "haenggung", n: "수원 행궁동", q: "수원 행궁동", lat: 37.2836, lng: 127.0145, e: "🏯", tags: ["카페", "사진", "여행", "전시", "산책"], line: "화성 성곽길 걷고 행리단길 카페" },
   { id: "songdo", n: "송도 센트럴파크", q: "송도 센트럴파크", lat: 37.3925, lng: 126.6392, e: "⛵", tags: ["산책", "사진", "자전거", "쇼핑", "낚시"], line: "수상택시 타고 공원 산책, 아울렛 구경" },
+  { id: "heyri", n: "파주 헤이리 예술마을", q: "헤이리 예술마을", lat: 37.7890, lng: 126.6990, e: "🖼️", tags: ["전시", "미술", "사진", "카페"], line: "작은 미술관과 공방이 모인 마을 산책" },
+  // 부산
+  { id: "haeundae", n: "해운대 · 해리단길", q: "해리단길", lat: 35.1631, lng: 129.1600, e: "🌊", tags: ["산책", "맛집", "카페", "사진", "러닝"], line: "바다 산책하고 기찻길 옆 골목 맛집" },
+  { id: "gwangalli", n: "광안리 해변", q: "광안리", lat: 35.1532, lng: 129.1187, e: "🌉", tags: ["산책", "맥주", "사진", "맛집"], line: "광안대교 야경 보며 해변 산책", out: true },
+  { id: "jeonpo", n: "전포 카페거리", q: "전포카페거리", lat: 35.1555, lng: 129.0640, e: "☕", tags: ["카페", "베이킹", "쇼핑", "굿즈"], line: "공구 골목이 바뀐 부산 대표 카페 거리" },
+  { id: "gamcheon", n: "감천문화마을", q: "감천문화마을", lat: 35.0975, lng: 129.0106, e: "🎨", tags: ["사진", "미술", "여행", "산책"], line: "알록달록 언덕 골목에서 사진 한 장" },
+  // 대구 · 대전 · 광주 · 울산 · 세종
+  { id: "dongseongro", n: "대구 동성로", q: "대구 동성로", lat: 35.8690, lng: 128.5960, e: "🛍️", tags: ["쇼핑", "맛집", "게임", "영화", "보드게임"], line: "쇼핑하고 방탈출·오락실까지 한 번에" },
+  { id: "kimkwangseok", n: "김광석 다시그리기길", q: "김광석길", lat: 35.8605, lng: 128.6066, e: "🎸", tags: ["음악", "공연", "사진", "카페", "기타"], line: "벽화 골목에서 노래 듣고 버스킹 구경" },
+  { id: "sungsimdang", n: "대전 은행동 · 성심당", q: "대전 은행동", lat: 36.3277, lng: 127.4273, e: "🥐", tags: ["베이킹", "카페", "맛집", "쇼핑"], line: "빵지순례 1번지, 원도심 골목 구경" },
+  { id: "sojedong", n: "대전 소제동 카페거리", q: "소제동 카페", lat: 36.3326, lng: 127.4407, e: "🏡", tags: ["카페", "사진", "산책", "독서"], line: "철도관사촌 옛집을 고친 감성 카페" },
+  { id: "yangnim", n: "광주 양림동", q: "광주 양림동", lat: 35.1386, lng: 126.9150, e: "🎨", tags: ["전시", "미술", "사진", "산책", "독서"], line: "근대 건물과 갤러리가 있는 언덕 마을" },
+  { id: "dongmyeong", n: "광주 동명동 카페거리", q: "동명동 카페", lat: 35.1490, lng: 126.9265, e: "☕", tags: ["카페", "맛집", "베이킹", "와인"], line: "한옥과 주택을 고친 카페·와인바 골목" },
+  { id: "taehwagang", n: "울산 태화강 국가정원", q: "태화강 국가정원", lat: 35.5486, lng: 129.2967, e: "🌾", tags: ["산책", "자전거", "사진", "러닝", "강아지"], line: "강변 대나무숲과 꽃밭 산책", out: true },
+  { id: "sejonglake", n: "세종 호수공원", q: "세종호수공원", lat: 36.4985, lng: 127.2700, e: "🦆", tags: ["산책", "자전거", "러닝", "강아지", "캠핑"], line: "넓은 호수 한 바퀴, 근처 국립세종도서관", out: true },
+  // 강원 · 충청
+  { id: "anmok", n: "강릉 안목 커피거리", q: "강릉 안목해변", lat: 37.7720, lng: 128.9480, e: "☕", tags: ["카페", "여행", "사진", "산책"], line: "바다 보이는 카페에서 핸드드립 한 잔" },
+  { id: "sokcho", n: "속초 해변 · 중앙시장", q: "속초 중앙시장", lat: 38.1900, lng: 128.6020, e: "🦑", tags: ["여행", "맛집", "산책", "사진"], line: "닭강정 들고 해변 산책, 영금정 일출" },
+  { id: "chuncheon", n: "춘천 공지천 · 명동 닭갈비골목", q: "춘천 닭갈비골목", lat: 37.8790, lng: 127.7240, e: "🍗", tags: ["맛집", "자전거", "산책", "여행"], line: "닭갈비 먹고 호숫가 자전거" },
+  { id: "suamgol", n: "청주 수암골 · 성안길", q: "청주 성안길", lat: 36.6370, lng: 127.4930, e: "🌙", tags: ["사진", "카페", "쇼핑", "산책"], line: "벽화 마을 전망 카페와 시내 쇼핑" },
+  { id: "buldang", n: "천안 불당동 카페거리", q: "천안 불당동", lat: 36.8105, lng: 127.1120, e: "🍰", tags: ["카페", "베이킹", "맛집", "쇼핑", "영화"], line: "신도시 카페 거리와 맛집" },
+  // 전라
+  { id: "jeonjuhanok", n: "전주 한옥마을", q: "전주 한옥마을", lat: 35.8150, lng: 127.1530, e: "🏯", tags: ["여행", "사진", "맛집", "전시"], line: "한복 입고 골목 산책, 길거리 음식" },
+  { id: "gaekridan", n: "전주 객리단길", q: "객리단길", lat: 35.8180, lng: 127.1430, e: "🍷", tags: ["맛집", "와인", "맥주", "카페"], line: "객사 뒤 골목의 작은 식당과 바" },
+  { id: "yeosu", n: "여수 낭만포차 · 해상케이블카", q: "여수 낭만포차", lat: 34.7370, lng: 127.7420, e: "🎆", tags: ["여행", "맛집", "맥주", "사진"], line: "바다 야경 보며 포차 한 상", drink: true },
+  { id: "suncheonbay", n: "순천만 국가정원", q: "순천만국가정원", lat: 34.9300, lng: 127.5100, e: "🌿", tags: ["산책", "사진", "자전거", "여행"], line: "갈대밭과 정원을 천천히 걷기", out: true },
+  // 경상 · 제주
+  { id: "hwangridan", n: "경주 황리단길", q: "경주 황리단길", lat: 35.8380, lng: 129.2100, e: "🏛️", tags: ["카페", "사진", "여행", "전시"], line: "한옥 카페 골목과 대릉원 산책" },
+  { id: "yeongildae", n: "포항 영일대 해변", q: "포항 영일대", lat: 36.0560, lng: 129.3780, e: "🌅", tags: ["산책", "맛집", "러닝", "맥주"], line: "바다 위 누각과 해변 산책로" },
+  { id: "changwon", n: "창원 가로수길", q: "창원 가로수길", lat: 35.2400, lng: 128.6650, e: "🥐", tags: ["카페", "베이킹", "맛집", "쇼핑"], line: "메타세쿼이아 길 따라 카페 투어" },
+  { id: "jinjuseong", n: "진주성 · 남강", q: "진주성", lat: 35.1890, lng: 128.0790, e: "🏮", tags: ["산책", "사진", "여행", "전시"], line: "성곽 산책과 남강 야경" },
+  { id: "aewol", n: "제주 애월 해안도로", q: "애월 카페", lat: 33.4630, lng: 126.3110, e: "🌴", tags: ["카페", "여행", "사진", "자전거"], line: "바다 옆 카페와 해안 드라이브" },
+  { id: "dongmun", n: "제주 원도심 · 동문시장", q: "제주 동문시장", lat: 33.5120, lng: 126.5260, e: "🍊", tags: ["맛집", "요리", "여행", "산책"], line: "야시장 먹거리와 원도심 골목" },
+  { id: "hyeopjae", n: "협재 해변", q: "협재해수욕장", lat: 33.3940, lng: 126.2390, e: "🏖️", tags: ["수영", "여행", "캠핑", "사진"], line: "에메랄드빛 바다 수영과 노을", out: true },
 ];
 // 관심사 → 지도 검색어 (동네 이름 뒤에 붙임)
 const HOT_Q = { 카페: "카페", 베이킹: "베이커리", 맛집: "맛집", 요리: "쿠킹클래스", 와인: "와인바", 맥주: "수제맥주", 전시: "전시", 미술: "갤러리", 사진: "포토스팟", 독서: "독립서점", 글쓰기: "북카페",
@@ -1791,9 +1831,10 @@ function hotPicks(me, o) {
     const why = both.length ? `둘 다 ${josa(both.slice(0, 2).join("·"), "을", "를")} 좋아해서` : one ? `${o.interests.includes(one) ? o.nickname + "님이" : "내가"} ${josa(one, "을", "를")} 좋아해서` : "두 분 중간쯤 요즘 뜨는 곳";
     return { ...h, s, dMe, dO, why, query: `${h.q} ${HOT_Q[best] || ""}`.trim(), fair: Math.abs(dMe - dO) <= 3 };
   }).sort((a, b) => b.s - a.s);
-  // 두 사람 평균 20km 넘게 먼 곳은, 가까운 곳이 6곳 이상 있으면 빼기
-  const near = scored.filter(h => (h.dMe + h.dO) / 2 <= 20);
-  return near.length >= 6 ? near : scored;
+  // 전국이라 다른 도시 핫플이 섞이지 않게: 두 사람 평균 25km 안 → 모자라면 80km 안 → 그래도 모자라면 가까운 순 6곳
+  const within = km => scored.filter(h => (h.dMe + h.dO) / 2 <= km);
+  const near = within(25).length >= 3 ? within(25) : within(80);
+  return near.length >= 3 ? near : scored.slice(0, 6);
 }
 const km = d => d < 1 ? "1km 안" : `${Math.round(d)}km`;
 function hotEntry(me, o) {

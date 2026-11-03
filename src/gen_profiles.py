@@ -1,18 +1,10 @@
-"""가상 회원 480명 생성 → 기존 20명과 합쳐 profiles_500.json (항상 같은 결과가 나오게 시드 고정)"""
+"""가상 회원 480명 생성 (전국) → 기존 20명과 합쳐 profiles_500.json (항상 같은 결과가 나오게 시드 고정)"""
 import json, random
 from matching import load, CATEGORIES
 
 random.seed(20261014)
 
-REGIONS = [
-    ("서울 강서구", 37.5509, 126.8495, 5), ("서울 양천구", 37.5170, 126.8665, 4), ("서울 마포구", 37.5663, 126.9019, 7),
-    ("서울 영등포구", 37.5264, 126.8963, 5), ("서울 서대문구", 37.5791, 126.9368, 4), ("서울 은평구", 37.6027, 126.9291, 4),
-    ("서울 종로구", 37.5735, 126.9790, 3), ("서울 용산구", 37.5326, 126.9905, 4), ("서울 동작구", 37.5124, 126.9393, 4),
-    ("서울 관악구", 37.4784, 126.9516, 6), ("서울 성동구", 37.5634, 127.0369, 4), ("서울 광진구", 37.5385, 127.0823, 5),
-    ("서울 강남구", 37.5172, 127.0473, 7), ("서울 송파구", 37.5145, 127.1059, 6), ("서울 노원구", 37.6542, 127.0568, 4),
-    ("경기 고양시", 37.6584, 126.8320, 4), ("경기 성남시 분당구", 37.3826, 127.1189, 4), ("경기 수원시", 37.2636, 127.0286, 4),
-    ("인천 연수구", 37.4100, 126.6783, 3),
-]
+from regions import REGIONS   # 전국 지역 (인구 비율로 비중)
 # 성향(페르소나)별로 관심사와 생활 패턴을 묶어서, 그럴듯한 사람이 나오게
 PERSONAS = {
     "운동파":   dict(tags=["헬스", "러닝", "요가", "축구", "야구", "농구", "수영", "클라이밍", "자전거", "테니스", "볼링", "골프"], chrono=.7, out=.85, drink=[.3, .5, .2], extra=["맛집", "등산", "여행"]),
@@ -43,6 +35,15 @@ OPP = {"M": "F", "F": "M"}
 def pick(weights_by_value):
     vals, ws = zip(*weights_by_value)
     return random.choices(vals, ws)[0]
+
+# 원하는 최대 거리: 수도권은 가까이, 광역시는 중간, 도 지역은 도시 사이가 멀어서 넓게
+def max_dist(region):
+    c = region.split(" ")[0]
+    if c in ("서울", "경기", "인천"):
+        return [5, 10, 15, 15, 20, 20, 30, 40]
+    if c in ("부산", "대구", "대전", "광주", "울산", "세종"):
+        return [15, 20, 30, 30, 40, 50]
+    return [30, 40, 50, 60, 80, 100]
 
 def make(pid, used_names):
     persona = random.choices(list(PERSONAS), PERSONA_W)[0]
@@ -99,7 +100,7 @@ def make(pid, used_names):
         "marriage_view": pick([("positive", 45), ("neutral", 40), ("negative", 15)]),
         "spending": pick([("saver", 35), ("balanced", 45), ("spender", 20)]),
         "preference": {"gender": pref_gender, "age_min": lo, "age_max": hi,
-                       "max_distance_km": random.choice([5, 10, 10, 15, 15, 20, 20, 30, 40]),
+                       "max_distance_km": random.choice(max_dist(reg[0])),
                        "distance_importance": random.choices([1, 2, 3], [20, 50, 30])[0],
                        "conditions": conditions, "appearance": app_pref},
         "appearance": {"hair": random.choice(["short", "medium", "long"]) if gender == "F" else random.choices(["short", "medium", "long"], [70, 25, 5])[0],
