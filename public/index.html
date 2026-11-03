@@ -392,6 +392,8 @@ tr.pen td { color: var(--bad); }
 .pc-letter { font-family: var(--font-display); font-size: 54px; line-height: .78; font-weight: 800; background: linear-gradient(180deg, var(--accent), var(--mint)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .pc-kind { font-size: 13px; font-weight: 700; color: var(--accent); padding-bottom: 1px; }
 .pc-head .tier { margin-bottom: 2px; }
+.secret { display: flex; gap: 10px; align-items: flex-start; margin-top: 12px; padding: 12px 14px; border-radius: 16px; background: var(--accent-soft); font-size: 13px; line-height: 1.5; }
+.secret b { color: var(--accent); }
 .pc-head .new { background: var(--pink); color: var(--pink-ink); border-radius: 6px; padding: 1px 6px; font-size: 11px; font-weight: 700; margin-bottom: 2px; }
 .pc-box { background: var(--surface); border-radius: 24px; padding: 18px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; }
 .pc-top { display: flex; gap: 14px; align-items: center; }
@@ -1396,7 +1398,7 @@ function openersFor(me, o, r) {
   const out = [];
   if (hit) out.push(`${josa(hit.theirs, "을", "를")} 좋아하신다고 해서 반가웠어요! 요즘 자주 가는 곳 있으세요?`);
   if (o.bio) out.push(`프로필에 '${o.bio.length > 18 ? o.bio.slice(0, 18) + "…" : o.bio}' 보고 궁금해졌어요 ㅎㅎ`);
-  out.push(`${o.weekend === "out" ? "주말엔 밖으로 나가는 편" : "주말엔 집에서 쉬는 편"}이시죠? 이번 주말엔 뭐 하세요?`);
+  out.push("주말엔 보통 뭐 하면서 쉬세요? 저는 요즘 새로운 데 가 보는 재미에 빠졌어요");
   return out.slice(0, 3);
 }
 // 공통점을 짧은 키워드로 (성사 화면은 얼굴과 점수가 주인공이라 나머지는 작게)
@@ -1404,11 +1406,11 @@ function matchKeywords(o, r) {
   const kw = [...(r?.reasons.find(x => x.key === "interests")?.hits.slice(0, 2).map(h => h.theirs) || [])];   // 같이 좋아하는 관심사를 맨 앞에
   for (const x of r ? r.reasons : []) {
     if (x.key === "interests") continue;
-    else if (x.key === "chronotype") kw.push(`둘다${KO[x.value]}`);
-    else if (x.key === "weekend") kw.push(x.value === "home" ? "주말엔집콕" : "주말엔밖으로");
-    else if (x.key === "contact_style") kw.push(x.value === "frequent" ? "연락자주" : "연락은가끔");
+    else if (x.key === "chronotype") kw.push("생활리듬비슷");
+    else if (x.key === "weekend") kw.push("주말취향비슷");
+    else if (x.key === "contact_style") kw.push("연락스타일찰떡");
     else if (x.key === "marriage_view") kw.push("결혼관일치");
-    else if (x.key === "drinking") kw.push(x.value === "none" ? "둘다논알콜" : "술취향비슷");
+    else if (x.key === "drinking") kw.push("술취향비슷");
     else if (x.key === "spending") kw.push("소비성향비슷");
     else if (x.key === "distance") kw.push(`${Math.max(1, Math.round(x.value))}km거리`);
     else if (x.key === "taste") kw.push("취향결비슷");
@@ -1621,12 +1623,13 @@ function reasonText(r) {
       return `둘 다 ${josa(cats.join(", "), "을", "를")} 좋아해요 (${r.hits.map(h => h.theirs).join(" · ")})`;
     }
     case "taste": return "관심사는 달라도 즐기는 방식이 비슷해요";
-    case "marriage_view": return "결혼에 대한 생각이 같아요";
-    case "drinking": return r.value === "none" ? "둘 다 술을 안 마셔요" : r.value === "often" ? "둘 다 술자리를 좋아해요" : "술자리 취향이 비슷해요";
+    // 상대의 실제 값(술을 안 마신다, 저녁형이다…)은 알려주지 않고 '잘 맞는다'만. 알아 가는 재미는 대화에서
+    case "marriage_view": return "결혼에 대한 생각이 잘 맞아요";
+    case "drinking": return "술자리 취향이 잘 맞아요";
     case "spending": return "돈 쓰는 스타일이 비슷해요";
-    case "contact_style": return r.value === "frequent" ? "둘 다 연락을 자주 하는 편이에요" : "연락은 가끔, 생각이 같아요";
-    case "chronotype": return `둘 다 ${KO[r.value]}이에요`;
-    case "weekend": return r.value === "home" ? "둘 다 주말엔 집에서 쉬는 걸 좋아해요" : "둘 다 주말엔 밖으로 나가요";
+    case "contact_style": return "연락하는 스타일이 잘 맞아요";
+    case "chronotype": return "하루 생활 리듬이 비슷해요";
+    case "weekend": return "주말을 보내는 방식이 비슷해요";
     case "distance": return `가까이 살아요 · 약 ${Math.max(1, Math.round(r.value))}km`;
     case "appearance": return "내가 좋아하는 스타일이에요";
   }
@@ -2083,7 +2086,7 @@ function planCard(me, o) {
       <span class="muted" style="font-size:12px">${esc(c.note)}</span>
       <div class="course-foot"><span style="font-size:13px">추천 시간 · ${esc(c.time)}</span><button class="btn sm" data-act="propose" data-i="${page * per + i}">이 코스 제안하기</button></div>
     </div>`).join("")}</div>
-    <div class="course-foot">${pl.noDrink ? `<span class="muted" style="font-size:12px">술을 안 마시는 분이 있어 술자리 코스는 뒤로 보냈어요</span>` : "<span></span>"}${pages > 1 ? `<button class="btn line sm" data-act="planmore">다른 코스 보기 (${page + 1}/${pages})</button>` : ""}</div>
+    <div class="course-foot">${pl.noDrink ? `<span class="muted" style="font-size:12px">두 분 생활 취향에 맞춰 술자리 코스는 뒤로 보냈어요</span>` : "<span></span>"}${pages > 1 ? `<button class="btn line sm" data-act="planmore">다른 코스 보기 (${page + 1}/${pages})</button>` : ""}</div>
   </div>`;
 }
 
@@ -2498,15 +2501,14 @@ function actionButtons(me, o, small) {
     <button class="btn${mine ? " line" : " heart"}${sm}" data-act="like" data-id="${o.id}" aria-pressed="${mine}">${mine ? "좋아요 보냄 · 취소" : "♥ 좋아요"}</button></div>`;
 }
 // ---------------- 추천 카드 (페르소나 카드) ----------------
-// 관심사가 가장 많이 몰린 분야로 유형 이름, 주말 성향 + 좋아하는 관심사 2개로 한 줄 소개
+// 관심사가 가장 많이 몰린 분야로 유형 이름, 좋아하는 관심사 2개로 한 줄 소개 (생활·가치관 값은 보여주지 않음)
 const PERSONA = { "운동": "에너지 넘치는 운동파", "아웃도어·여행": "아웃도어 탐험가형", "음식·술": "맛집 탐방형", "영화·책·전시": "감성 문화인형", "음악·공연": "음악 감성형", "게임·덕질": "취미 몰입형", "생활": "다정한 일상형" };
 function personaOf(o) {
   const cnt = {};
   for (const t of o.interests) { const c = E.CAT_OF[t]; if (c) cnt[c] = (cnt[c] || 0) + E.levelOf(o, t) + (t === o.favorite_tag ? 2 : 0); }
   const cat = Object.entries(cnt).sort((a, b) => b[1] - a[1])[0]?.[0];
   const top = [...o.interests].sort((a, b) => E.levelOf(o, b) - E.levelOf(o, a)).slice(0, 2);
-  const what = top.length ? josa(top.join("·"), "을", "를") + " 즐기는" : "새로운 취향을 찾는";
-  return { type: PERSONA[cat] || "취향 탐색형", line: `${o.weekend === "out" ? "주말마다 밖에서" : "주말엔 집 근처에서"}<br>${esc(what)}` };
+  return { type: PERSONA[cat] || "취향 탐색형", line: top.length ? `요즘 ${esc(top.join("·"))}에<br>푹 빠진` : "새로운 취향을<br>찾고 있는" };
 }
 // 궁합 막대: 항목별 점수를 세 묶음으로 (점수 ÷ 그 항목 비중 = 얼마나 같은지)
 const BAR_GROUPS = [["관심사", ["interests"]], ["생활 리듬", ["contact_style", "chronotype", "weekend", "drinking"]], ["가치관", ["marriage_view", "spending", "pet"]]];
@@ -2523,12 +2525,12 @@ function recCard(me, o, r, fresh, idx = 0) {
   const reasons = r.reasons.slice(0, 3).map(reasonText).filter(Boolean);
   const common = new Set(r.reasons.find(x => x.key === "interests")?.hits.map(h => h.theirs) || []);
   const lk = S.likes[`${o.id}_${me.id}`], mine = liked(me.id, o.id), matched = isMatched(me.id, o.id);
-  const tags = [...o.interests.map(t => [t + (E.levelOf(o, t) === 3 ? "★" : ""), common.has(t)]), [KO[o.chronotype], false], [o.weekend === "out" ? "주말엔밖으로" : "주말엔집콕", false], ...(o.mbti ? [[o.mbti, false]] : [])];
+  const tags = o.interests.map(t => [t + (E.levelOf(o, t) === 3 ? "★" : ""), common.has(t)]);
   return `<article class="pcard" data-act="open" data-id="${o.id}">
     <div class="pc-head"><span class="pc-letter" aria-hidden="true">${"ABCDEFGH"[idx] || "+"}</span><span class="pc-kind">${esc(g)} · 궁합 <span class="num">${Math.round(r.score)}</span>점</span>${tierBadge(o)}${isNew(o) ? `<span class="new">NEW</span>` : ""}</div>
     <div class="pc-box">
       <div class="pc-top">${photo(o, "pc-av")}<div class="pc-id"><p class="pc-line">${pz.line}</p><b class="pc-type">${esc(pz.type)} ${esc(o.nickname)}${vb(o)}</b></div></div>
-      <div class="muted pc-sub">${o.age}세 · ${esc(o.region)} ${Math.max(1, Math.round(r.distance))}km 이내 · ${esc(o.job)}</div>
+      <div class="muted pc-sub">${o.age}세 · ${esc(o.region)} ${Math.max(1, Math.round(r.distance))}km 이내</div>
       <div class="pc-bars">${matchBars(r).map(([l, v]) => `<div class="pc-bar" role="img" aria-label="${l} ${v}% 일치"><span>${l}</span><i style="--v:${v}%"></i><b class="num">${v}%</b></div>`).join("")}</div>
       <div class="pc-tags">${tags.map(([t, hit]) => `<span class="${hit ? "hit" : ""}">#${esc(t)}</span>`).join("")}</div>
     </div>
@@ -2567,7 +2569,8 @@ function detailView(me) {
             ${reasons.length ? `<ul class="reasons">${reasons.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : `<span class="muted" style="font-size:14px">새로운 취향을 나눌 수 있는 사람이에요</span>`}</div>` : ""}
           ${o.id !== me.id ? aiMatchBox(me, o) : ""}
           <div><div class="facts"><div style="grid-column:1/-1"><div class="k">관심사</div><div class="chips" style="margin-top:4px">${o.interests.map(t => `<span class="chip${common.has(t) ? " hit" : ""}">${esc(t)} <span class="muted" style="font-size:11px">${LEVEL_KO[E.levelOf(o, t)]}</span></span>`).join("")}</div></div>
-            ${facts.map(([k, v]) => `<div><div class="k">${k}</div><div class="v">${esc(v)}</div></div>`).join("")}</div></div>
+            ${o.id === me.id ? facts.map(([k, v]) => `<div><div class="k">${k}</div><div class="v">${esc(v)}</div></div>`).join("") : ""}</div>
+            ${o.id === me.id ? "" : `<div class="secret"><span aria-hidden="true">🔒</span><span>직업·키·MBTI·생활 습관·가치관은 <b>궁합 점수에만</b> 쓰고 보여주지 않아요. 대화하면서 직접 알아가 보세요.</span></div>`}</div>
           ${isMatched(me.id, o.id) ? signalPanel(me, o, false) : ""}
           ${S.dev && r ? devSheet(r) : ""}
           ${!r ? `<div class="notice" style="font-size:13px">내 추천 조건(나이·거리·목적 등) 밖이라 궁합 점수가 없어요. 검색으로 찾은 사람에게도 좋아요는 보낼 수 있어요.</div>` : ""}
