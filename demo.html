@@ -375,6 +375,7 @@ tr.pen td { color: var(--bad); }
 .pc-head { display: flex; align-items: flex-end; gap: 10px; padding-left: 4px; }
 .pc-letter { font-family: var(--font-display); font-size: 54px; line-height: .78; font-weight: 800; background: linear-gradient(180deg, var(--accent), var(--mint)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .pc-kind { font-size: 13px; font-weight: 700; color: var(--accent); padding-bottom: 1px; }
+.pc-head .tier { margin-bottom: 2px; }
 .pc-head .new { background: var(--pink); color: var(--pink-ink); border-radius: 6px; padding: 1px 6px; font-size: 11px; font-weight: 700; margin-bottom: 2px; }
 .pc-box { background: var(--surface); border-radius: 24px; padding: 18px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; }
 .pc-top { display: flex; gap: 14px; align-items: center; }
@@ -401,40 +402,120 @@ tr.pen td { color: var(--bad); }
 .state.wait::after { content: ""; animation: aidots 1.2s steps(4) infinite; }
 .note-in { width: 100%; border: 1px solid var(--line); background: var(--paper); border-radius: 999px; padding: 10px 16px; margin-bottom: 10px; }
 .msg-sys.note { color: var(--pink-ink); background: var(--pink); font-weight: 400; max-width: 90%; text-align: center; }
-/* ---------- 매칭 성사 ---------- */
+/* ---------- 매칭 성사: 상대 얼굴 크게, 궁합 점수, 키워드 작게 ---------- */
 .overlay.celeb { align-items: center; z-index: 25; }
-.celeb .scrim { background: radial-gradient(circle at 50% 40%, rgba(255, 211, 226, .5), rgba(31, 33, 71, .72)); }
-.celeb-card { position: relative; width: min(440px, calc(100% - 32px)); max-height: calc(100% - 32px); overflow-y: auto; overscroll-behavior: contain; background: var(--app); border-radius: 28px; padding: 26px 20px 20px; display: flex; flex-direction: column; gap: 12px; text-align: center; box-shadow: 0 20px 60px rgba(31, 33, 71, .4); animation: celebIn .45s cubic-bezier(.2, 1.3, .4, 1) both; }
-.celeb-card h2 { font-size: 28px; color: var(--accent); }
-.celeb-card > p { margin: 0; color: var(--muted); font-size: 14px; }
-.celeb-pair { display: flex; justify-content: center; align-items: center; height: 104px; position: relative; }
-.celeb-av { width: 96px; height: 96px; border-radius: 50%; box-shadow: 0 0 0 4px var(--surface), 0 8px 24px rgba(91, 95, 224, .3); }
-.celeb-av .ini { font-size: 38px; }
-.celeb-av.l { margin-right: -6px; animation: slideL .6s .1s cubic-bezier(.2, 1.2, .4, 1) both; }
-.celeb-av.r { margin-left: -6px; animation: slideR .6s .1s cubic-bezier(.2, 1.2, .4, 1) both; }
-.celeb-heart { position: absolute; left: 50%; top: 50%; width: 46px; height: 46px; margin: -23px 0 0 -23px; border-radius: 50%; background: var(--pink); color: var(--heart); display: grid; place-items: center; z-index: 1; box-shadow: 0 4px 14px rgba(214, 51, 108, .35); animation: pop .5s .55s cubic-bezier(.2, 1.6, .4, 1) both; }
-.celeb-heart svg { width: 24px; height: 24px; fill: currentColor; }
-.celeb-spark { position: absolute; inset: 0; pointer-events: none; overflow: hidden; border-radius: inherit; }
-.celeb-spark i { position: absolute; top: -14px; width: 8px; height: 12px; border-radius: 2px; opacity: .9; animation: fall 2.6s linear infinite; }
-.celeb-open { display: flex; flex-direction: column; gap: 6px; text-align: left; background: var(--accent-soft); border-radius: 18px; padding: 12px; }
-.celeb-open b { font-size: 13px; color: var(--accent); }
-.celeb-open button { border: 0; background: var(--surface); color: var(--ink); border-radius: 14px; padding: 10px 12px; min-height: 44px; text-align: left; font-size: 14px; cursor: pointer; }
-.celeb-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.celeb-next { text-align: left; font-size: 13px; }
+.celeb .scrim { background: radial-gradient(circle at 50% 35%, rgba(142, 145, 238, .55), rgba(15, 16, 36, .9) 72%); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.celeb2 { position: relative; z-index: 1; width: min(400px, calc(100% - 32px)); max-height: calc(100% - 20px); overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; padding: 6px 2px 14px; color: #FFFFFF; }
+.celeb-tag { font-family: var(--font-logo); font-size: 38px; line-height: 1.1; font-weight: 700; text-shadow: 0 0 18px rgba(255, 141, 181, .8), 0 2px 0 rgba(0, 0, 0, .15); }
+.celeb-tag span { color: #FF8DB5; }
+.celeb-photo { position: relative; width: 100%; aspect-ratio: 4 / 5; max-height: 50vh; border-radius: 30px; overflow: hidden; flex: none; box-shadow: 0 0 0 3px rgba(255, 255, 255, .85), 0 0 46px rgba(255, 141, 181, .55), 0 24px 60px rgba(0, 0, 0, .45); transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .2s ease-out; touch-action: pan-y; }
+.celeb-photo .celeb-big { width: 100%; height: 100%; }
+.celeb-big .ini { font-size: 150px; }
+.celeb-shine { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at var(--mx, 30%) var(--my, 18%), rgba(255, 255, 255, .5), transparent 42%); mix-blend-mode: soft-light; }
+.celeb-shine::after { content: ""; position: absolute; inset: -20% -60%; background: linear-gradient(110deg, transparent 40%, rgba(255, 255, 255, .45) 50%, transparent 60%); transform: translateX(-60%); }
+.anim .celeb-shine::after { animation: sweep 1.4s .7s ease-out both; }
+.celeb-who { position: absolute; left: 0; right: 0; bottom: 0; padding: 70px 18px 16px; background: linear-gradient(transparent, rgba(15, 16, 36, .82)); text-align: left; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.celeb-who b { font-size: 30px; font-weight: 800; line-height: 1.2; }
+.celeb-who > span:not(.tier) { font-size: 15px; opacity: .92; }
+.celeb-me { position: absolute; top: 14px; left: 14px; display: flex; align-items: center; gap: 6px; background: rgba(15, 16, 36, .45); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-radius: 999px; padding: 4px 12px 4px 4px; font-size: 12px; }
+.celeb-me > span { color: #FF8DB5; }
+.celeb-score { display: flex; align-items: baseline; justify-content: center; gap: 6px; margin-top: 2px; }
+.celeb-score b { font-size: 68px; line-height: 1; font-weight: 800; background: linear-gradient(180deg, #FFFFFF 30%, #FFC2D6); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 4px 18px rgba(255, 141, 181, .65)); }
+.celeb-score small { font-size: 15px; font-weight: 700; opacity: .9; }
+.celeb-kw { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.celeb-kw span { font-size: 12px; padding: 3px 10px; border-radius: 999px; background: rgba(255, 255, 255, .14); border: 1px solid rgba(255, 255, 255, .28); }
+.celeb-note { margin: 0; font-size: 13px; color: #FFE3EC; }
+.celeb-go { width: 100%; min-height: 52px; font-size: 16px; border: 0; color: #FFFFFF; background: linear-gradient(120deg, #FF8DB5, #A3A6FF); box-shadow: 0 10px 30px rgba(255, 141, 181, .45); }
+.celeb-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
+.celeb2 .btn.line { color: #FFFFFF; border-color: rgba(255, 255, 255, .45); background: rgba(255, 255, 255, .08); }
+.celeb-next { text-align: left; font-size: 13px; width: 100%; }
 .celeb-next summary { cursor: pointer; color: var(--accent); font-weight: 700; padding: 8px 0; }
+.celeb2 .celeb-next summary { color: #C3C5FF; }
 .rules { margin: 4px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; line-height: 1.5; }
 .rules b { color: var(--accent); }
+.celeb2 .rules b { color: #FFC2D6; }
+.anim .celeb-tag { animation: tagIn .6s cubic-bezier(.2, 1.5, .4, 1) both; }
+.anim .celeb-photo { animation: photoIn .8s .1s cubic-bezier(.2, 1.2, .3, 1) both; }
+.anim .celeb-score, .anim .celeb-kw, .anim .celeb-go { animation: upIn .5s .55s ease-out both; }
+#burst { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 45; }
+/* ---------- 프로필 등급 ---------- */
+.tier { display: inline-flex; align-items: center; gap: 3px; font-size: 11.5px; font-weight: 800; padding: 1px 9px; border-radius: 999px; color: #FFFFFF; background: linear-gradient(120deg, var(--tc), color-mix(in srgb, var(--tc) 55%, #FFFFFF)); box-shadow: 0 2px 8px color-mix(in srgb, var(--tc) 40%, transparent); white-space: nowrap; vertical-align: 2px; }
+.tier-card { display: flex; flex-direction: column; gap: 10px; position: relative; overflow: hidden; }
+.tier-card::before { content: ""; position: absolute; inset: 0 0 auto; height: 6px; background: linear-gradient(90deg, var(--tc), color-mix(in srgb, var(--tc) 40%, #FFFFFF)); }
+.tier-top { display: flex; align-items: center; gap: 12px; }
+.tier-gem { width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; font-size: 26px; color: #FFFFFF; background: linear-gradient(140deg, var(--tc), color-mix(in srgb, var(--tc) 45%, #FFFFFF)); box-shadow: 0 6px 18px color-mix(in srgb, var(--tc) 45%, transparent); flex: none; }
+.tier-top > div { flex: 1; display: flex; flex-direction: column; }
+.tier-top small { font-size: 12px; color: var(--muted); }
+.tier-top b { font-size: 22px; }
+.tier-score { font-size: 28px; font-weight: 800; color: var(--accent); }
+.tier-score small { font-size: 13px; color: var(--muted); }
+.tier-track { position: relative; height: 10px; border-radius: 99px; background: var(--accent-soft); }
+.tier-track i { position: absolute; inset: 0 auto 0 0; border-radius: inherit; background: linear-gradient(90deg, var(--mint), var(--tc)); }
+.tier-track span { position: absolute; top: -3px; width: 2px; height: 16px; background: var(--surface); }
+.tier-steps { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-top: -4px; }
+.tier-items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.tier-items li { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.tier-items li b { color: var(--accent); }
+.tier-items li.done b::after { content: " ✓"; color: var(--good); }
+.tier-items li small { grid-column: 1 / -1; font-size: 12px; color: var(--heart); }
+/* ---------- 움직이는 배경 (WebGL) ---------- */
+#bg-gl { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+html.gl #app { background: color-mix(in srgb, var(--app) 52%, transparent); box-shadow: none; }
 .typing { display: flex; gap: 4px; padding: 14px; }
 .typing i { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); animation: blink 1.2s infinite; }
 .typing i:nth-child(2) { animation-delay: .2s; }
 .typing i:nth-child(3) { animation-delay: .4s; }
-@keyframes celebIn { from { transform: scale(.85); opacity: 0; } }
-@keyframes slideL { from { transform: translateX(-80px); opacity: 0; } }
-@keyframes slideR { from { transform: translateX(80px); opacity: 0; } }
-@keyframes pop { from { transform: scale(0); } }
-@keyframes fall { to { transform: translateY(620px) rotate(540deg); } }
+@keyframes tagIn { from { transform: scale(.4); opacity: 0; } }
+@keyframes photoIn { from { transform: perspective(900px) rotateY(-40deg) scale(.7); opacity: 0; } }
+@keyframes upIn { from { transform: translateY(14px); opacity: 0; } }
+@keyframes sweep { to { transform: translateX(60%); } }
 @keyframes blink { 0%, 80%, 100% { opacity: .25; } 40% { opacity: 1; } }
-@media (prefers-reduced-motion: reduce) { .celeb-card, .celeb-av, .celeb-heart { animation: none; } .celeb-spark { display: none; } }
+@media (prefers-reduced-motion: reduce) { .anim .celeb-tag, .anim .celeb-photo, .anim .celeb-score, .anim .celeb-kw, .anim .celeb-go, .anim .celeb-shine::after { animation: none; } }
+
+/* ---------- 취향 핫플 지도 ---------- */
+.hot-entry { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; border: 0; cursor: pointer; border-radius: 20px; padding: 12px 14px; color: #FFFFFF; background: linear-gradient(120deg, #5B5FE0, #9C7BEA 60%, #F08DB0); box-shadow: 0 8px 20px rgba(91, 95, 224, .28); flex: none; }
+.hot-entry .ico { width: 42px; height: 42px; border-radius: 14px; background: rgba(255, 255, 255, .22); display: grid; place-items: center; font-size: 22px; flex: none; }
+.hot-entry .txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.hot-entry b { font-size: 16px; }
+.hot-entry small { font-size: 12.5px; opacity: .95; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hot-entry svg { width: 18px; height: 18px; transform: rotate(180deg); flex: none; }
+.hot-map { height: 300px; width: 100%; background: #E9ECF5; position: relative; z-index: 0; flex: none; }
+.hot-map .leaflet-tile-pane { filter: saturate(.3) brightness(1.06) contrast(.92); }   /* 바탕 지도는 흐리게, 핀이 눈에 띄게 */
+.map-off { display: grid; place-items: center; height: 100%; padding: 20px; text-align: center; font-size: 14px; color: #64678A; }
+.mpin { display: grid; place-items: center; font-weight: 800; color: #FFFFFF; }
+.mpin.who { width: 30px; height: 30px; border-radius: 50%; border: 3px solid #FFFFFF; font-size: 13px; box-shadow: 0 2px 8px rgba(0, 0, 0, .25); }
+.mpin.me { background: #5B5FE0; }
+.mpin.them { background: #E0679A; }
+.mpin.spot { width: 42px; height: 42px; border-radius: 50%; background: #FFFFFF; border: 2.5px solid #5B5FE0; font-size: 20px; position: relative; box-shadow: 0 4px 12px rgba(31, 33, 71, .3); transition: transform .15s; }
+.mpin.spot b { position: absolute; top: -6px; right: -6px; min-width: 19px; height: 19px; border-radius: 10px; background: #5B5FE0; color: #FFFFFF; font-size: 11px; display: grid; place-items: center; }
+.mpin.spot.on { transform: scale(1.3); border-color: #E0679A; }
+.mpin.spot.on b { background: #E0679A; }
+.hot-legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted); padding-block: 10px 0; }
+.hot-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
+.hot-list { display: flex; flex-direction: column; gap: 10px; padding-block: 12px 20px; }
+.hot-card { display: flex; flex-direction: column; gap: 12px; background: var(--surface); border: 2px solid transparent; border-radius: 22px; padding: 14px; box-shadow: var(--shadow); cursor: pointer; }
+.hot-card.on { border-color: var(--accent); }
+.hot-row { display: flex; gap: 12px; align-items: flex-start; }
+.hot-ico { width: 58px; height: 58px; flex: none; border-radius: 18px; display: grid; place-items: center; font-size: 30px; background: linear-gradient(140deg, var(--accent-soft), var(--pink)); position: relative; }
+.hot-ico b { position: absolute; top: -6px; left: -6px; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-size: 12px; display: grid; place-items: center; }
+.hot-main { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.hot-main > b { font-size: 17px; }
+.hot-line { font-size: 13.5px; color: var(--muted); }
+.hot-why { font-size: 13px; font-weight: 700; color: var(--heart); }
+.hot-dist { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 3px; }
+.hot-dist span { font-size: 12px; padding: 2px 9px; border-radius: 999px; background: var(--chip); color: var(--mint-deep); }
+.hot-dist .fair { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.hot-acts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.hot-acts a { display: flex; align-items: center; justify-content: center; min-height: 46px; border-radius: 14px; font-weight: 800; font-size: 14px; text-decoration: none; }
+.hot-acts .naver { background: #03C75A; color: #FFFFFF; }
+.hot-acts .kakao { background: #FEE500; color: #191919; }
+.hot-acts .btn { grid-column: 1 / -1; }
+.hotmsg { display: flex; flex-direction: column; gap: 3px; }
+.hotmsg .hm-t { font-weight: 800; }
+.hotmsg .hm-links { display: flex; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+.hotmsg .hm-links a { font-size: 12px; font-weight: 800; padding: 5px 11px; border-radius: 999px; text-decoration: none; }
+.hotmsg .hm-links .naver { background: #03C75A; color: #FFFFFF; }
+.hotmsg .hm-links .kakao { background: #FEE500; color: #191919; }
 
 /* 모바일: 핸드폰에서 주로 쓰니까 손가락·키보드 기준으로 */
 html { -webkit-text-size-adjust: 100%; }
@@ -1100,6 +1181,7 @@ const S = {
   menu: null, report: null, legal: null, notifOpen: false, admin: false, adminTab: "stats", planOpen: false, planMood: "auto", planPage: 0,
   afters: {}, sim: null,
   celebrate: null, thinking: {}, typing: {}, prefill: null, menuEnd: false,
+  hot: null, hotSel: 0, hotPage: 0,
   authError: "",
   ai: {}, aiOpen: false, aiTab: "reply", aiTone: "warm", riskSeen: {}, reportPreset: -1, reportDetail: "",
 };
@@ -1159,7 +1241,10 @@ function world() {
   if (cache && cache.ver === ver && cache.uid === S.uid) return cache;
   const list = allProfiles().filter(p => !isSuspended(p.id) || p.id === S.uid);
   const byId = Object.fromEntries(list.map(p => [p.id, p]));
-  cache = { ver, uid: S.uid, list, byId, ...E.computeAll(list, settingsOf, { isBlocked: (a, b) => isBlocked(a, b) || hiddenPair(a, b) }) };
+  // 비슷한 등급끼리: 등급이 2단계 이상 차이 나면 서로 추천하지 않음 (회원이 TIER_MIN명 이상일 때만)
+  const tierOn = list.length >= TIER_MIN, ti = tierOn ? Object.fromEntries(list.map(p => [p.id, tierOf(p).i])) : {};
+  const tierGap = (a, b) => tierOn && Math.abs(ti[a] - ti[b]) >= 2;
+  cache = { ver, uid: S.uid, list, byId, tierOn, ...E.computeAll(list, settingsOf, { isBlocked: (a, b) => isBlocked(a, b) || hiddenPair(a, b) || tierGap(a, b) }) };
   return cache;
 }
 // 화면에 보이는 추천만 근거를 자세히 계산해서 붙임 (같은 계산 결과 안에서는 다시 안 함)
@@ -1183,6 +1268,33 @@ function matchesOf(uid) {
   return out.filter(x => w.byId[x.id]);
 }
 const isMatched = (a, b) => matchesOf(a).some(x => x.id === b);
+
+// ---------------- 프로필 등급 ----------------
+// 얼굴이 아니라 '프로필을 얼마나 정성껏 채우고 관리하는지'로 매기는 100점짜리 점수.
+// 비슷한 등급(±1)끼리 추천해서, 좋은 사람을 만나려면 내 프로필부터 관리하게 함.
+const TIERS = [["브론즈", 0, "#B98A5E"], ["실버", 50, "#8D97AD"], ["골드", 65, "#D9A521"], ["플래티넘", 80, "#33B5BD"], ["다이아", 90, "#8E7CFF"]];
+function profileScore(p) {
+  const base = !REAL && BASE.profiles.some(b => b.id === p.id);   // 시연판 가상 회원은 인증·접속 기록이 없어서 번호로 정해 둠
+  const items = [], add = (label, got, max, tip) => items.push({ label, got, max, tip });
+  add("프로필 사진", p.photo || p.has_photo ? 20 : 0, 20, "사진을 올리면 +20");
+  add("사진 인증", isVerified(p.id) || (base && unit("v" + p.id) < 0.35) ? 20 : 0, 20, "셀카로 사진 인증을 하면 +20");
+  const bl = (p.bio || "").trim().length;
+  add("자기소개", bl >= 60 ? 20 : bl >= 30 ? 14 : bl >= 15 ? 8 : bl ? 4 : 0, 20, `자기소개를 ${bl >= 30 ? 60 : bl >= 15 ? 30 : 15}자 넘게 쓰면 올라가요 (지금 ${bl}자)`);
+  const ni = p.interests.length;
+  add("관심사", (ni >= 5 ? 10 : ni >= 4 ? 8 : ni >= 3 ? 6 : ni >= 2 ? 3 : 0) + (p.favorite_tag ? 5 : 0), 15, "관심사를 5개까지 고르고, 가장 좋아하는 하나에 ★★★을 주세요");
+  add("기본 정보", (p.job ? 5 : 0) + (p.height ? 5 : 0) + (p.mbti ? 5 : 0), 15, "직업·키·MBTI를 채우면 하나에 +5");
+  const seen = p.id === S.uid ? Date.now() : S.users[p.id]?.seenAt || (base ? Date.now() - unit("s" + p.id) * 10 * 864e5 : 0);
+  const days = (Date.now() - seen) / 864e5;
+  add("최근 활동", days <= 3 ? 10 : days <= 7 ? 6 : seen ? 2 : 0, 10, "자주 들어오면 +10");
+  return { score: items.reduce((t, x) => t + x.got, 0), items };
+}
+function tierOf(p) {
+  const { score, items } = profileScore(p);
+  let i = 0; TIERS.forEach((t, k) => { if (score >= t[1]) i = k; });
+  return { i, name: TIERS[i][0], color: TIERS[i][2], score, items, next: TIERS[i + 1] || null };
+}
+const tierBadge = p => { const t = tierOf(p); return `<span class="tier" style="--tc:${t.color}" title="프로필 등급 ${t.name}">◆ ${t.name}</span>`; };
+const TIER_MIN = 40;   // 회원이 이만큼은 있어야 등급으로 나눠 추천 (적을 때 나누면 추천할 사람이 없어짐)
 
 // ---------------- 매칭 후 다음 매칭 ----------------
 // 동시에 대화하는 매칭은 MATCH_CAP명까지. 꽉 차면 새 좋아요는 한 명과 대화를 마친 뒤에.
@@ -1217,7 +1329,7 @@ function botLikeBack(me, id) {
     const w = world(), o = w.byId[id], meP = w.byId[me];
     if (S.uid !== me || !liked(me, id) || !o) return render();
     const r = w.lists[me].recs.find(x => x.id === id);
-    const p = Math.min(0.9, Math.max(0.2, ((r ? r.ba : 40) - 30) / 50));   // 상대 기준 점수 80점 → 90%, 40점 → 20%
+    const p = Math.min(0.92, Math.max(0.35, ((r ? r.ba : 40) - 25) / 45));   // 상대 기준 점수 70점 → 92%, 45점 → 44%, 아무리 낮아도 35%
     if (unit(me + ">" + id) < p && matchesOf(me).length < MATCH_CAP) {
       const common = meP.interests.find(t => o.interests.includes(t));
       setLike(id, me, true, common ? `저도 ${josa(common, "을", "를")} 좋아해요! 반가워요` : "프로필 보고 반가웠어요 :)");
@@ -1229,6 +1341,8 @@ function botReply(me, o, msgs) {
   const last = mine[mine.length - 1]?.text || "";
   const common = me.interests.find(t => o.interests.includes(t)), fav = o.interests[0], myTag = me.interests[n % me.interests.length];
   const pick = arr => arr[parseInt(hashStr(o.id + n + last), 36) % arr.length];
+  const hp = /^\[핫플 제안\] (.+?) 어때요/.exec(last);
+  if (hp) return `${n ? "" : `안녕하세요 ${me.nickname}님! `}오 ${hp[1]} 좋아요! 저도 가보고 싶었어요 :) ${o.chronotype === "morning" ? "주말 오전" : "평일 저녁"} 어떠세요?`;
   if (!n) return `안녕하세요 ${me.nickname}님! 반가워요 :) ${common ? `저도 ${josa(common, "을", "를")} 정말 좋아해요.` : `저는 요즘 ${fav}에 빠져 있어요.`} ${me.nickname}님은 주말에 주로 뭐 하세요?`;
   if (/만나|커피|약속|언제|볼래|보실래/.test(last)) return `좋아요! 저는 ${o.chronotype === "morning" ? "주말 오전" : "평일 저녁"}이 편해요. ${o.region} 근처 어떠세요?`;
   if (/주말|쉬는 날|뭐 하/.test(last)) return o.weekend === "out" ? `주말엔 거의 밖에 있어요. 요즘은 ${fav} 하러 자주 나가요!` : `주말엔 집에서 쉬는 편이에요. ${fav} 하면서 충전해요 ㅎㅎ`;
@@ -1258,7 +1372,7 @@ function checkNewMatch(me) {
   const k = "gm-mseen:" + me.id, seen = ls.get(k, null), ms = matchesOf(me.id);
   if (!seen) return ls.set(k, ms.map(m => m.id));
   const nw = ms.find(m => !seen.includes(m.id) && (m.via === "auto" || Date.now() - matchedAt(me.id, m.id) < 3 * 864e5));
-  if (nw && !S.celebrate) S.celebrate = { id: nw.id, via: nw.via };
+  if (nw && !S.celebrate) S.celebrate = { id: nw.id, via: nw.via, fresh: true };
   if (ms.some(m => !seen.includes(m.id))) ls.set(k, [...new Set([...seen, ...ms.map(m => m.id)])]);
 }
 function openersFor(me, o, r) {
@@ -1269,28 +1383,86 @@ function openersFor(me, o, r) {
   out.push(`${o.weekend === "out" ? "주말엔 밖으로 나가는 편" : "주말엔 집에서 쉬는 편"}이시죠? 이번 주말엔 뭐 하세요?`);
   return out.slice(0, 3);
 }
+// 공통점을 짧은 키워드로 (성사 화면은 얼굴과 점수가 주인공이라 나머지는 작게)
+function matchKeywords(o, r) {
+  const kw = [...(r?.reasons.find(x => x.key === "interests")?.hits.slice(0, 2).map(h => h.theirs) || [])];   // 같이 좋아하는 관심사를 맨 앞에
+  for (const x of r ? r.reasons : []) {
+    if (x.key === "interests") continue;
+    else if (x.key === "chronotype") kw.push(`둘다${KO[x.value]}`);
+    else if (x.key === "weekend") kw.push(x.value === "home" ? "주말엔집콕" : "주말엔밖으로");
+    else if (x.key === "contact_style") kw.push(x.value === "frequent" ? "연락자주" : "연락은가끔");
+    else if (x.key === "marriage_view") kw.push("결혼관일치");
+    else if (x.key === "drinking") kw.push(x.value === "none" ? "둘다논알콜" : "술취향비슷");
+    else if (x.key === "spending") kw.push("소비성향비슷");
+    else if (x.key === "distance") kw.push(`${Math.max(1, Math.round(x.value))}km거리`);
+    else if (x.key === "taste") kw.push("취향결비슷");
+  }
+  kw.push(personaOf(o).type.replace(/ /g, ""));
+  return [...new Set(kw)].slice(0, 6);
+}
 function celebrateView(me) {
   const w = world(), c = S.celebrate, o = c && w.byId[c.id];
   if (!o) return "";
   const r0 = w.lists[me.id].recs.find(x => x.id === o.id), r = r0 ? full(me.id, r0) : null;
-  const reasons = r ? r.reasons.slice(0, 3).map(reasonText).filter(Boolean) : [];
-  const how = c.via === "auto" ? "서로가 서로의 1순위 추천이라 자동으로 연결됐어요" : `${o.nickname}님도 ${me.nickname}님에게 좋아요를 눌렀어요`;
-  const note = S.likes[`${o.id}_${me.id}`]?.note;
-  const spark = Array.from({ length: 14 }, (_, i) => `<i style="left:${(i * 7.3 + 3) % 100}%;animation-delay:${(i % 7) * .35}s;background:${i % 3 ? "var(--pink)" : "var(--mint)"}"></i>`).join("");
-  return `<div class="overlay celeb" role="dialog" aria-modal="true" aria-label="매칭 성사">
+  const score = r ? Math.round(r.score) : null, note = S.likes[`${o.id}_${me.id}`]?.note;
+  return `<div class="overlay celeb" role="dialog" aria-modal="true" aria-label="${esc(o.nickname)}님과 매칭 성사">
     <div class="scrim" data-act="celeb-close"></div>
-    <div class="celeb-card">
-      <div class="celeb-spark" aria-hidden="true">${spark}</div>
-      <div class="celeb-pair">${photo(me, "celeb-av l")}<span class="celeb-heart" aria-hidden="true">${ICON.heart}</span>${photo(o, "celeb-av r")}</div>
-      <h2>매칭 성사!</h2>
-      <p>${esc(how)}</p>
-      ${note ? `<div class="msg-sys note" style="align-self:center">♥ ${esc(o.nickname)}님의 한마디 · “${esc(note)}”</div>` : ""}
-      ${reasons.length ? `<div class="pc-tags" style="justify-content:center">${reasons.map(x => `<span class="hit">${esc(x)}</span>`).join("")}</div>` : ""}
-      <div class="celeb-open"><b>첫 인사, 이렇게 해보세요 (누르면 입력창에 들어가요)</b>${openersFor(me, o, r).map((t, i) => `<button type="button" data-act="celeb-say" data-id="${o.id}" data-i="${i}">${esc(t)}</button>`).join("")}</div>
-      <button class="btn" data-act="celeb-chat" data-id="${o.id}">대화 시작하기</button>
-      <div class="celeb-row"><button class="btn line sm" data-act="focus" data-id="${o.id}">이 사람에게 집중하기</button><button class="btn line sm" data-act="celeb-close">계속 둘러보기</button></div>
-      <details class="celeb-next"><summary>다음 매칭은 어떻게 되나요?</summary>${nextRules(matchesOf(me.id).length)}</details>
+    <div class="celeb2${c.fresh ? " anim" : ""}">
+      <div class="celeb-tag">It's a Match <span>♥</span></div>
+      <div class="celeb-photo" id="celeb-photo">${photo(o, "celeb-big")}<span class="celeb-shine" aria-hidden="true"></span>
+        <div class="celeb-me">${photo(me, "av mini")}<span>♥</span>${c.via === "auto" ? "서로의 1순위라 자동 연결" : "서로 좋아요"}</div>
+        <div class="celeb-who"><b>${esc(o.nickname)}</b><span>${o.age}세 · ${esc(o.region.replace(/^(서울|경기|인천) /, ""))}</span>${tierBadge(o)}</div>
+      </div>
+      ${score != null ? `<div class="celeb-score"><small>궁합</small><b class="num" data-count="${score}">${c.fresh ? 0 : score}</b><small>점</small></div>` : ""}
+      <div class="celeb-kw">${matchKeywords(o, r).map(k => `<span>#${esc(k)}</span>`).join("")}</div>
+      ${note ? `<p class="celeb-note">“${esc(note)}”</p>` : ""}
+      <button class="btn celeb-go" data-act="celeb-chat" data-id="${o.id}">대화 시작하기</button>
+      <div class="celeb-row"><button class="btn line sm" data-act="hotopen" data-id="${o.id}">📍 취향 핫플</button><button class="btn line sm" data-act="celeb-close">나중에</button></div>
+      <details class="celeb-next"><summary>다음 매칭은 어떻게 되나요?</summary>${nextRules(matchesOf(me.id).length)}<button class="btn line sm" style="margin-top:10px" data-act="focus" data-id="${o.id}">이 사람에게 집중하기</button></details>
     </div></div>`;
+}
+// 성사 화면 효과: 사진이 손가락을 따라 3D로 기울고 빛이 반사됨. 처음 뜰 때는 점수가 0부터 올라가고 하트가 터짐
+function celebFx(fresh) {
+  const card = document.getElementById("celeb-photo");
+  if (!card) return;
+  const tilt = (x, y) => { card.style.setProperty("--ry", (x - .5) * 18 + "deg"); card.style.setProperty("--rx", (.5 - y) * 14 + "deg"); card.style.setProperty("--mx", x * 100 + "%"); card.style.setProperty("--my", y * 100 + "%"); };
+  card.onpointermove = e => { const b = card.getBoundingClientRect(); tilt((e.clientX - b.left) / b.width, (e.clientY - b.top) / b.height); };
+  card.onpointerleave = () => tilt(.5, .5);
+  if (!fresh) return;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const num = document.querySelector(".celeb-score b[data-count]");
+  if (num) {
+    const to = +num.dataset.count, t0 = performance.now();
+    const step = now => { if (!num.isConnected) return; const k = Math.min(1, (now - t0) / 1200); num.textContent = Math.round(to * (1 - (1 - k) ** 3)); if (k < 1) requestAnimationFrame(step); };
+    if (reduce) num.textContent = to; else setTimeout(() => requestAnimationFrame(step), 500);
+  }
+  if (!reduce) { const b = card.getBoundingClientRect(); burst(b.left + b.width / 2, b.top + b.height * .45); }
+}
+// 하트·반짝이 터뜨리기 (화면을 다시 그려도 끊기지 않게 #app 밖의 캔버스에)
+function burst(cx, cy) {
+  let cv = document.getElementById("burst");
+  if (!cv) { cv = document.createElement("canvas"); cv.id = "burst"; cv.setAttribute("aria-hidden", "true"); document.body.appendChild(cv); }
+  const k = Math.min(devicePixelRatio || 1, 2), ctx = cv.getContext("2d");
+  cv.width = innerWidth * k; cv.height = innerHeight * k; ctx.setTransform(k, 0, 0, k, 0, 0);
+  const COLORS = ["#FF8DB5", "#FFC2D6", "#A3A6FF", "#FFFFFF", "#C3C5FF", "#FFD36E"];
+  const parts = Array.from({ length: 70 }, (_, i) => { const a = Math.random() * Math.PI * 2, v = 4 + Math.random() * 9;
+    return { x: cx, y: cy, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 4, s: 6 + Math.random() * 10, r: Math.random() * 6, vr: (Math.random() - .5) * .3, c: COLORS[i % COLORS.length], heart: i % 3 !== 2 }; });
+  const heart = s => { ctx.beginPath(); ctx.moveTo(0, s * .3); ctx.bezierCurveTo(0, 0, -s * .5, 0, -s * .5, s * .3); ctx.bezierCurveTo(-s * .5, s * .6, 0, s * .75, 0, s); ctx.bezierCurveTo(0, s * .75, s * .5, s * .6, s * .5, s * .3); ctx.bezierCurveTo(s * .5, 0, 0, 0, 0, s * .3); ctx.fill(); };
+  const t0 = performance.now();
+  const frame = now => {
+    const life = (now - t0) / 1900;
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    if (life >= 1) return cv.remove();
+    ctx.globalAlpha = 1 - life ** 2;
+    for (const p of parts) {
+      p.vy += .22; p.vx *= .985; p.vy *= .985; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c;
+      if (p.heart) heart(p.s); else { ctx.beginPath(); ctx.arc(0, 0, p.s / 4, 0, 7); ctx.fill(); }
+      ctx.restore();
+    }
+    requestAnimationFrame(frame);
+  };
+  requestAnimationFrame(frame);
 }
 
 // ---------------- 저장 ----------------
@@ -1899,6 +2071,147 @@ function planCard(me, o) {
   </div>`;
 }
 
+// ---------- 취향 핫플 지도 ----------
+// 매칭된 두 사람의 공통 취향 + 두 집의 중간 지점 + 이동 거리 공평함으로 요즘 핫플 동네를 골라,
+// 지도에 두 사람과 함께 핀으로 보여주고 네이버 지도·카카오맵에서 바로 열어요. (가게 이름은 지도 앱의 최신 검색 결과로)
+// e: 그림, q: 지도 검색에 붙일 동네 이름, out: 야외, drink: 술이 중심
+const HOTSPOTS = [
+  { id: "seongsu", n: "성수동 카페거리", q: "성수동", lat: 37.5446, lng: 127.0557, e: "☕", tags: ["카페", "베이킹", "쇼핑", "굿즈", "전시"], line: "공장을 고친 카페와 팝업스토어가 모인 곳" },
+  { id: "seoulforest", n: "서울숲", q: "서울숲", lat: 37.5444, lng: 127.0374, e: "🌳", tags: ["산책", "강아지", "사진", "자전거"], line: "넓은 숲길 피크닉, 반려견과 산책", out: true },
+  { id: "yeonnam", n: "연남동 경의선숲길", q: "연남동", lat: 37.5622, lng: 126.9256, e: "🌿", tags: ["산책", "카페", "맛집", "사진", "고양이"], line: "옛 기찻길 공원을 따라 걷는 골목 맛집 거리" },
+  { id: "hongdae", n: "홍대 걷고싶은거리", q: "홍대", lat: 37.5551, lng: 126.9227, e: "🎸", tags: ["공연", "힙합", "음악", "기타", "게임", "애니", "보드게임"], line: "라이브 클럽, 버스킹, 오락실이 한 골목에" },
+  { id: "mangwon", n: "망원시장 · 망원 한강공원", q: "망원동", lat: 37.5555, lng: 126.8955, e: "🚲", tags: ["자전거", "맛집", "산책", "러닝"], line: "시장 간식 사 들고 한강 자전거 한 바퀴", out: true },
+  { id: "euljiro", n: "을지로 노포 골목", q: "을지로", lat: 37.5661, lng: 126.9918, e: "🍺", tags: ["맥주", "와인", "음악", "사진"], line: "인쇄소 골목 사이 숨은 펍과 LP바", drink: true },
+  { id: "ikseon", n: "익선동 한옥거리", q: "익선동", lat: 37.5744, lng: 126.9898, e: "🏮", tags: ["카페", "맛집", "사진", "베이킹"], line: "한옥 골목에서 디저트와 사진 한 장" },
+  { id: "seochon", n: "서촌 · 통인시장", q: "서촌", lat: 37.5800, lng: 126.9705, e: "📚", tags: ["독서", "글쓰기", "전시", "미술", "카페"], line: "독립서점, 작은 갤러리, 엽전 도시락" },
+  { id: "samcheong", n: "삼청동 미술관길", q: "삼청동", lat: 37.5788, lng: 126.9800, e: "🎨", tags: ["전시", "미술", "사진", "산책"], line: "미술관 하나 보고 돌담길 산책" },
+  { id: "daehakro", n: "대학로 소극장 거리", q: "대학로", lat: 37.5822, lng: 127.0020, e: "🎭", tags: ["공연", "영화", "드라마", "맛집"], line: "소극장 연극 한 편과 마로니에 공원" },
+  { id: "hannam", n: "한남동 · 이태원", q: "한남동", lat: 37.5347, lng: 127.0006, e: "🍷", tags: ["와인", "맛집", "요리", "전시", "쇼핑"], line: "편집숍, 갤러리, 세계 음식 레스토랑" },
+  { id: "yongridan", n: "용리단길", q: "용리단길", lat: 37.5296, lng: 126.9686, e: "🍜", tags: ["맛집", "요리", "카페", "와인"], line: "요즘 줄 서는 신용산 맛집 골목" },
+  { id: "yeouido", n: "여의도 한강공원", q: "여의도 한강공원", lat: 37.5284, lng: 126.9330, e: "🧺", tags: ["산책", "자전거", "러닝", "캠핑", "강아지"], line: "돗자리 피크닉과 야경, 주말 야시장", out: true },
+  { id: "thehyundai", n: "더현대 서울", q: "여의도 더현대", lat: 37.5259, lng: 126.9284, e: "🛍️", tags: ["쇼핑", "굿즈", "애니", "맛집"], line: "팝업스토어 성지, 실내 정원까지" },
+  { id: "seokchon", n: "석촌호수 · 롯데월드몰", q: "잠실 석촌호수", lat: 37.5096, lng: 127.1040, e: "🎡", tags: ["산책", "쇼핑", "사진", "영화"], line: "호수 한 바퀴 돌고 전망대·영화관" },
+  { id: "jamsilbb", n: "잠실야구장", q: "잠실야구장", lat: 37.5122, lng: 127.0719, e: "⚾", tags: ["야구", "맥주", "맛집"], line: "치킨 들고 같은 팀 응원하기" },
+  { id: "ttukseom", n: "뚝섬 한강공원", q: "뚝섬 한강공원", lat: 37.5293, lng: 127.0668, e: "🏃", tags: ["러닝", "자전거", "수영", "산책", "캠핑"], line: "강변 러닝·수영장, 노을 맛집", out: true },
+  { id: "garosu", n: "가로수길 · 도산공원", q: "신사동 가로수길", lat: 37.5212, lng: 127.0229, e: "👗", tags: ["쇼핑", "카페", "맛집", "와인", "베이킹"], line: "플래그십 스토어와 디저트 카페" },
+  { id: "gangnam", n: "강남역 놀거리", q: "강남역", lat: 37.4979, lng: 127.0276, e: "🔐", tags: ["보드게임", "게임", "볼링", "영화", "맛집", "코딩"], line: "방탈출, 보드게임, 볼링을 한곳에서" },
+  { id: "bukhansan", n: "북한산 우이동 둘레길", q: "우이동", lat: 37.6597, lng: 127.0115, e: "⛰️", tags: ["등산", "산책", "사진", "캠핑"], line: "초보도 걷는 둘레길과 계곡 백숙", out: true },
+  { id: "mullae", n: "문래 창작촌", q: "문래동", lat: 37.5151, lng: 126.8956, e: "🔨", tags: ["미술", "굿즈", "맥주", "사진"], line: "철공소 골목 공방 체험과 수제맥주" },
+  { id: "gwangjang", n: "광장시장 · 청계천", q: "광장시장", lat: 37.5700, lng: 126.9996, e: "🥟", tags: ["맛집", "요리", "여행", "산책"], line: "빈대떡 먹고 청계천 야경 산책" },
+  { id: "climbing", n: "성수 · 건대 실내 스포츠", q: "건대입구", lat: 37.5404, lng: 127.0700, e: "🧗", tags: ["클라이밍", "헬스", "요가", "테니스", "볼링"], line: "클라이밍·볼링 체험하고 건대 맛집" },
+  { id: "ilsan", n: "일산 호수공원", q: "일산 호수공원", lat: 37.6584, lng: 126.7697, e: "🦢", tags: ["산책", "자전거", "러닝", "강아지", "사진"], line: "넓은 호수 산책과 라페스타 맛집", out: true },
+  { id: "jeongja", n: "정자동 카페거리", q: "정자동 카페거리", lat: 37.3670, lng: 127.1085, e: "🥐", tags: ["카페", "베이킹", "맛집", "강아지", "산책"], line: "탄천 산책로 옆 테라스 카페" },
+  { id: "haenggung", n: "수원 행궁동", q: "수원 행궁동", lat: 37.2836, lng: 127.0145, e: "🏯", tags: ["카페", "사진", "여행", "전시", "산책"], line: "화성 성곽길 걷고 행리단길 카페" },
+  { id: "songdo", n: "송도 센트럴파크", q: "송도 센트럴파크", lat: 37.3925, lng: 126.6392, e: "⛵", tags: ["산책", "사진", "자전거", "쇼핑", "낚시"], line: "수상택시 타고 공원 산책, 아울렛 구경" },
+];
+// 관심사 → 지도 검색어 (동네 이름 뒤에 붙임)
+const HOT_Q = { 카페: "카페", 베이킹: "베이커리", 맛집: "맛집", 요리: "쿠킹클래스", 와인: "와인바", 맥주: "수제맥주", 전시: "전시", 미술: "갤러리", 사진: "포토스팟", 독서: "독립서점", 글쓰기: "북카페",
+  산책: "산책로", 등산: "등산로", 자전거: "자전거 대여", 러닝: "러닝 코스", 캠핑: "피크닉", 수영: "수영장", 클라이밍: "클라이밍", 헬스: "헬스장", 요가: "요가", 테니스: "테니스장", 볼링: "볼링장",
+  공연: "공연장", 음악: "LP바", 기타: "라이브클럽", 힙합: "힙합 클럽", 영화: "영화관", 드라마: "카페", 게임: "오락실", 보드게임: "보드게임카페", 애니: "애니 굿즈샵", 굿즈: "소품샵", 코딩: "방탈출",
+  쇼핑: "팝업스토어", 강아지: "애견동반 카페", 고양이: "고양이 카페", 야구: "야구장", 여행: "명소", 낚시: "낚시", 축구: "풋살장", 농구: "농구장", 골프: "스크린골프", 피아노: "LP바", 넷플릭스: "만화카페" };
+const naverUrl = q => `https://map.naver.com/p/search/${encodeURIComponent(q)}`;
+const kakaoUrl = q => `https://map.kakao.com/link/search/${encodeURIComponent(q)}`;
+function hotPicks(me, o) {
+  const mid = { lat: (me.lat + o.lat) / 2, lng: (me.lng + o.lng) / 2 };
+  const noDrink = me.drinking === "none" || o.drinking === "none", homey = me.weekend === "home" && o.weekend === "home";
+  const scored = HOTSPOTS.map(h => {
+    let best = null, bestV = -1;
+    const vals = h.tags.map(t => {
+      const a = me.interests.includes(t), b = o.interests.includes(t);
+      const v = a && b ? 1.2 : a || b ? 0.35 * E.levelOf(a ? me : o, t) : 0;
+      if (v > bestV) { bestV = v; best = t; }
+      return v;
+    }).sort((x, y) => y - x);
+    let s = vals[0] + 0.5 * (vals[1] || 0);   // 태그가 많은 곳이 유리하지 않게 잘 맞는 두 개만
+    const dMe = E.dist(me, h), dO = E.dist(o, h);
+    s -= 0.08 * (dMe + dO) / 2 + 0.05 * Math.abs(dMe - dO);   // 멀수록, 한쪽만 멀수록 뒤로
+    if (h.drink && noDrink) s -= 1.5;
+    if (h.out && homey) s -= 0.2;
+    const both = h.tags.filter(t => me.interests.includes(t) && o.interests.includes(t));
+    const one = h.tags.find(t => o.interests.includes(t)) || h.tags.find(t => me.interests.includes(t));
+    const why = both.length ? `둘 다 ${josa(both.slice(0, 2).join("·"), "을", "를")} 좋아해서` : one ? `${o.interests.includes(one) ? o.nickname + "님이" : "내가"} ${josa(one, "을", "를")} 좋아해서` : "두 분 중간쯤 요즘 뜨는 곳";
+    return { ...h, s, dMe, dO, why, query: `${h.q} ${HOT_Q[best] || ""}`.trim(), fair: Math.abs(dMe - dO) <= 3 };
+  }).sort((a, b) => b.s - a.s);
+  // 두 사람 평균 20km 넘게 먼 곳은, 가까운 곳이 6곳 이상 있으면 빼기
+  const near = scored.filter(h => (h.dMe + h.dO) / 2 <= 20);
+  return near.length >= 6 ? near : scored;
+}
+const km = d => d < 1 ? "1km 안" : `${Math.round(d)}km`;
+function hotEntry(me, o) {
+  const top = hotPicks(me, o).slice(0, 3);
+  return `<button type="button" class="hot-entry" data-act="hotopen" data-id="${o.id}"><span class="ico" aria-hidden="true">📍</span>
+    <span class="txt"><b>두 분 취향 핫플 TOP 3</b><small>${top.map(h => `${h.e} ${esc(h.n)}`).join(" · ")}</small></span>${ICON.back}</button>`;
+}
+function hotView(me) {
+  const o = world().byId[S.hot];
+  if (!o) return "";
+  const all = hotPicks(me, o), pages = Math.ceil(all.length / 3), page = S.hotPage % pages;
+  const picks = all.slice(page * 3, page * 3 + 3), sel = Math.min(S.hotSel, picks.length - 1);
+  S.hotCtx = { me, o, picks, sel };
+  return `<div class="overlay" role="dialog" aria-modal="true" aria-label="취향 핫플 지도">
+    <div class="scrim" data-act="hotclose"></div>
+    <div class="sheet full${S.enter ? " enter" : ""}">
+      <div class="sheet-head pad"><button class="icon-btn" data-act="hotclose" aria-label="뒤로">${ICON.back}</button><b>우리 취향 핫플</b><span class="muted" style="font-size:13px">${esc(o.nickname)}님과</span></div>
+      <div class="sheet-body" style="gap:0;padding-bottom:0">
+        <div id="hot-map"></div>
+        <div class="pad">
+          <div class="hot-legend"><span><i style="background:#5B5FE0"></i>나</span><span><i style="background:#E0679A"></i>${esc(o.nickname)}</span><span>숫자 핀 = 추천 핫플 (누르면 선택)</span></div>
+          <div class="hot-list">${picks.map((h, i) => `<article class="hot-card${i === sel ? " on" : ""}" data-act="hotsel" data-i="${i}">
+            <div class="hot-row"><div class="hot-ico" aria-hidden="true">${h.e}<b>${page * 3 + i + 1}</b></div>
+              <div class="hot-main"><b>${esc(h.n)}</b><span class="hot-line">${esc(h.line)}</span><span class="hot-why">♥ ${esc(h.why)}</span>
+                <div class="hot-dist"><span>나 ${km(h.dMe)}</span><span>${esc(o.nickname)} ${km(h.dO)}</span>${h.fair ? `<span class="fair">거리 공평</span>` : ""}</div></div></div>
+            ${i === sel ? `<div class="hot-acts"><a class="naver" href="${naverUrl(h.query)}" target="_blank" rel="noopener">네이버 지도</a><a class="kakao" href="${kakaoUrl(h.query)}" target="_blank" rel="noopener">카카오맵</a>
+              <button class="btn" data-act="hotpropose" data-id="${h.id}">${esc(o.nickname)}님에게 이 핫플 제안하기</button></div>` : ""}
+          </article>`).join("")}
+            <button class="btn line sm" style="align-self:center" data-act="hotmore">다른 핫플 보기 (${page + 1}/${pages})</button>
+            <span class="muted" style="font-size:12px;text-align:center">지도 버튼을 누르면 '${esc(picks[sel].query)}'처럼 두 분 취향 검색어로 지도 앱이 열려요. 가게 정보는 지도 앱의 최신 정보예요.</span>
+            ${planCard(me, o)}
+          </div>
+        </div>
+      </div>
+    </div></div>`;
+}
+// 지도 (Leaflet + OpenStreetMap 바탕 지도). 핫플 화면을 처음 열 때만 불러오고,
+// 화면을 다시 그려도 지도는 그대로 두고 자리만 옮겨 붙임 (깜빡임·타일 재로딩 없이)
+let LMAP = null, mapEl = null, mapKey = "";
+function loadLeaflet() {
+  if (window.L) return Promise.resolve();
+  return loadLeaflet.p || (loadLeaflet.p = new Promise((ok, fail) => {
+    const css = document.createElement("link"); css.rel = "stylesheet"; css.href = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"; document.head.appendChild(css);
+    const js = document.createElement("script"); js.src = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";
+    js.onload = ok; js.onerror = () => { loadLeaflet.p = null; fail(); }; document.head.appendChild(js);
+  }));
+}
+function mountHotMap() {
+  const slot = document.getElementById("hot-map"), c = S.hotCtx;
+  if (!slot || !c) return;
+  if (!mapEl) { mapEl = document.createElement("div"); mapEl.className = "hot-map"; mapEl.setAttribute("aria-label", "두 사람 위치와 추천 핫플 지도"); }
+  slot.replaceWith(mapEl);
+  loadLeaflet().then(() => {
+    if (!mapEl.isConnected) return;
+    if (!LMAP) {
+      LMAP = L.map(mapEl, { zoomControl: false, scrollWheelZoom: false });
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19,
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }).addTo(LMAP);
+      LMAP.dul = L.layerGroup().addTo(LMAP);
+    }
+    LMAP.invalidateSize();
+    const { me, o, picks, sel } = c, key = [me.id, o.id, picks.map(h => h.id).join(","), sel].join("|");
+    if (key === mapKey) return;
+    const moved = !mapKey.startsWith([me.id, o.id, picks.map(h => h.id).join(",")].join("|"));
+    mapKey = key;
+    const g = LMAP.dul; g.clearLayers();
+    const pin = (ll, html, cls, size, z) => L.marker(ll, { icon: L.divIcon({ className: "", html: `<div class="mpin ${cls}">${html}</div>`, iconSize: [size, size], iconAnchor: [size / 2, size / 2] }), zIndexOffset: z, keyboard: false }).addTo(g);
+    L.polyline([[me.lat, me.lng], [o.lat, o.lng]], { color: "#8E91EE", weight: 2, dashArray: "4 6", interactive: false }).addTo(g);
+    pin([me.lat, me.lng], esc(me.nickname[0]), "who me", 30, 1500);   // 두 사람 핀은 핫플 핀에 가려지지 않게 맨 위
+    pin([o.lat, o.lng], esc(o.nickname[0]), "who them", 30, 1500);
+    picks.forEach((h, i) => pin([h.lat, h.lng], `${h.e}<b>${S.hotPage % Math.ceil(HOTSPOTS.length / 3) * 3 + i + 1}</b>`, "spot" + (i === sel ? " on" : ""), 42, i === sel ? 1000 : 500)
+      .on("click", () => { S.hotSel = i; render(); }));
+    if (moved) LMAP.fitBounds([[me.lat, me.lng], [o.lat, o.lng], ...picks.map(h => [h.lat, h.lng])], { padding: [40, 40], maxZoom: 14 });
+    else LMAP.panTo([picks[sel].lat, picks[sel].lng]);
+  }).catch(() => { mapEl.innerHTML = `<div class="map-off">지도를 불러오지 못했어요.<br>아래 네이버 지도·카카오맵 버튼으로 볼 수 있어요.</div>`; });
+}
+
 // ---------- 차단·신고·약관·관리자 화면 ----------
 function menuView(me) {
   const o = world().byId[S.menu] || allProfiles().find(p => p.id === S.menu); if (!o) return "";
@@ -2088,7 +2401,7 @@ function homeView(me) {
       ${passed.length ? `<button class="btn line sm" data-act="unpass">넘긴 ${passed.length}명 다시 보기</button>` : ""}</div>` : "";
   const fewNote = recs.length && recs.length < REC_LIMIT ? relaxHtml(me, true) : "";
   const unpassNote = !doneNote && passed.length ? `<div class="daily-note"><button class="btn line sm" data-act="unpass">넘긴 ${passed.length}명 다시 보기</button></div>` : "";
-  return `${title}<span class="muted">${dayLabel} 오늘의 추천 · 매일 새로 골라드려요</span></div>${searchBar}
+  return `${title}<span class="muted">${dayLabel} 오늘의 추천 · 내 등급 ${tierBadge(me)}${w.tierOn ? " · 비슷한 등급끼리 골랐어요" : ""}</span></div>${searchBar}
     ${recs.length ? `<button class="sim-entry" data-act="simopen"><b>만약에?</b><span>관심사를 더 보면, 거리를 덜 보면… 순위가 어떻게 바뀌는지 미리 보기</span>${ICON.back}</button>` : ""}
     ${top}${cards}${doneNote}${unpassNote}${fewNote}`;
 }
@@ -2196,7 +2509,7 @@ function recCard(me, o, r, fresh, idx = 0) {
   const lk = S.likes[`${o.id}_${me.id}`], mine = liked(me.id, o.id), matched = isMatched(me.id, o.id);
   const tags = [...o.interests.map(t => [t + (E.levelOf(o, t) === 3 ? "★" : ""), common.has(t)]), [KO[o.chronotype], false], [o.weekend === "out" ? "주말엔밖으로" : "주말엔집콕", false], ...(o.mbti ? [[o.mbti, false]] : [])];
   return `<article class="pcard" data-act="open" data-id="${o.id}">
-    <div class="pc-head"><span class="pc-letter" aria-hidden="true">${"ABCDEFGH"[idx] || "+"}</span><span class="pc-kind">${esc(g)} · 궁합 <span class="num">${Math.round(r.score)}</span>점</span>${isNew(o) ? `<span class="new">NEW</span>` : ""}</div>
+    <div class="pc-head"><span class="pc-letter" aria-hidden="true">${"ABCDEFGH"[idx] || "+"}</span><span class="pc-kind">${esc(g)} · 궁합 <span class="num">${Math.round(r.score)}</span>점</span>${tierBadge(o)}${isNew(o) ? `<span class="new">NEW</span>` : ""}</div>
     <div class="pc-box">
       <div class="pc-top">${photo(o, "pc-av")}<div class="pc-id"><p class="pc-line">${pz.line}</p><b class="pc-type">${esc(pz.type)} ${esc(o.nickname)}${vb(o)}</b></div></div>
       <div class="muted pc-sub">${o.age}세 · ${esc(o.region)} ${Math.max(1, Math.round(r.distance))}km 이내 · ${esc(o.job)}</div>
@@ -2231,7 +2544,7 @@ function detailView(me) {
       <div class="sheet-body">
         <div class="detail-frame">${photo(o, "detail-ph")}${r ? `<span class="ph-tag">${g}</span>` : ""}</div>
         <div class="pad" style="display:flex;flex-direction:column;gap:14px">
-          <div><h2 style="font-size:26px">${esc(o.nickname)}${vb(o)} <span class="muted" style="font-family:var(--font-body);font-size:16px;font-weight:400">${o.age}세</span></h2>
+          <div><h2 style="font-size:26px">${esc(o.nickname)}${vb(o)} <span class="muted" style="font-family:var(--font-body);font-size:16px;font-weight:400">${o.age}세</span> ${tierBadge(o)}</h2>
             <div class="muted" style="font-size:14px">${esc(o.region)}${r ? ` · 약 ${Math.max(1, Math.round(r.distance))}km` : ""}</div></div>
           ${o.bio ? `<p style="margin:0">${esc(o.bio)}</p>` : ""}
           ${r ? `<div class="panel" style="display:flex;flex-direction:column;gap:8px"><div><span class="grade${topg ? " top" : ""}">${g}</span></div>
@@ -2370,6 +2683,8 @@ function chatView(me) {
     if (m.sig) { log += `<div class="msg-sys">${esc(sigText(m, me, o))}</div>`; lastFrom = ""; continue; }
     const bubble = m.img ? (() => { const im = S.imgs[m.img];
       return `<button class="msg-img ${side}" data-act="lightbox" data-img="${esc(m.img)}" aria-label="사진 크게 보기">${im ? `<img src="${esc(im.src)}" alt="보낸 사진">` : `<span class="loading">사진 불러오는 중</span>`}</button>`; })()
+      : m.hot && HOTSPOTS.find(h => h.id === m.hot) ? (() => { const h = HOTSPOTS.find(x => x.id === m.hot), q = m.q || h.q;
+        return `<div class="msg ${side} hotmsg"><span class="hm-t">${h.e} ${esc(h.n)} 어때요?</span><span>${esc(h.line)}</span><span class="hm-links"><a class="naver" href="${naverUrl(q)}" target="_blank" rel="noopener">네이버 지도</a><a class="kakao" href="${kakaoUrl(q)}" target="_blank" rel="noopener">카카오맵</a></span></div>`; })()
       : `<div class="msg ${side}">${esc(m.text)}</div>`;
     // 상대가 연달아 보낸 메시지는 첫 번째에만 프로필 사진
     log += mine ? bubble + time : `<div class="msg-row">${lastFrom === m.from ? `<span class="spacer"></span>` : photo(o, "av mini")}${bubble}</div>${time}`;
@@ -2386,7 +2701,7 @@ function chatView(me) {
     <div class="sheet full${S.enter ? " enter" : ""}">
       <div class="sheet-head pad"><button class="icon-btn" data-act="closechat" aria-label="뒤로">${ICON.back}</button>${photo(o, "av")}<b>${esc(o.nickname)}${vb(o)}</b>
         <button class="btn line sm" data-act="open" data-id="${o.id}">프로필</button><button class="icon-btn" data-act="menu" data-id="${o.id}" aria-label="차단·신고 메뉴">${ICON.dots}</button></div>
-      ${ok && !S.aiOpen ? `<div class="pad" style="padding-block:10px 0;display:flex;flex-direction:column;gap:8px;flex:none;max-height:58vh;overflow-y:auto">${signalPanel(me, o, true)}${planCard(me, o)}</div>` : ""}
+      ${ok && !S.aiOpen ? `<div class="pad" style="padding-block:10px 0;display:flex;flex-direction:column;gap:8px;flex:none;max-height:58vh;overflow-y:auto">${hotEntry(me, o)}${signalPanel(me, o, true)}</div>` : ""}
       <div class="log pad" id="chat-log">${hint ? `<div class="notice" style="font-size:13px">${hint}</div>` : ""}${notes}
         ${log || `<div class="empty">${EMPTY_ART}<b>${esc(o.nickname)}님과 매칭됐어요</b>공통 관심사로 먼저 말을 걸어보세요.</div>`}</div>
       ${ok ? riskAlert(o, key, hits) + aiChatPanel(me, o, key, hits) : ""}
@@ -2422,7 +2737,15 @@ function meView(me) {
   const lifestyle = ["purpose", "marriage_view", "contact_style", "chronotype", "weekend", "drinking", "smoking", "pet", "spending", "religion"];
   const a = me.appearance || {};
   const tg = (key, v, label, on) => `<button type="button" class="tgl${on ? " on" : ""}" data-act="ap-${key}" data-v="${v}" aria-pressed="${on}">${label}</button>`;
-  return `<div class="screen-title"><h2>내 정보</h2><button class="btn line sm" data-act="logout">로그아웃</button></div>
+  const tr = tierOf(me);
+  const tierHtml = `<section class="panel tier-card" style="--tc:${tr.color}">
+      <div class="tier-top"><span class="tier-gem" aria-hidden="true">◆</span><div><small>내 프로필 등급</small><b>${tr.name}</b></div><span class="tier-score num">${tr.score}<small>/100</small></span></div>
+      <div class="tier-track" role="img" aria-label="프로필 점수 ${tr.score}점"><i style="width:${tr.score}%"></i>${TIERS.slice(1).map(t => `<span style="left:${t[1]}%"></span>`).join("")}</div>
+      <div class="tier-steps">${TIERS.map(t => `<span>${t[0]}</span>`).join("")}</div>
+      <span style="font-size:14px">${tr.next ? `<b>${tr.next[0]}</b>까지 <b class="num">${tr.next[1] - tr.score}점</b> 남았어요.` : "최고 등급이에요!"} 비슷한 등급(±1)끼리 추천돼서, 등급이 오르면 더 정성스러운 프로필의 사람을 만나요.</span>
+      <ul class="tier-items">${tr.items.map(x => `<li class="${x.got >= x.max ? "done" : ""}"><span>${x.label}</span><b class="num">${x.got}/${x.max}</b>${x.got < x.max ? `<small>${esc(x.tip)}</small>` : ""}</li>`).join("")}</ul>
+      <span class="muted" style="font-size:12px">등급은 외모가 아니라 프로필을 얼마나 채우고 관리하는지로만 매겨요.</span></section>`;
+  return `<div class="screen-title"><h2>내 정보</h2><button class="btn line sm" data-act="logout">로그아웃</button></div>${tierHtml}
     <section class="panel"><div class="photo-pick">${photo(me)}<div style="display:flex;flex-direction:column;gap:8px">
       <b style="font-family:var(--font-display);font-size:20px">${esc(me.nickname)}</b>
       <span class="muted" style="font-size:13px">${me.age}세 · ${esc(me.region)}</span>
@@ -2722,7 +3045,10 @@ function render() {
   const scrollY = window.scrollY;
   S.enter = screen !== lastScreen;
   if (authed && !isSuspended(S.uid)) checkNewMatch(world().byId[S.uid]);
-  app.innerHTML = (authed ? (isSuspended(S.uid) ? suspendedView() : shell() + (S.celebrate ? celebrateView(world().byId[S.uid]) : "")) : authView()) + (S.legal ? legalView() : "");
+  if (authed && S.fb && S.usersLoaded && !S.seenSaved && Date.now() - (S.users[S.uid]?.seenAt || 0) > 12 * 36e5) { S.seenSaved = true; setTimeout(() => saveUser(S.uid, { seenAt: Date.now() }), 0); }
+  app.innerHTML = (authed ? (isSuspended(S.uid) ? suspendedView() : shell() + (S.hot ? hotView(world().byId[S.uid]) : "") + (S.celebrate ? celebrateView(world().byId[S.uid]) : "")) : authView()) + (S.legal ? legalView() : "");
+  if (S.celebrate) { celebFx(S.celebrate.fresh); S.celebrate.fresh = false; }
+  if (S.hot) mountHotMap();
   if (S.prefill != null) { const ci = document.getElementById("chat-input"); if (ci) { ci.value = S.prefill; S.prefill = null; ci.focus({ preventScroll: true }); } }
   if (authed && !isSuspended(S.uid)) browserNotify(world().byId[S.uid]);
   if (screen === lastScreen) {
@@ -2864,9 +3190,19 @@ document.addEventListener("click", e => {
       break;
     }
     case "celeb-close": S.celebrate = null; render(); break;
-    case "celeb-chat": S.celebrate = null; S.chat = id; S.detail = null; render(); break;
-    case "celeb-say": { const meP = world().byId[me], o = world().byId[id], r0 = world().lists[me].recs.find(x => x.id === id);
-      S.prefill = openersFor(meP, o, r0 ? full(me, r0) : null)[+t.dataset.i] || ""; S.celebrate = null; S.chat = id; S.detail = null; render(); break; }
+    case "hotopen": S.celebrate = null; S.hot = id; S.hotSel = 0; S.hotPage = 0; S.chat = id; S.detail = null; render(); break;
+    case "hotclose": S.hot = null; render(); break;
+    case "hotsel": S.hotSel = +t.dataset.i; render(); break;
+    case "hotmore": S.hotPage++; S.hotSel = 0; render(); break;
+    case "hotpropose": {
+      const c = S.hotCtx, h = c && c.picks.find(x => x.id === id); if (!h) break;
+      if (!S.canWrite) return toast("보기 전용이라 보낼 수 없어요");
+      sendMsg(pk(me, c.o.id), me, `[핫플 제안] ${h.n} 어때요? ${h.line}`, { hot: h.id, q: h.query });
+      S.hot = null; S.chat = c.o.id; toast("핫플을 제안했어요"); botAnswer(me, c.o.id); break;
+    }
+    case "celeb-chat": { const o = world().byId[id], r0 = world().lists[me].recs.find(x => x.id === id);   // 첫 인사 추천 하나를 입력창에 미리 넣어 둠
+      if (!(S.chats[pk(me, id)]?.messages || []).length) S.prefill = openersFor(world().byId[me], o, r0 ? full(me, r0) : null)[0] || "";
+      S.celebrate = null; S.chat = id; S.detail = null; render(); break; }
     case "focus": S.celebrate = null; S.menu = null; saveUser(me, { focus: focusKey(me, id) }); toast(`${world().byId[id].nickname}님에게 집중할게요. 새 추천은 잠시 쉬어요`); break;
     case "focus-off": S.menu = null; saveUser(me, { focus: null }); toast("집중 모드를 껐어요. 다시 추천해드릴게요"); break;
     case "endask": S.menuEnd = true; render(); break;
@@ -2905,7 +3241,7 @@ document.addEventListener("click", e => {
     case "planmore": S.planPage++; render(); break;
     case "propose": { const o = world().byId[S.chat]; if (!o) break; const pl = meetPlan(world().byId[me], o, S.planMood), c = pl.courses[+t.dataset.i]; if (!c) break;
       const route = c.steps.map(st => st.split("|")[0]).join(" → ");
-      sendMsg(pk(me, o.id), me, `[데이트 제안] ${pl.area} 근처에서 '${c.t}' 코스 어때요? ${route} · ${c.time}`); S.planOpen = false; toast("데이트 코스를 제안했어요"); break; }
+      sendMsg(pk(me, o.id), me, `[데이트 제안] ${pl.area} 근처에서 '${c.t}' 코스 어때요? ${route} · ${c.time}`); S.planOpen = false; S.hot = null; toast("데이트 코스를 제안했어요"); break; }
     case "adminopen": S.admin = true; S.adminTab = "stats"; render(); break;
     case "closeadmin": S.admin = false; render(); break;
     case "admtab": S.adminTab = t.dataset.v; render(); break;
@@ -3126,6 +3462,7 @@ document.addEventListener("input", e => {
 // 맨 위에 열린 것 하나 닫기 (Esc, 핸드폰 뒤로 가기 공통)
 function closeTop() {
   if (S.celebrate) S.celebrate = null;
+  else if (S.hot) S.hot = null;
   else if (S.sim) S.sim = null;
   else if (S.legal || S.report || S.menu || S.notifOpen) { S.legal = S.report = S.menu = null; S.notifOpen = false; S.menuEnd = false; }
   else if (S.lightbox) S.lightbox = null;
@@ -3136,7 +3473,7 @@ function closeTop() {
   render();
   return true;
 }
-const anyOpen = () => !!(S.uid && (S.celebrate || S.sim || S.legal || S.report || S.menu || S.notifOpen || S.lightbox || S.admin || S.chat || S.detail));
+const anyOpen = () => !!(S.uid && (S.celebrate || S.hot || S.sim || S.legal || S.report || S.menu || S.notifOpen || S.lightbox || S.admin || S.chat || S.detail));
 document.addEventListener("keydown", e => { if (e.key === "Escape") closeTop(); });
 
 // 안드로이드 뒤로 가기: 시트가 열려 있으면 앱을 나가지 않고 시트만 닫음
@@ -3169,6 +3506,67 @@ if (window.visualViewport) {
   vv.addEventListener("scroll", fit);
   fit();
 }
+
+// ---------------- 움직이는 배경 (WebGL) ----------------
+// 오로라처럼 천천히 흐르는 파스텔 빛 + 반짝이, 손가락이 닿는 곳에 빛이 따라옴. 게임 엔진 없이 셰이더 하나로 (몇 KB).
+// 화면 해상도의 절반으로 초당 30번까지만 그리고, 탭이 안 보이면 멈춤. '동작 줄이기' 설정이면 한 장만. WebGL이 없으면 원래 그라데이션.
+(function bgGL() {
+  const cv = document.createElement("canvas"); cv.id = "bg-gl"; cv.setAttribute("aria-hidden", "true");
+  let gl = null; try { gl = cv.getContext("webgl", { antialias: false, alpha: false, powerPreference: "low-power" }); } catch (e) {}
+  if (!gl) return;
+  const FS = `precision mediump float;
+uniform vec2 r; uniform float t; uniform vec2 p; uniform vec3 c1, c2, c3, bg;
+float h(vec2 q) { return fract(sin(dot(q, vec2(127.1, 311.7))) * 43758.5453); }
+float n(vec2 q) { vec2 i = floor(q), f = fract(q); f = f * f * (3. - 2. * f);
+  return mix(mix(h(i), h(i + vec2(1, 0)), f.x), mix(h(i + vec2(0, 1)), h(i + vec2(1, 1)), f.x), f.y); }
+float fbm(vec2 q) { float s = 0., a = .5; for (int i = 0; i < 4; i++) { s += a * n(q); q *= 2.03; a *= .5; } return s; }
+void main() {
+  vec2 uv = gl_FragCoord.xy / r, q = uv * vec2(r.x / r.y, 1.) * 1.7;
+  float tt = t * .05;
+  vec2 w = vec2(fbm(q + tt), fbm(q + vec2(5.2, 1.3) - tt));
+  float f = fbm(q + 2.2 * w + vec2(tt * .7, -tt * .4));
+  vec3 col = mix(c1, c2, smoothstep(.25, .8, f));
+  col = mix(col, c3, smoothstep(.5, .95, w.y) * .8);
+  vec2 d = (uv - p) * vec2(r.x / r.y, 1.);
+  col += c3 * .35 * exp(-dot(d, d) * 9.);
+  vec2 cell = gl_FragCoord.xy / (34. * r.y / 900.), id = floor(cell), fr = fract(cell) - .5;
+  float s = h(id), tw = step(.975, s) * (.5 + .5 * sin(t * 1.7 + s * 60.));
+  col += tw * smoothstep(.16, 0., length(fr)) * .7;
+  gl_FragColor = vec4(mix(bg, col, .8), 1.);
+}`;
+  const sh = (type, src) => { const x = gl.createShader(type); gl.shaderSource(x, src); gl.compileShader(x); return x; };
+  const pr = gl.createProgram();
+  gl.attachShader(pr, sh(gl.VERTEX_SHADER, "attribute vec2 a; void main() { gl_Position = vec4(a, 0., 1.); }"));
+  gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, FS));
+  gl.linkProgram(pr);
+  if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) return;
+  gl.useProgram(pr);
+  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(pr, "a"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  const U = {}; for (const k of ["r", "t", "p", "c1", "c2", "c3", "bg"]) U[k] = gl.getUniformLocation(pr, k);
+  // 라이트: 라벤더·연핑크·인디고 / 다크: 남색·자주·보라
+  const PAL = { light: [[.80, .79, 1], [.98, .80, .88], [.55, .57, .94], [.95, .95, 1]], dark: [[.13, .14, .40], [.33, .15, .32], [.40, .42, .90], [.05, .05, .13]] };
+  const isDark = () => { const th = document.documentElement.dataset.theme; return th ? th === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; };
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let px = .5, py = .7, tx = .5, ty = .7, last = 0;
+  const aim = e => { tx = e.clientX / innerWidth; ty = 1 - e.clientY / innerHeight; };
+  addEventListener("pointermove", aim, { passive: true }); addEventListener("pointerdown", aim, { passive: true });
+  const t0 = performance.now();
+  const draw = now => {
+    px += (tx - px) * .05; py += (ty - py) * .05;
+    const c = PAL[isDark() ? "dark" : "light"];
+    gl.uniform2f(U.r, cv.width, cv.height); gl.uniform1f(U.t, (now - t0) / 1000); gl.uniform2f(U.p, px, py);
+    gl.uniform3fv(U.c1, c[0]); gl.uniform3fv(U.c2, c[1]); gl.uniform3fv(U.c3, c[2]); gl.uniform3fv(U.bg, c[3]);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  };
+  const fit = () => { const k = Math.min(devicePixelRatio || 1, 2) * .5; cv.width = Math.round(innerWidth * k); cv.height = Math.round(innerHeight * k); gl.viewport(0, 0, cv.width, cv.height); draw(performance.now()); };
+  document.body.prepend(cv); document.documentElement.classList.add("gl");
+  addEventListener("resize", fit); fit();
+  if (reduce) { matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => draw(performance.now())); return; }
+  const loop = now => { if (!document.hidden && now - last > 33) { last = now; draw(now); } requestAnimationFrame(loop); };
+  requestAnimationFrame(loop);
+})();
 
 // ---------------- 시작 ----------------
 function subscribe(db, fail) {
