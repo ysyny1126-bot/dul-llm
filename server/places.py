@@ -5,6 +5,7 @@
 - none: 장소 검색 없이 LLM이 장소 종류만 정하고, 지도 검색 링크를 붙임
 """
 import math
+from typing import Optional
 import os
 from urllib.parse import quote
 
@@ -77,7 +78,7 @@ def _google(keyword, lat, lng, radius_m, size):
     } for p in r.json().get("places", [])]
 
 
-def hours_on(place: dict, weekday: int | None) -> str:
+def hours_on(place: dict, weekday: Optional[int]) -> str:
     """그 요일 영업시간 한 줄 (구글은 '월요일: 오전 11:00~오후 10:00' 모양). 모르면 빈 문자열."""
     hours = place.get("hours") or []
     if weekday is None or not hours:

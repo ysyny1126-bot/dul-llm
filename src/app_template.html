@@ -2551,7 +2551,12 @@ function aiStatus(st) {
 }
 // LLM에 보내는 프로필: 다른 회원에게도 보이는 정보만 (아이디, 생년월일, 좌표, 사진, 종교, 외모는 안 보냄)
 const AI_LIFE = ["purpose", "marriage_view", "contact_style", "chronotype", "weekend", "drinking", "smoking", "pet", "spending"];
-function aiPerson(p) {
+// mine: 비교 기준이 되는 '나'. 상대(mine이 있을 때)는 직업·MBTI·생활·가치관 값을 보내지 않고 '나와 같은 항목'만 보냄.
+// (선택지가 두세 개라 '다름'만 알려도 값이 짐작돼서) AI가 상대의 비공개 정보를 말할 수 없게 함 — 궁합 점수에만 쓰는 정보
+function aiPerson(p, mine) {
+  if (mine) return { nickname: p.nickname, age: p.age, region: p.region, job: "", bio: p.bio || "", mbti: "",
+    interests: p.interests.map(t => `${t}(${LEVEL_KO[E.levelOf(p, t)]})`),
+    life: Object.fromEntries(AI_LIFE.filter(f => p[f] && p[f] === mine[f]).map(f => [FIELD_KO[f], "나와 같음"])) };
   return { nickname: p.nickname, age: p.age, region: p.region, job: p.job === "비공개" ? "" : p.job || "", bio: p.bio || "", mbti: p.mbti || "",
     interests: p.interests.map(t => `${t}(${LEVEL_KO[E.levelOf(p, t)]})`),
     life: Object.fromEntries(AI_LIFE.filter(f => p[f]).map(f => [FIELD_KO[f], f === "smoking" ? SMOKE_KO[p[f]] : KO[p[f]]])) };
@@ -2754,7 +2759,7 @@ document.addEventListener("click", e => {
     case "ai-match": {
       const w = world(), o = w.byId[id]; if (!o) break;
       const r = full(me, w.lists[me].recs.find(x => x.id === id));
-      aiRun("match:" + pk(me, id), "match-insight", { me: aiPerson(w.byId[me]), other: aiPerson(o),
+      aiRun("match:" + pk(me, id), "match-insight", { me: aiPerson(w.byId[me]), other: aiPerson(o, w.byId[me]),
         reasons: r ? r.reasons.map(reasonText).filter(Boolean).slice(0, 12) : [], score: r ? Math.round(r.score) : null });
       break;
     }
@@ -2764,10 +2769,10 @@ document.addEventListener("click", e => {
     case "ai-reply": case "ai-topics": case "ai-safety": {
       const w = world(), meP = w.byId[me], o = w.byId[S.chat]; if (!o) break;
       const key = pk(me, o.id), log = aiLog(meP, o), msgs = S.chats[key]?.messages || [];
-      if (act === "ai-reply") aiRun("reply:" + key, "chat-coach", { me: aiPerson(meP), other: aiPerson(o), messages: log, tone: S.aiTone,
+      if (act === "ai-reply") aiRun("reply:" + key, "chat-coach", { me: aiPerson(meP), other: aiPerson(o, meP), messages: log, tone: S.aiTone,
         stale: !!msgs.length && Date.now() - msgs[msgs.length - 1].at > 864e5 });
       else if (act === "ai-topics") { const plan = msgs.filter(m => m.text?.startsWith("[데이트 제안]")).pop();
-        aiRun("topics:" + key, "first-meet", { me: aiPerson(meP), other: aiPerson(o), plan: plan ? plan.text.slice(0, 200) : "" }); }
+        aiRun("topics:" + key, "first-meet", { me: aiPerson(meP), other: aiPerson(o, meP), plan: plan ? plan.text.slice(0, 200) : "" }); }
       else { if (!log.some(m => m.who === "them")) return toast("아직 상대가 보낸 메시지가 없어요");
         aiRun("safety:" + key, "safety", { other_nickname: o.nickname, messages: log,
           rule_hits: riskScan(msgs, me).map(h => ({ label: h.label, quote: h.quote })).slice(0, 20) }); }
@@ -2794,7 +2799,7 @@ document.addEventListener("click", e => {
       const w = world(), meP = w.byId[me], o = w.byId[S.chat]; if (!o) break;
       const pl = meetPlan(meP, o, S.planMood), v = x => document.getElementById(x)?.value || "";
       const keywords = [...new Set(pl.courses.slice(0, 4).flatMap(c => c.steps.map(st => st.split("|")[1]).filter(Boolean)))].slice(0, 6);
-      aiRun("plan:" + pk(me, o.id), "date-plan", { me: aiPerson(meP), other: aiPerson(o), area: pl.area,
+      aiRun("plan:" + pk(me, o.id), "date-plan", { me: aiPerson(meP), other: aiPerson(o, meP), area: pl.area,
         lat: (meP.lat + o.lat) / 2, lng: (meP.lng + o.lng) / 2, budget: v("ai-budget"), date: v("ai-date"), time: v("ai-time"),
         mood: MOODS.find(m => m[0] === S.planMood)[1], request: v("ai-req").trim(), keywords, no_drink: pl.noDrink });
       break;

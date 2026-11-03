@@ -17,6 +17,7 @@ import time
 from collections import defaultdict, deque
 from datetime import date
 from pathlib import Path
+from typing import Optional
 from typing import Literal
 
 from fastapi import FastAPI, HTTPException, Request
@@ -74,7 +75,7 @@ def guard(request: Request) -> None:
 # ---------------- 받는 데이터 ----------------
 class Person(BaseModel):
     nickname: str = Field(max_length=30)
-    age: int | None = None
+    age: Optional[int] = None
     region: str = Field("", max_length=30)
     job: str = Field("", max_length=50)
     bio: str = Field("", max_length=300)
@@ -95,7 +96,7 @@ class Pair(BaseModel):
 
 class MatchIn(Pair):
     reasons: list[str] = Field(default_factory=list, max_length=12)    # 매칭 엔진이 계산한 근거
-    score: int | None = None
+    score: Optional[int] = None
 
 
 class CoachIn(Pair):

@@ -20,3 +20,4 @@ server/.env
 # AI 서버 실행 기록
 server/ai_server.log
 server/.venv/
+server/.venv-mac/
