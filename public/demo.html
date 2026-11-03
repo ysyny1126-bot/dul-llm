@@ -370,6 +370,72 @@ tr.pen td { color: var(--bad); }
 .lightbox { position: fixed; inset: 0; z-index: 40; background: rgba(15, 12, 30, .86); display: grid; place-items: center; padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); cursor: zoom-out; }
 .lightbox img { max-width: 100%; max-height: 100%; border-radius: 8px; }
 
+/* ---------- 추천 카드: 페르소나 카드 (A·B·C) ---------- */
+.pcard { display: flex; flex-direction: column; gap: 10px; cursor: pointer; }
+.pc-head { display: flex; align-items: flex-end; gap: 10px; padding-left: 4px; }
+.pc-letter { font-family: var(--font-display); font-size: 54px; line-height: .78; font-weight: 800; background: linear-gradient(180deg, var(--accent), var(--mint)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.pc-kind { font-size: 13px; font-weight: 700; color: var(--accent); padding-bottom: 1px; }
+.pc-head .new { background: var(--pink); color: var(--pink-ink); border-radius: 6px; padding: 1px 6px; font-size: 11px; font-weight: 700; margin-bottom: 2px; }
+.pc-box { background: var(--surface); border-radius: 24px; padding: 18px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; }
+.pc-top { display: flex; gap: 14px; align-items: center; }
+.pc-av { width: 84px; height: 84px; border-radius: 50%; flex: none; box-shadow: 0 0 0 3px var(--accent-soft); }
+.pc-av .ini { font-size: 34px; }
+.pc-id { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.pc-line { margin: 0; font-size: 16px; line-height: 1.4; }
+.pc-type { font-size: 18px; line-height: 1.35; color: var(--accent); font-weight: 800; word-break: keep-all; overflow-wrap: anywhere; }
+.pc-sub { font-size: 13px; padding-bottom: 12px; border-bottom: 1.5px dashed var(--stroke); }
+.pc-bars { display: flex; flex-direction: column; gap: 9px; }
+.pc-bar { display: grid; grid-template-columns: 62px minmax(0, 1fr) 42px; align-items: center; gap: 10px; font-size: 13px; }
+.pc-bar span { font-weight: 700; }
+.pc-bar i { height: 10px; border-radius: 99px; background: var(--accent-soft); position: relative; overflow: hidden; }
+.pc-bar i::after { content: ""; position: absolute; inset: 0 auto 0 0; width: var(--v); border-radius: inherit; background: linear-gradient(90deg, var(--mint), var(--accent)); }
+.pc-bar b { color: var(--accent); text-align: right; font-size: 14px; }
+.pc-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.pc-tags span { font-size: 12px; padding: 3px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--mint-deep); }
+.pc-tags span.hit { background: var(--pink); color: var(--pink-ink); font-weight: 700; }
+.pc-needs { background: var(--accent-soft); border-radius: 20px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; }
+.pc-needs b { font-size: 14px; color: var(--accent); }
+.pc-needs ul { margin: 0; padding-left: 18px; font-size: 13.5px; color: var(--mint-deep); display: flex; flex-direction: column; gap: 3px; }
+.pcard > .state, .pcard > .fresh { padding-left: 4px; }
+.state.wait { color: var(--accent); }
+.state.wait::after { content: ""; animation: aidots 1.2s steps(4) infinite; }
+.note-in { width: 100%; border: 1px solid var(--line); background: var(--paper); border-radius: 999px; padding: 10px 16px; margin-bottom: 10px; }
+.msg-sys.note { color: var(--pink-ink); background: var(--pink); font-weight: 400; max-width: 90%; text-align: center; }
+/* ---------- 매칭 성사 ---------- */
+.overlay.celeb { align-items: center; z-index: 25; }
+.celeb .scrim { background: radial-gradient(circle at 50% 40%, rgba(255, 211, 226, .5), rgba(31, 33, 71, .72)); }
+.celeb-card { position: relative; width: min(440px, calc(100% - 32px)); max-height: calc(100% - 32px); overflow-y: auto; overscroll-behavior: contain; background: var(--app); border-radius: 28px; padding: 26px 20px 20px; display: flex; flex-direction: column; gap: 12px; text-align: center; box-shadow: 0 20px 60px rgba(31, 33, 71, .4); animation: celebIn .45s cubic-bezier(.2, 1.3, .4, 1) both; }
+.celeb-card h2 { font-size: 28px; color: var(--accent); }
+.celeb-card > p { margin: 0; color: var(--muted); font-size: 14px; }
+.celeb-pair { display: flex; justify-content: center; align-items: center; height: 104px; position: relative; }
+.celeb-av { width: 96px; height: 96px; border-radius: 50%; box-shadow: 0 0 0 4px var(--surface), 0 8px 24px rgba(91, 95, 224, .3); }
+.celeb-av .ini { font-size: 38px; }
+.celeb-av.l { margin-right: -6px; animation: slideL .6s .1s cubic-bezier(.2, 1.2, .4, 1) both; }
+.celeb-av.r { margin-left: -6px; animation: slideR .6s .1s cubic-bezier(.2, 1.2, .4, 1) both; }
+.celeb-heart { position: absolute; left: 50%; top: 50%; width: 46px; height: 46px; margin: -23px 0 0 -23px; border-radius: 50%; background: var(--pink); color: var(--heart); display: grid; place-items: center; z-index: 1; box-shadow: 0 4px 14px rgba(214, 51, 108, .35); animation: pop .5s .55s cubic-bezier(.2, 1.6, .4, 1) both; }
+.celeb-heart svg { width: 24px; height: 24px; fill: currentColor; }
+.celeb-spark { position: absolute; inset: 0; pointer-events: none; overflow: hidden; border-radius: inherit; }
+.celeb-spark i { position: absolute; top: -14px; width: 8px; height: 12px; border-radius: 2px; opacity: .9; animation: fall 2.6s linear infinite; }
+.celeb-open { display: flex; flex-direction: column; gap: 6px; text-align: left; background: var(--accent-soft); border-radius: 18px; padding: 12px; }
+.celeb-open b { font-size: 13px; color: var(--accent); }
+.celeb-open button { border: 0; background: var(--surface); color: var(--ink); border-radius: 14px; padding: 10px 12px; min-height: 44px; text-align: left; font-size: 14px; cursor: pointer; }
+.celeb-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.celeb-next { text-align: left; font-size: 13px; }
+.celeb-next summary { cursor: pointer; color: var(--accent); font-weight: 700; padding: 8px 0; }
+.rules { margin: 4px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; line-height: 1.5; }
+.rules b { color: var(--accent); }
+.typing { display: flex; gap: 4px; padding: 14px; }
+.typing i { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); animation: blink 1.2s infinite; }
+.typing i:nth-child(2) { animation-delay: .2s; }
+.typing i:nth-child(3) { animation-delay: .4s; }
+@keyframes celebIn { from { transform: scale(.85); opacity: 0; } }
+@keyframes slideL { from { transform: translateX(-80px); opacity: 0; } }
+@keyframes slideR { from { transform: translateX(80px); opacity: 0; } }
+@keyframes pop { from { transform: scale(0); } }
+@keyframes fall { to { transform: translateY(620px) rotate(540deg); } }
+@keyframes blink { 0%, 80%, 100% { opacity: .25; } 40% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .celeb-card, .celeb-av, .celeb-heart { animation: none; } .celeb-spark { display: none; } }
+
 /* 모바일: 핸드폰에서 주로 쓰니까 손가락·키보드 기준으로 */
 html { -webkit-text-size-adjust: 100%; }
 body { -webkit-tap-highlight-color: transparent; overscroll-behavior-y: none; }
@@ -1033,6 +1099,7 @@ const S = {
   blocks: {}, reports: {}, mod: {}, verifs: {}, myVerif: null, isAdmin: false,
   menu: null, report: null, legal: null, notifOpen: false, admin: false, adminTab: "stats", planOpen: false, planMood: "auto", planPage: 0,
   afters: {}, sim: null,
+  celebrate: null, thinking: {}, typing: {}, prefill: null, menuEnd: false,
   authError: "",
   ai: {}, aiOpen: false, aiTab: "reply", aiTone: "warm", riskSeen: {}, reportPreset: -1, reportDetail: "",
 };
@@ -1092,7 +1159,7 @@ function world() {
   if (cache && cache.ver === ver && cache.uid === S.uid) return cache;
   const list = allProfiles().filter(p => !isSuspended(p.id) || p.id === S.uid);
   const byId = Object.fromEntries(list.map(p => [p.id, p]));
-  cache = { ver, uid: S.uid, list, byId, ...E.computeAll(list, settingsOf, { isBlocked }) };
+  cache = { ver, uid: S.uid, list, byId, ...E.computeAll(list, settingsOf, { isBlocked: (a, b) => isBlocked(a, b) || hiddenPair(a, b) }) };
   return cache;
 }
 // 화면에 보이는 추천만 근거를 자세히 계산해서 붙임 (같은 계산 결과 안에서는 다시 안 함)
@@ -1117,6 +1184,115 @@ function matchesOf(uid) {
 }
 const isMatched = (a, b) => matchesOf(a).some(x => x.id === b);
 
+// ---------------- 매칭 후 다음 매칭 ----------------
+// 동시에 대화하는 매칭은 MATCH_CAP명까지. 꽉 차면 새 좋아요는 한 명과 대화를 마친 뒤에.
+// 집중 모드: 한 사람과 알아가는 동안 새 추천을 쉬고, 다른 사람 추천에도 나오지 않음 (그 사람과의 연결은 그대로)
+const MATCH_CAP = 3;
+const focusKey = (a, b) => hashStr(pk(a, b));
+function focusOf(uid) { const f = S.users[uid]?.focus; return f ? matchesOf(uid).find(m => focusKey(uid, m.id) === f) || null : null; }
+// 집중 모드인 사람은 집중하는 상대 말고는 추천 계산에서 빠짐 (프로필에는 상대 번호 대신 짝의 해시만 저장)
+function hiddenPair(a, b) {
+  const fa = S.users[a]?.focus, fb = S.users[b]?.focus;
+  return !!((fa && fa !== focusKey(a, b)) || (fb && fb !== focusKey(a, b)));
+}
+function nextRules(n) {
+  return `<ol class="rules">
+    <li><b>동시에 ${MATCH_CAP}명까지</b> 대화할 수 있어요. 지금 ${n}명${n >= MATCH_CAP ? " · 새 좋아요는 한 명과 대화를 마친 뒤에 보낼 수 있어요" : ""}</li>
+    <li>매칭된 사람은 <b>다음 추천부터 빠지고</b>, 빈자리는 다음 날 새로운 사람으로 채워요</li>
+    <li><b>집중 모드</b>를 켜면 새 추천을 쉬고, 다른 사람 추천에도 나오지 않아요. 언제든 끌 수 있어요</li>
+    <li><b>대화 마치기</b>를 하면 서로 다시 추천되지 않고, 상대에게는 정중한 종료 알림만 가요</li>
+    <li>만난 뒤 남긴 <b>애프터 체크</b>와 마음 표현은 다음 추천 순서에 반영돼요</li></ol>`;
+}
+
+// ---------------- 시연판: 가상 회원 반응 시뮬레이션 ----------------
+// 실제 서비스(REAL)에는 없음. 가상 회원에게 좋아요를 보내면 '상대가 본 내 점수(ba)'가 높을수록 좋아요를 돌려주고,
+// 매칭된 뒤 메시지를 보내면 그 사람 프로필을 바탕으로 짧게 답장해요. 같은 두 사람이면 결과는 늘 같아요.
+const isBot = id => !REAL && id !== S.uid && BASE.profiles.some(p => p.id === id);
+const unit = s => parseInt(hashStr(s), 36) % 1000 / 1000;
+function botLikeBack(me, id) {
+  if (!isBot(id) || liked(id, me)) return;
+  S.thinking[id] = true; render();
+  setTimeout(() => {
+    delete S.thinking[id];
+    const w = world(), o = w.byId[id], meP = w.byId[me];
+    if (S.uid !== me || !liked(me, id) || !o) return render();
+    const r = w.lists[me].recs.find(x => x.id === id);
+    const p = Math.min(0.9, Math.max(0.2, ((r ? r.ba : 40) - 30) / 50));   // 상대 기준 점수 80점 → 90%, 40점 → 20%
+    if (unit(me + ">" + id) < p && matchesOf(me).length < MATCH_CAP) {
+      const common = meP.interests.find(t => o.interests.includes(t));
+      setLike(id, me, true, common ? `저도 ${josa(common, "을", "를")} 좋아해요! 반가워요` : "프로필 보고 반가웠어요 :)");
+    } else toast(`${o.nickname}님은 아직 답이 없어요. 다른 분도 둘러보세요`);
+  }, 1400 + unit(id + me) * 1400);
+}
+function botReply(me, o, msgs) {
+  const mine = msgs.filter(m => m.from === me.id && m.text), n = msgs.filter(m => m.from === o.id && !m.sig).length;
+  const last = mine[mine.length - 1]?.text || "";
+  const common = me.interests.find(t => o.interests.includes(t)), fav = o.interests[0], myTag = me.interests[n % me.interests.length];
+  const pick = arr => arr[parseInt(hashStr(o.id + n + last), 36) % arr.length];
+  if (!n) return `안녕하세요 ${me.nickname}님! 반가워요 :) ${common ? `저도 ${josa(common, "을", "를")} 정말 좋아해요.` : `저는 요즘 ${fav}에 빠져 있어요.`} ${me.nickname}님은 주말에 주로 뭐 하세요?`;
+  if (/만나|커피|약속|언제|볼래|보실래/.test(last)) return `좋아요! 저는 ${o.chronotype === "morning" ? "주말 오전" : "평일 저녁"}이 편해요. ${o.region} 근처 어떠세요?`;
+  if (/주말|쉬는 날|뭐 하/.test(last)) return o.weekend === "out" ? `주말엔 거의 밖에 있어요. 요즘은 ${fav} 하러 자주 나가요!` : `주말엔 집에서 쉬는 편이에요. ${fav} 하면서 충전해요 ㅎㅎ`;
+  if (/무슨 일|직업|회사|일하/.test(last)) return `저는 ${o.job}로 일하고 있어요. ${me.nickname}님은요?`;
+  if (/어디 살|동네|사세요/.test(last)) return `${o.region}에 살아요! 가까우면 좋겠네요`;
+  if (/술|맥주|와인/.test(last)) return o.drinking === "none" ? "저는 술은 거의 안 마셔요. 대신 카페 가는 거 좋아해요!" : "가볍게 한잔하는 거 좋아해요 ㅎㅎ";
+  if (n >= 4) return "얘기하다 보니 더 궁금해지네요 ㅎㅎ 이번 주에 커피 한잔 어떠세요?";
+  return pick([`오 그렇군요! ${josa(myTag, "은", "는")} 언제부터 좋아하셨어요?`, `ㅎㅎ 공감돼요. ${o.bio || `저는 ${fav} 좋아해요.`}`, `와 재밌네요! ${myTag} 하면 어디가 제일 좋았어요?`]);
+}
+function botAnswer(me, id) {
+  if (!isBot(id) || S.typing[id]) return;
+  S.typing[id] = true;
+  setTimeout(() => { if (S.chat === id) render(); }, 450);
+  setTimeout(() => {
+    delete S.typing[id];
+    const w = world(), key = pk(me, id);
+    if (S.uid !== me || !isMatched(me, id)) return render();
+    sendMsg(key, id, botReply(w.byId[me], w.byId[id], S.chats[key]?.messages || []));
+  }, 1600 + unit(id + Date.now()) * 1200);
+}
+
+// ---------------- 매칭 성사 ----------------
+// 새로 생긴 매칭을 한 번만 축하 (이미 있던 매칭은 처음 열 때 '본 것'으로 저장)
+function matchedAt(me, id) { return Math.max(S.likes[`${me}_${id}`]?.at || 0, S.likes[`${id}_${me}`]?.at || 0); }
+function checkNewMatch(me) {
+  if (S.fb && !S.usersLoaded) return;
+  const k = "gm-mseen:" + me.id, seen = ls.get(k, null), ms = matchesOf(me.id);
+  if (!seen) return ls.set(k, ms.map(m => m.id));
+  const nw = ms.find(m => !seen.includes(m.id) && (m.via === "auto" || Date.now() - matchedAt(me.id, m.id) < 3 * 864e5));
+  if (nw && !S.celebrate) S.celebrate = { id: nw.id, via: nw.via };
+  if (ms.some(m => !seen.includes(m.id))) ls.set(k, [...new Set([...seen, ...ms.map(m => m.id)])]);
+}
+function openersFor(me, o, r) {
+  const hit = r?.reasons.find(x => x.key === "interests")?.hits[0];
+  const out = [];
+  if (hit) out.push(`${josa(hit.theirs, "을", "를")} 좋아하신다고 해서 반가웠어요! 요즘 자주 가는 곳 있으세요?`);
+  if (o.bio) out.push(`프로필에 '${o.bio.length > 18 ? o.bio.slice(0, 18) + "…" : o.bio}' 보고 궁금해졌어요 ㅎㅎ`);
+  out.push(`${o.weekend === "out" ? "주말엔 밖으로 나가는 편" : "주말엔 집에서 쉬는 편"}이시죠? 이번 주말엔 뭐 하세요?`);
+  return out.slice(0, 3);
+}
+function celebrateView(me) {
+  const w = world(), c = S.celebrate, o = c && w.byId[c.id];
+  if (!o) return "";
+  const r0 = w.lists[me.id].recs.find(x => x.id === o.id), r = r0 ? full(me.id, r0) : null;
+  const reasons = r ? r.reasons.slice(0, 3).map(reasonText).filter(Boolean) : [];
+  const how = c.via === "auto" ? "서로가 서로의 1순위 추천이라 자동으로 연결됐어요" : `${o.nickname}님도 ${me.nickname}님에게 좋아요를 눌렀어요`;
+  const note = S.likes[`${o.id}_${me.id}`]?.note;
+  const spark = Array.from({ length: 14 }, (_, i) => `<i style="left:${(i * 7.3 + 3) % 100}%;animation-delay:${(i % 7) * .35}s;background:${i % 3 ? "var(--pink)" : "var(--mint)"}"></i>`).join("");
+  return `<div class="overlay celeb" role="dialog" aria-modal="true" aria-label="매칭 성사">
+    <div class="scrim" data-act="celeb-close"></div>
+    <div class="celeb-card">
+      <div class="celeb-spark" aria-hidden="true">${spark}</div>
+      <div class="celeb-pair">${photo(me, "celeb-av l")}<span class="celeb-heart" aria-hidden="true">${ICON.heart}</span>${photo(o, "celeb-av r")}</div>
+      <h2>매칭 성사!</h2>
+      <p>${esc(how)}</p>
+      ${note ? `<div class="msg-sys note" style="align-self:center">♥ ${esc(o.nickname)}님의 한마디 · “${esc(note)}”</div>` : ""}
+      ${reasons.length ? `<div class="pc-tags" style="justify-content:center">${reasons.map(x => `<span class="hit">${esc(x)}</span>`).join("")}</div>` : ""}
+      <div class="celeb-open"><b>첫 인사, 이렇게 해보세요 (누르면 입력창에 들어가요)</b>${openersFor(me, o, r).map((t, i) => `<button type="button" data-act="celeb-say" data-id="${o.id}" data-i="${i}">${esc(t)}</button>`).join("")}</div>
+      <button class="btn" data-act="celeb-chat" data-id="${o.id}">대화 시작하기</button>
+      <div class="celeb-row"><button class="btn line sm" data-act="focus" data-id="${o.id}">이 사람에게 집중하기</button><button class="btn line sm" data-act="celeb-close">계속 둘러보기</button></div>
+      <details class="celeb-next"><summary>다음 매칭은 어떻게 되나요?</summary>${nextRules(matchesOf(me.id).length)}</details>
+    </div></div>`;
+}
+
 // ---------------- 저장 ----------------
 const chains = {};
 function queueWrite(path, fn) {
@@ -1136,17 +1312,18 @@ function saveUser(uid, patch) {
   changed(true);
   if (S.db) { const body = plain(S.users[uid]); queueWrite("users/" + uid, () => S.db.doc("users/" + uid).set(body)); }
 }
-function setLike(from, to, on) {
-  const key = `${from}_${to}`;
-  if (on) S.likes[key] = { from, to, at: Date.now() }; else delete S.likes[key];
+// note: 좋아요와 함께 보내는 한마디 (매칭 전 유일한 연락 수단, 60자)
+function setLike(from, to, on, note) {
+  const key = `${from}_${to}`, body = { from, to, at: Date.now(), ...(note ? { note: note.slice(0, 60) } : {}) };
+  if (on) S.likes[key] = body; else delete S.likes[key];
   changed();
-  if (S.db) queueWrite("likes/" + key, () => on ? S.db.doc("likes/" + key).set({ from, to, at: Date.now() }) : S.db.doc("likes/" + key).delete());
+  if (S.db) queueWrite("likes/" + key, () => on ? S.db.doc("likes/" + key).set(body) : S.db.doc("likes/" + key).delete());
 }
 function sendMsg(key, from, text, extra) {
   const cur = S.chats[key] || { pair: key.split("_"), messages: [] };
   const next = { pair: cur.pair, messages: [...cur.messages, { from, text, at: Date.now(), ...(extra || {}) }].slice(-300), updatedAt: Date.now() };
   S.chats[key] = next;
-  markRead(key);
+  if (from === S.uid) markRead(key);
   changed();
   if (S.db) { const body = plain(next); queueWrite("chats/" + key, () => S.db.doc("chats/" + key).set(body)); }
 }
@@ -1159,8 +1336,9 @@ function sendImage(key, from, src) {
   sendMsg(key, from, "", { img: id });
 }
 const sigOf = (a, b) => S.signals[`${a}_${b}`] || null;
-function setBlock(to, on) {
-  const key = `${S.uid}_${to}`, body = { from: S.uid, to, at: Date.now() };
+// kind "end": 차단이 아니라 '대화 마치기' (서로 다시 추천되지 않는 건 같고, 상대에게는 정중한 종료 알림)
+function setBlock(to, on, kind) {
+  const key = `${S.uid}_${to}`, body = { from: S.uid, to, at: Date.now(), ...(kind ? { kind } : {}) };
   if (on) S.blocks[key] = body; else delete S.blocks[key];
   changed(true);
   if (S.db) queueWrite("blocks/" + key, () => on ? S.db.doc("blocks/" + key).set(body) : S.db.doc("blocks/" + key).delete());
@@ -1425,7 +1603,8 @@ function dailyPicks(me) {
   const cutoff = Date.now() - 14 * 864e5;
   for (const [id, day] of Object.entries(seen)) if (Date.parse(day) < cutoff) delete seen[id];
   const passed = d && d.date === t ? (d.passed || []) : [];
-  const order = [...recs.filter(r => !seen[r.id]), ...recs.filter(r => seen[r.id]).sort((a, b) => (seen[a.id] < seen[b.id] ? -1 : 1))];
+  const open = recs.filter(r => !isMatched(me.id, r.id));   // 이미 매칭된 사람은 다음 추천부터 빠짐
+  const order = [...open.filter(r => !seen[r.id]), ...open.filter(r => seen[r.id]).sort((a, b) => (seen[a.id] < seen[b.id] ? -1 : 1))];
   const ids = order.filter(r => !passed.includes(r.id)).slice(0, REC_LIMIT).map(r => r.id);
   // 신규 회원 첫 주 노출 보장: 오늘 고른 사람 중에 이번 주 가입자가 없으면,
   // 조건(R1~R7)을 통과한 신규 회원 중 가장 잘 맞는 1명을 마지막 자리에 넣음.
@@ -1580,7 +1759,8 @@ function dayOf(t) { if (!t) return ""; const d = new Date(t); return `${d.getFul
 // ---------- 알림 ----------
 function events(me) {
   const w = world(), ev = [], nick = id => w.byId[id]?.nickname || "누군가";
-  for (const l of Object.values(S.likes)) if (l.to === me.id && w.byId[l.from] && !isBlocked(me.id, l.from)) ev.push({ at: l.at || 0, text: `${nick(l.from)}님이 좋아요를 보냈어요`, act: "tab", v: "match" });
+  for (const l of Object.values(S.likes)) if (l.to === me.id && w.byId[l.from] && !isBlocked(me.id, l.from)) ev.push({ at: l.at || 0, text: `${nick(l.from)}님이 좋아요를 보냈어요${l.note ? ` · “${l.note}”` : ""}`, act: "tab", v: "match" });
+  for (const b of Object.values(S.blocks)) if (b.to === me.id && b.kind === "end") ev.push({ at: b.at || 0, text: `${nick(b.from)}님이 대화를 마쳤어요. 새로운 인연을 찾아드릴게요`, act: "tab", v: "home" });
   for (const g of Object.values(S.signals)) if (g.to === me.id && g.kind && w.byId[g.from] && !isBlocked(me.id, g.from)) ev.push({ at: g.at || 0, text: `${nick(g.from)}님이 '${SIG[g.kind]}'를 보냈어요`, act: "openchat", id: g.from });
   for (const m of matchesOf(me.id)) {
     const msgs = S.chats[pk(me.id, m.id)]?.messages || [];
@@ -1722,11 +1902,20 @@ function planCard(me, o) {
 // ---------- 차단·신고·약관·관리자 화면 ----------
 function menuView(me) {
   const o = world().byId[S.menu] || allProfiles().find(p => p.id === S.menu); if (!o) return "";
-  const bl = blockedByMe(me.id, o.id);
+  const bl = blockedByMe(me.id, o.id), mt = isMatched(me.id, o.id), fo = focusOf(me.id);
+  if (S.menuEnd && mt) return `<div class="overlay" role="dialog" aria-modal="true" aria-label="대화 마치기">
+    <div class="scrim" data-act="closemenu"></div>
+    <div class="sheet${S.enter ? " enter" : ""}"><div class="sheet-body pad" style="padding-block:16px 14px">
+      <b style="font-size:17px">${esc(o.nickname)}님과 대화를 마칠까요?</b>
+      <span class="muted" style="font-size:14px">대화방이 닫히고 서로 다시 추천되지 않아요. ${esc(o.nickname)}님에게는 "대화를 마쳤어요"라는 알림만 가요. 진행 중 매칭이 줄어서 새 좋아요를 보낼 수 있어요.</span>
+      <div class="menu-list"><button data-act="end" data-id="${o.id}" class="danger">대화 마치기</button><button data-act="closemenu">취소</button></div>
+    </div></div></div>`;
   return `<div class="overlay" role="dialog" aria-modal="true" aria-label="${esc(o.nickname)} 메뉴">
     <div class="scrim" data-act="closemenu"></div>
     <div class="sheet${S.enter ? " enter" : ""}"><div class="sheet-body pad" style="padding-block:6px 14px">
       <div class="menu-list">
+        ${mt ? (fo && fo.id === o.id ? `<button data-act="focus-off">집중 모드 끄기</button>` : `<button data-act="focus" data-id="${o.id}">${esc(o.nickname)}님에게 집중하기 (새 추천 쉬기)</button>`) : ""}
+        ${mt ? `<button data-act="endask" data-id="${o.id}">대화 마치기</button>` : ""}
         <button data-act="block" data-id="${o.id}" class="${bl ? "" : "danger"}">${bl ? `${esc(o.nickname)}님 차단 풀기` : `${esc(o.nickname)}님 차단하기`}</button>
         <button data-act="reportopen" data-id="${o.id}" class="danger">신고하기</button>
         <button data-act="closemenu">취소</button>
@@ -1878,8 +2067,20 @@ function homeView(me) {
   for (const o of pendingAfters(me)) top += afterCard(me, o, false);
   for (const m of matchesOf(me.id)) if (afterState(me.id, m.id) === "both" && Date.now() - afterOf(me.id, m.id).at < 3 * 864e5) top += `<div class="after both"><b>애프터 성사! ${esc(w.byId[m.id].nickname)}님도 또 만나고 싶대요</b><button class="btn sm" style="align-self:flex-start" data-act="openchat" data-id="${m.id}">약속 잡으러 가기</button></div>`;
   const searchBar = `<form class="search" id="search-form" role="search"><input type="search" id="q" enterkeyhint="search" placeholder="관심사로 찾기 · 예: 야구 맛집, 주말엔 산 타요" autocomplete="off" value="${esc(S.q)}" aria-label="관심사로 사람 찾기">${S.q ? `<button type="button" class="icon-btn" data-act="clearq" aria-label="검색 지우기">${ICON.close}</button>` : ""}</form>`;
+  const title = `<div class="screen-title"><h2>오늘도 좋은 인연이<br>기다리고 있어요 <span class="hrt" aria-hidden="true">♥</span></h2>`;
+  const fo = focusOf(me.id);
+  if (fo) {
+    const o = w.byId[fo.id];
+    return `${title}<span class="muted">집중 모드 · 새 추천을 잠시 쉬고 있어요</span></div>${pendingAfters(me).map(x => afterCard(me, x, false)).join("")}
+      <div class="match-banner"><div class="pair">${photo(me, "av")}<span class="heart" aria-hidden="true">♥</span>${photo(o, "av")}</div>
+        <h3>${esc(o.nickname)}님에게 집중하는 중이에요</h3>
+        <p class="muted" style="margin:0;font-size:14px">새 추천을 쉬고, 다른 사람의 추천에도 나오지 않아요. 두 분의 대화와 매칭은 그대로예요.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" data-act="openchat" data-id="${o.id}">대화하기</button><button class="btn line sm" data-act="focus-off">집중 모드 끄기</button></div></div>`;
+  }
+  const nm = matchesOf(me.id).length;
+  if (nm >= MATCH_CAP) top += `<div class="notice">지금 <b>${nm}명</b>과 대화 중이에요. 동시에 ${MATCH_CAP}명까지라, 새 좋아요는 한 명과 대화를 마친 뒤에 보낼 수 있어요. <button class="btn line sm" data-act="tab" data-v="match">매칭 정리하기</button></div>`;
   if (S.q.trim()) return searchBar + searchView(me);
-  const cards = shown.length ? shown.map(r => recCard(me, w.byId[r.id], r, dp.fresh && dp.fresh.id === r.id ? dp.fresh : null)).join("") : (recs.length ? "" : emptyRecs(0, rejected));
+  const cards = shown.length ? shown.map((r, i) => recCard(me, w.byId[r.id], r, dp.fresh && dp.fresh.id === r.id ? dp.fresh : null, i)).join("") : (recs.length ? "" : emptyRecs(0, rejected));
   const d = new Date(), dayLabel = `${d.getMonth() + 1}월 ${d.getDate()}일`;
   const extraLeft = Math.max(0, 3 - dp.extra);
   const doneNote = recs.length && shown.length < REC_LIMIT ? `<div class="daily-note">${EMPTY_ART}<span>${shown.length ? "오늘의 추천은 여기까지예요." : "오늘의 추천을 모두 확인했어요."} 내일 새로운 사람을 골라드릴게요.</span>
@@ -1887,7 +2088,7 @@ function homeView(me) {
       ${passed.length ? `<button class="btn line sm" data-act="unpass">넘긴 ${passed.length}명 다시 보기</button>` : ""}</div>` : "";
   const fewNote = recs.length && recs.length < REC_LIMIT ? relaxHtml(me, true) : "";
   const unpassNote = !doneNote && passed.length ? `<div class="daily-note"><button class="btn line sm" data-act="unpass">넘긴 ${passed.length}명 다시 보기</button></div>` : "";
-  return `<div class="screen-title"><h2>오늘도 좋은 인연이<br>기다리고 있어요 <span class="hrt" aria-hidden="true">♥</span></h2><span class="muted">${dayLabel} 오늘의 추천 · 매일 새로 골라드려요</span></div>${searchBar}
+  return `${title}<span class="muted">${dayLabel} 오늘의 추천 · 매일 새로 골라드려요</span></div>${searchBar}
     ${recs.length ? `<button class="sim-entry" data-act="simopen"><b>만약에?</b><span>관심사를 더 보면, 거리를 덜 보면… 순위가 어떻게 바뀌는지 미리 보기</span>${ICON.back}</button>` : ""}
     ${top}${cards}${doneNote}${unpassNote}${fewNote}`;
 }
@@ -1967,27 +2168,50 @@ function actionButtons(me, o, small) {
   return `<div class="acts"><button class="btn alt${sm}" data-act="pass" data-id="${o.id}">넘기기</button>
     <button class="btn${mine ? " line" : " heart"}${sm}" data-act="like" data-id="${o.id}" aria-pressed="${mine}">${mine ? "좋아요 보냄 · 취소" : "♥ 좋아요"}</button></div>`;
 }
-function recCard(me, o, r, fresh) {
+// ---------------- 추천 카드 (페르소나 카드) ----------------
+// 관심사가 가장 많이 몰린 분야로 유형 이름, 주말 성향 + 좋아하는 관심사 2개로 한 줄 소개
+const PERSONA = { "운동": "에너지 넘치는 운동파", "아웃도어·여행": "아웃도어 탐험가형", "음식·술": "맛집 탐방형", "영화·책·전시": "감성 문화인형", "음악·공연": "음악 감성형", "게임·덕질": "취미 몰입형", "생활": "다정한 일상형" };
+function personaOf(o) {
+  const cnt = {};
+  for (const t of o.interests) { const c = E.CAT_OF[t]; if (c) cnt[c] = (cnt[c] || 0) + E.levelOf(o, t) + (t === o.favorite_tag ? 2 : 0); }
+  const cat = Object.entries(cnt).sort((a, b) => b[1] - a[1])[0]?.[0];
+  const top = [...o.interests].sort((a, b) => E.levelOf(o, b) - E.levelOf(o, a)).slice(0, 2);
+  const what = top.length ? josa(top.join("·"), "을", "를") + " 즐기는" : "새로운 취향을 찾는";
+  return { type: PERSONA[cat] || "취향 탐색형", line: `${o.weekend === "out" ? "주말마다 밖에서" : "주말엔 집 근처에서"}<br>${esc(what)}` };
+}
+// 궁합 막대: 항목별 점수를 세 묶음으로 (점수 ÷ 그 항목 비중 = 얼마나 같은지)
+const BAR_GROUPS = [["관심사", ["interests"]], ["생활 리듬", ["contact_style", "chronotype", "weekend", "drinking"]], ["가치관", ["marriage_view", "spending", "pet"]]];
+function matchBars(r) {
+  return BAR_GROUPS.map(([label, keys]) => {
+    const ps = r.parts.filter(p => keys.includes(p.key));
+    const w = ps.reduce((t, p) => t + p.w, 0), pts = ps.reduce((t, p) => t + p.pts, 0);
+    return [label, w ? Math.round(100 * pts / w) : 0];
+  });
+}
+function recCard(me, o, r, fresh, idx = 0) {
   r = full(me.id, r);
-  const [g, topg] = grade(r.score);
+  const [g] = grade(r.score), pz = personaOf(o);
   const reasons = r.reasons.slice(0, 3).map(reasonText).filter(Boolean);
   const common = new Set(r.reasons.find(x => x.key === "interests")?.hits.map(h => h.theirs) || []);
-  const likedMe = liked(o.id, me.id) && !isMatched(me.id, o.id);
-  const mine = liked(me.id, o.id), matched = isMatched(me.id, o.id);
-  return `<article class="card" data-act="open" data-id="${o.id}">
-    <div class="frame">${photo(o)}<span class="ph-tag">${g}</span></div>
-    <div class="card-body">
-      <div class="card-name"><span><b>${esc(o.nickname)}</b> <span style="font-size:17px">${o.age}세</span>${vb(o)}</span></div>
-      <div class="muted" style="font-size:13px;margin-top:-8px">${esc(o.region)} | ${Math.max(1, Math.round(r.distance))}km 이내 · ${esc(o.job)}</div>
-      ${isNew(o) ? `<div class="fresh"><span class="new">NEW</span>${fresh ? "새로 온 회원 · 첫 주에는 하루 한 자리를 먼저 챙겨드려요" : `가입한 지 ${daysSince(joinedAt(o))}일 된 새 회원이에요`}</div>` : ""}
-      ${likedMe ? `<div class="state">♥ ${esc(o.nickname)}님이 나에게 좋아요를 보냈어요</div>` : ""}
-      ${reasons.length ? `<ul class="reasons">${reasons.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
-      <div class="chips">${o.interests.map(t => `<span class="chip${common.has(t) ? " hit" : ""}">${esc(t)}${E.levelOf(o, t) === 3 ? " ★" : ""}</span>`).join("")}</div>
-      ${S.dev ? `<div class="devline">최종 ${f1(r.score)} = √(내 기준 ${f1(r.ab)} × 상대 기준 ${f1(r.ba)})${r.pop < 1 ? ` × 인기 보정 ${r.pop.toFixed(2)}` : ""}${fresh ? `<br>신규 회원 노출 보장: 원래 순위 ${fresh.rank}위 → 오늘 추천 ${REC_LIMIT}번째 자리 (그 자리 점수의 ${NEW_FLOOR * 100}% 이상이라 넣었어요)` : ""}</div>` : ""}
-      ${matched ? `<button class="btn" data-act="openchat" data-id="${o.id}">${esc(o.nickname)}님과 대화하기</button>`
-        : `<div class="round-acts"><button class="rbtn" data-act="pass" data-id="${o.id}" aria-label="넘기기" title="넘기기">${ICON.close}</button>
-          <button class="rbtn like${mine ? " on" : ""}" data-act="like" data-id="${o.id}" aria-pressed="${mine}" aria-label="${mine ? "좋아요 취소" : "좋아요"}" title="${mine ? "좋아요 보냄 · 누르면 취소" : "좋아요"}">${ICON.heart}</button></div>`}
-    </div></article>`;
+  const lk = S.likes[`${o.id}_${me.id}`], mine = liked(me.id, o.id), matched = isMatched(me.id, o.id);
+  const tags = [...o.interests.map(t => [t + (E.levelOf(o, t) === 3 ? "★" : ""), common.has(t)]), [KO[o.chronotype], false], [o.weekend === "out" ? "주말엔밖으로" : "주말엔집콕", false], ...(o.mbti ? [[o.mbti, false]] : [])];
+  return `<article class="pcard" data-act="open" data-id="${o.id}">
+    <div class="pc-head"><span class="pc-letter" aria-hidden="true">${"ABCDEFGH"[idx] || "+"}</span><span class="pc-kind">${esc(g)} · 궁합 <span class="num">${Math.round(r.score)}</span>점</span>${isNew(o) ? `<span class="new">NEW</span>` : ""}</div>
+    <div class="pc-box">
+      <div class="pc-top">${photo(o, "pc-av")}<div class="pc-id"><p class="pc-line">${pz.line}</p><b class="pc-type">${esc(pz.type)} ${esc(o.nickname)}${vb(o)}</b></div></div>
+      <div class="muted pc-sub">${o.age}세 · ${esc(o.region)} ${Math.max(1, Math.round(r.distance))}km 이내 · ${esc(o.job)}</div>
+      <div class="pc-bars">${matchBars(r).map(([l, v]) => `<div class="pc-bar" role="img" aria-label="${l} ${v}% 일치"><span>${l}</span><i style="--v:${v}%"></i><b class="num">${v}%</b></div>`).join("")}</div>
+      <div class="pc-tags">${tags.map(([t, hit]) => `<span class="${hit ? "hit" : ""}">#${esc(t)}</span>`).join("")}</div>
+    </div>
+    ${isNew(o) && fresh ? `<div class="fresh">새로 온 회원 · 첫 주에는 하루 한 자리를 먼저 챙겨드려요</div>` : ""}
+    ${lk && !matched ? `<div class="state">♥ ${esc(o.nickname)}님이 나에게 좋아요를 보냈어요${lk.note ? ` · “${esc(lk.note)}”` : ""}</div>` : ""}
+    ${S.thinking[o.id] ? `<div class="state wait">${esc(o.nickname)}님이 내 프로필을 보고 있어요</div>` : ""}
+    ${reasons.length ? `<div class="pc-needs"><b>이래서 추천했어요</b><ul>${reasons.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>` : ""}
+    ${S.dev ? `<div class="devline">최종 ${f1(r.score)} = √(내 기준 ${f1(r.ab)} × 상대 기준 ${f1(r.ba)})${r.pop < 1 ? ` × 인기 보정 ${r.pop.toFixed(2)}` : ""}${fresh ? `<br>신규 회원 노출 보장: 원래 순위 ${fresh.rank}위 → 오늘 추천 ${REC_LIMIT}번째 자리 (그 자리 점수의 ${NEW_FLOOR * 100}% 이상이라 넣었어요)` : ""}</div>` : ""}
+    ${matched ? `<button class="btn" data-act="openchat" data-id="${o.id}">${esc(o.nickname)}님과 대화하기</button>`
+      : `<div class="round-acts"><button class="rbtn" data-act="pass" data-id="${o.id}" aria-label="넘기기" title="넘기기">${ICON.close}</button>
+        <button class="rbtn like${mine ? " on" : ""}" data-act="like" data-id="${o.id}" aria-pressed="${mine}" aria-label="${mine ? "좋아요 취소" : "좋아요"}" title="${mine ? "좋아요 보냄 · 누르면 취소" : "좋아요"}">${ICON.heart}</button></div>`}
+  </article>`;
 }
 
 function detailView(me) {
@@ -2020,7 +2244,7 @@ function detailView(me) {
           ${!r ? `<div class="notice" style="font-size:13px">내 추천 조건(나이·거리·목적 등) 밖이라 궁합 점수가 없어요. 검색으로 찾은 사람에게도 좋아요는 보낼 수 있어요.</div>` : ""}
         </div>
       </div>
-      ${o.id !== me.id ? `<div class="sheet-foot pad">${actionButtons(me, o)}</div>` : ""}
+      ${o.id !== me.id ? `<div class="sheet-foot pad">${!isMatched(me.id, o.id) && !liked(me.id, o.id) && !isBlocked(me.id, o.id) ? `<input type="text" id="like-note" class="note-in" maxlength="60" enterkeyhint="done" placeholder="좋아요와 함께 한마디 (선택) · 예: 저도 캠핑 좋아해요!" aria-label="좋아요와 함께 보낼 한마디">` : ""}${actionButtons(me, o)}</div>` : ""}
     </div></div>`;
 }
 function signalPanel(me, o, compact) {
@@ -2107,15 +2331,17 @@ function matchView(me) {
   const likedMe = Object.values(S.likes).filter(l => l.to === me.id && !isMatched(me.id, l.from) && w.byId[l.from] && !isBlocked(me.id, l.from));
   const iLiked = Object.values(S.likes).filter(l => l.from === me.id && !isMatched(me.id, l.to) && w.byId[l.to]);
   const sec = (title, inner, emptyText) => `<section class="panel sec"><h3>${title}</h3>${inner || `<div class="empty" style="padding:10px">${emptyText}</div>`}</section>`;
-  return `<div class="screen-title"><h2>매칭</h2></div>
+  const fo = focusOf(me.id);
+  return `<div class="screen-title"><h2>매칭</h2><span class="muted">진행 중 ${ms.length}/${MATCH_CAP}명${fo ? ` · ${esc(w.byId[fo.id].nickname)}님에게 집중하는 중` : ""}</span></div>
+    <details class="panel celeb-next"><summary>매칭 후 다음 매칭은 이렇게 돼요</summary>${nextRules(ms.length)}</details>
     ${sec(`연결된 사람 · ${ms.length}`, ms.length ? `<div class="list">${ms.map(m => { const th = sigOf(m.id, me.id), mi = sigOf(me.id, m.id);
       const sub = th?.kind ? `${esc(w.byId[m.id].nickname)}님 · ${SIG[th.kind]}` : esc(w.byId[m.id].region);
       return personRow(w.byId[m.id], sub,
       `<span class="via${m.via === "auto" ? " auto" : ""}">${m.via === "auto" ? "자동 매칭" : "서로 좋아요"}</span>${mi?.kind ? `<span class="sigtag${mi.kind === "pass" ? "" : " warm"}">내 마음 · ${SIG[mi.kind]}</span>` : ""}<button class="btn sm" data-act="openchat" data-id="${m.id}">대화</button>`); }).join("")}</div>` : "",
       "서로 1순위이거나 서로 좋아요를 누르면 여기에 나와요")}
-    ${sec(`나를 좋아한 사람 · ${likedMe.length}`, likedMe.length ? `<div class="list">${likedMe.map(l => personRow(w.byId[l.from], "좋아요를 보냈어요",
+    ${sec(`나를 좋아한 사람 · ${likedMe.length}`, likedMe.length ? `<div class="list">${likedMe.map(l => personRow(w.byId[l.from], l.note ? `“${esc(l.note)}”` : "좋아요를 보냈어요",
       `<button class="btn sm" data-act="like" data-id="${l.from}">♥ 수락</button>`)).join("")}</div>` : "", "아직 없어요")}
-    ${sec(`내가 좋아요 보낸 사람 · ${iLiked.length}`, iLiked.length ? `<div class="list">${iLiked.map(l => personRow(w.byId[l.to], "상대의 답을 기다리는 중",
+    ${sec(`내가 좋아요 보낸 사람 · ${iLiked.length}`, iLiked.length ? `<div class="list">${iLiked.map(l => personRow(w.byId[l.to], S.thinking[l.to] ? "내 프로필을 보고 있어요…" : l.note ? `내 한마디 · “${esc(l.note)}”` : "상대의 답을 기다리는 중",
       `<span>${timeLabel(l.at)}</span>`)).join("")}</div>` : "", "추천에서 마음에 드는 사람에게 좋아요를 보내보세요")}`;
 }
 
@@ -2150,7 +2376,10 @@ function chatView(me) {
     lastFrom = m.from;
   }
   const base = BASE.profiles.find(p => p.id === o.id);
-  const hint = base ? `${esc(o.nickname)}님은 가상 회원이에요. 답장해보려면 로그아웃한 뒤 <span class="num">${base.login_id}</span> / <span class="num">1234</span>로 로그인하세요.` : "";
+  const hint = base && !REAL ? `${esc(o.nickname)}님은 가상 회원이라 시연용으로 자동 답장해요. 직접 답해보려면 로그아웃한 뒤 <span class="num">${base.login_id}</span> / <span class="num">1234</span>로 로그인하세요.` : "";
+  const notes = [[o, S.likes[`${o.id}_${me.id}`]], [me, S.likes[`${me.id}_${o.id}`]]].filter(([, l]) => l?.note)
+    .map(([p, l]) => `<div class="msg-sys note">♥ ${p.id === me.id ? "내가" : esc(p.nickname) + "님이"} 좋아요와 함께 보낸 한마디 · “${esc(l.note)}”</div>`).join("");
+  if (S.typing[o.id]) log += `<div class="msg-row">${lastFrom === o.id ? `<span class="spacer"></span>` : photo(o, "av mini")}<div class="msg them typing" aria-label="입력 중"><i></i><i></i><i></i></div></div>`;
   const ok = isMatched(me.id, o.id), hits = ok ? riskScan(msgs, me.id) : [];
   return `<div class="overlay" role="dialog" aria-modal="true" aria-label="${esc(o.nickname)}님과 대화">
     <div class="scrim" data-act="closechat"></div>
@@ -2158,7 +2387,7 @@ function chatView(me) {
       <div class="sheet-head pad"><button class="icon-btn" data-act="closechat" aria-label="뒤로">${ICON.back}</button>${photo(o, "av")}<b>${esc(o.nickname)}${vb(o)}</b>
         <button class="btn line sm" data-act="open" data-id="${o.id}">프로필</button><button class="icon-btn" data-act="menu" data-id="${o.id}" aria-label="차단·신고 메뉴">${ICON.dots}</button></div>
       ${ok && !S.aiOpen ? `<div class="pad" style="padding-block:10px 0;display:flex;flex-direction:column;gap:8px;flex:none;max-height:58vh;overflow-y:auto">${signalPanel(me, o, true)}${planCard(me, o)}</div>` : ""}
-      <div class="log pad" id="chat-log">${hint ? `<div class="notice" style="font-size:13px">${hint}</div>` : ""}
+      <div class="log pad" id="chat-log">${hint ? `<div class="notice" style="font-size:13px">${hint}</div>` : ""}${notes}
         ${log || `<div class="empty">${EMPTY_ART}<b>${esc(o.nickname)}님과 매칭됐어요</b>공통 관심사로 먼저 말을 걸어보세요.</div>`}</div>
       ${ok ? riskAlert(o, key, hits) + aiChatPanel(me, o, key, hits) : ""}
       ${ok ? `<form class="composer pad" id="chat-form"><label class="attach" title="사진 보내기">${ICON.clip}<input type="file" id="chat-photo" accept="image/*" aria-label="사진 보내기"></label><input type="text" id="chat-input" enterkeyhint="send" placeholder="메시지를 입력하세요" maxlength="500" autocomplete="off"><button class="btn line sm" type="button" data-act="ai-open" aria-pressed="${S.aiOpen}" title="AI 답장 추천·대화 주제·안전 점검">AI</button><button class="send" type="submit" aria-label="보내기">${ICON.send}</button></form>`
@@ -2186,7 +2415,8 @@ function meView(me) {
       <span class="pose">${esc(poseFor(me.id))}</span>
       <label class="btn sm file-btn" style="align-self:flex-start">셀카 찍어 올리기<input type="file" id="verif-photo" accept="image/*" capture="user"></label>`;
   let nperm = "none"; try { nperm = "Notification" in window ? Notification.permission : "none"; } catch (e) {}
-  const myBlocks = Object.values(S.blocks).filter(b => b.from === me.id);
+  const myBlocks = Object.values(S.blocks).filter(b => b.from === me.id && b.kind !== "end");
+  const myEnds = Object.values(S.blocks).filter(b => b.from === me.id && b.kind === "end");
   const allP = Object.fromEntries(allProfiles().map(p => [p.id, p]));
   const smokeDeal = pr.conditions?.smoking?.importance === 3;
   const lifestyle = ["purpose", "marriage_view", "contact_style", "chronotype", "weekend", "drinking", "smoking", "pet", "spending", "religion"];
@@ -2248,6 +2478,8 @@ function meView(me) {
         : nperm === "default" ? `<span style="font-size:14px">둘을 다른 탭에 열어두면 새 메시지와 좋아요를 브라우저 알림으로 받을 수 있어요.</span><button class="btn sm" style="align-self:flex-start" data-act="notifperm">브라우저 알림 켜기</button>`
         : `<span style="font-size:14px">이 화면에서는 브라우저 알림을 쓸 수 없어요. 오른쪽 위 종 모양에서 알림을 확인하세요.</span>`}
       <span class="muted" style="font-size:12px">앱을 완전히 닫았을 때 오는 푸시 알림은 준비 중이에요.</span></section>
+    ${myEnds.length ? `<section class="panel f"><h3 style="font-size:18px">대화를 마친 사람 · ${myEnds.length}</h3><span class="muted" style="font-size:13px">서로 다시 추천되지 않아요. 풀면 다시 추천에 나올 수 있어요.</span>
+      <div class="list">${myEnds.map(b => `<div class="item" style="cursor:default"><div class="meta"><b>${esc(allP[b.to]?.nickname || "(탈퇴한 회원)")}</b><span>${timeLabel(b.at)}에 대화 마침</span></div><div class="side"><button class="btn line sm" data-act="unblock" data-id="${b.to}">다시 추천 받기</button></div></div>`).join("")}</div></section>` : ""}
     <section class="panel f"><h3 style="font-size:18px">차단한 사람 · ${myBlocks.length}</h3>
       ${myBlocks.length ? `<div class="list">${myBlocks.map(b => `<div class="item" style="cursor:default"><div class="meta"><b>${esc(allP[b.to]?.nickname || "(탈퇴한 회원)")}</b><span>${timeLabel(b.at)}에 차단</span></div><div class="side"><button class="btn line sm" data-act="unblock" data-id="${b.to}">차단 풀기</button></div></div>`).join("")}</div>` : `<span class="muted" style="font-size:13px">프로필이나 채팅의 ··· 메뉴에서 차단하고 신고할 수 있어요.</span>`}</section>
     ${S.isAdmin ? `<section class="panel f"><h3 style="font-size:18px">관리자</h3><span class="muted" style="font-size:13px">신고 처리, 사진 인증 승인, 이용 정지, 가입 현황을 볼 수 있어요.</span><button class="btn sm" style="align-self:flex-start" data-act="adminopen">관리자 화면 열기</button></section>` : ""}
@@ -2489,7 +2721,9 @@ function render() {
   const nearBottom = log ? log.scrollHeight - log.scrollTop - log.clientHeight < 80 : true;
   const scrollY = window.scrollY;
   S.enter = screen !== lastScreen;
-  app.innerHTML = (authed ? (isSuspended(S.uid) ? suspendedView() : shell()) : authView()) + (S.legal ? legalView() : "");
+  if (authed && !isSuspended(S.uid)) checkNewMatch(world().byId[S.uid]);
+  app.innerHTML = (authed ? (isSuspended(S.uid) ? suspendedView() : shell() + (S.celebrate ? celebrateView(world().byId[S.uid]) : "")) : authView()) + (S.legal ? legalView() : "");
+  if (S.prefill != null) { const ci = document.getElementById("chat-input"); if (ci) { ci.value = S.prefill; S.prefill = null; ci.focus({ preventScroll: true }); } }
   if (authed && !isSuspended(S.uid)) browserNotify(world().byId[S.uid]);
   if (screen === lastScreen) {
     for (const [id, st] of Object.entries(keep)) { const el = document.getElementById(id); if (!el) continue; if ("c" in st) el.checked = st.c; else el.value = st.v; }
@@ -2623,16 +2857,31 @@ document.addEventListener("click", e => {
     case "like": {
       if (!S.canWrite) return toast("보기 전용이라 저장할 수 없어요");
       const on = !liked(me, id);
-      setLike(me, id, on);
-      if (on && liked(id, me)) toast(`${world().byId[id].nickname}님과 서로 좋아요! 매칭됐어요`);
-      else if (on) toast("좋아요를 보냈어요");
+      if (on && matchesOf(me).length >= MATCH_CAP) return toast(`지금 ${MATCH_CAP}명과 대화 중이에요. 한 명과 대화를 마치면 새 좋아요를 보낼 수 있어요`);
+      const note = on && t.closest(".sheet") ? (document.getElementById("like-note")?.value.trim() || "") : "";
+      setLike(me, id, on, note);
+      if (on && !liked(id, me)) { toast(note ? "한마디와 함께 좋아요를 보냈어요" : "좋아요를 보냈어요"); botLikeBack(me, id); }   // 서로 좋아요면 매칭 성사 화면이 떠요
       break;
+    }
+    case "celeb-close": S.celebrate = null; render(); break;
+    case "celeb-chat": S.celebrate = null; S.chat = id; S.detail = null; render(); break;
+    case "celeb-say": { const meP = world().byId[me], o = world().byId[id], r0 = world().lists[me].recs.find(x => x.id === id);
+      S.prefill = openersFor(meP, o, r0 ? full(me, r0) : null)[+t.dataset.i] || ""; S.celebrate = null; S.chat = id; S.detail = null; render(); break; }
+    case "focus": S.celebrate = null; S.menu = null; saveUser(me, { focus: focusKey(me, id) }); toast(`${world().byId[id].nickname}님에게 집중할게요. 새 추천은 잠시 쉬어요`); break;
+    case "focus-off": S.menu = null; saveUser(me, { focus: null }); toast("집중 모드를 껐어요. 다시 추천해드릴게요"); break;
+    case "endask": S.menuEnd = true; render(); break;
+    case "end": {
+      if (!S.canWrite) return toast("보기 전용이라 저장할 수 없어요");
+      const nick = world().byId[id]?.nickname || "";
+      if (focusOf(me)?.id === id) saveUser(me, { focus: null });
+      setBlock(id, true, "end"); S.menu = null; S.menuEnd = false; S.chat = null; S.detail = null;
+      toast(`${nick}님과 대화를 마쳤어요. 새 좋아요를 보낼 수 있어요`); break;
     }
     case "pass": { const dp = dailyPicks(world().byId[me]); S.detail = null; saveDaily({ passed: [...dp.passed, id] }); break; }
     case "unpass": saveDaily({ passed: [] }); break;
     case "more": {
       const meP = world().byId[me], dp = dailyPicks(meP), recs = world().lists[me].recs;
-      const nx = recs.find(r => !dp.ids.includes(r.id) && !dp.passed.includes(r.id));
+      const nx = recs.find(r => !dp.ids.includes(r.id) && !dp.passed.includes(r.id) && !isMatched(me, r.id));
       if (nx && dp.extra < 3) saveDaily({ ids: [...dp.ids, nx.id], extra: dp.extra + 1, seen: { ...dp.seen, [nx.id]: today() } });
       break;
     }
@@ -2643,7 +2892,7 @@ document.addEventListener("click", e => {
       if (ev.act === "openchat") { S.chat = ev.id; S.detail = null; S.sigOpen = false; } else { S.tab = ev.v; S.chat = null; S.detail = null; } render(); break; }
     case "notifperm": try { Notification.requestPermission().then(() => render(), () => render()); } catch (e) { toast("이 화면에서는 브라우저 알림을 쓸 수 없어요"); } break;
     case "menu": S.menu = id; render(); break;
-    case "closemenu": S.menu = null; render(); break;
+    case "closemenu": S.menu = null; S.menuEnd = false; render(); break;
     case "block": { const on = !blockedByMe(me, id); if (!S.canWrite) return toast("보기 전용이라 저장할 수 없어요");
       setBlock(id, on); S.menu = null; if (on) { if (S.chat === id) S.chat = null; if (S.detail === id) S.detail = null; } toast(on ? "차단했어요. 서로 보이지 않아요" : "차단을 풀었어요"); break; }
     case "unblock": setBlock(id, false); toast("차단을 풀었어요"); break;
@@ -2804,6 +3053,7 @@ document.addEventListener("submit", async e => {
     if (!S.canWrite) return toast("보기 전용이라 보낼 수 없어요");
     inp.value = "";
     sendMsg(pk(S.uid, S.chat), S.uid, text);
+    botAnswer(S.uid, S.chat);
     document.getElementById("chat-input")?.focus();
   }
 });
@@ -2875,8 +3125,9 @@ document.addEventListener("input", e => {
 });
 // 맨 위에 열린 것 하나 닫기 (Esc, 핸드폰 뒤로 가기 공통)
 function closeTop() {
-  if (S.sim) S.sim = null;
-  else if (S.legal || S.report || S.menu || S.notifOpen) { S.legal = S.report = S.menu = null; S.notifOpen = false; }
+  if (S.celebrate) S.celebrate = null;
+  else if (S.sim) S.sim = null;
+  else if (S.legal || S.report || S.menu || S.notifOpen) { S.legal = S.report = S.menu = null; S.notifOpen = false; S.menuEnd = false; }
   else if (S.lightbox) S.lightbox = null;
   else if (S.admin && !S.chat && !S.detail) S.admin = false;
   else if (S.chat) S.chat = null;
@@ -2885,7 +3136,7 @@ function closeTop() {
   render();
   return true;
 }
-const anyOpen = () => !!(S.uid && (S.sim || S.legal || S.report || S.menu || S.notifOpen || S.lightbox || S.admin || S.chat || S.detail));
+const anyOpen = () => !!(S.uid && (S.celebrate || S.sim || S.legal || S.report || S.menu || S.notifOpen || S.lightbox || S.admin || S.chat || S.detail));
 document.addEventListener("keydown", e => { if (e.key === "Escape") closeTop(); });
 
 // 안드로이드 뒤로 가기: 시트가 열려 있으면 앱을 나가지 않고 시트만 닫음
