@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>둘 - 동네친구, 데이트, 새로운 시작</title>
 <meta name="description" content="둘 - 동네친구, 데이트, 새로운 시작. 취향이 가까운 사람을 찾아주는 매칭 앱">
-<meta name="theme-color" content="#FDE6EE">
+<meta name="theme-color" content="#F4F3FF">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z' fill='%23FF6F9C'/%3E%3C/svg%3E">
 <style>
 :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
@@ -36,39 +36,41 @@ img { max-width: 100%; }
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: 핑크·라벤더 그라데이션 위에 둥근 흰 카드. 사진이 주인공이고, 선은 얇게, 그림자는 부드럽게. 로고만 필기체 */
+/* Layout: 라벤더빛 바탕 위에 둥근 흰 카드. 주요 버튼·강조는 인디고 파스텔, 좋아요·고른 것은 파스텔 핑크. 선은 얇게, 그림자는 부드럽게. 로고만 필기체 */
 :root {
-  --bg: #F6ECF5;
-  --bg-grad: linear-gradient(165deg, #FCE9F1 0%, #F2EAFB 52%, #FDF2EE 100%);
-  --hero-grad: linear-gradient(180deg, #B8A5EC 0%, #DDA9DA 46%, #F7B7C8 76%, #FBD3CB 100%);
-  --app: #FFF8FB;
+  --bg: #ECEBFA;
+  --bg-grad: linear-gradient(165deg, #F1F0FF 0%, #ECEBFA 55%, #FCEFF4 100%);
+  --hero-grad: linear-gradient(180deg, #5B5FE0 0%, #7A7EEA 45%, #B7A6EE 75%, #F6C3D5 100%);
+  --app: #F7F6FF;
   --surface: #FFFFFF;
-  --paper: #FBF5F9;
-  --ink: #2F2633;
-  --muted: #9C8FA0;
-  --line: #F1E6EE;
-  --stroke: #F3BFD2;
-  --rose: #F0789E;
-  --accent: #F0789E;
+  --paper: #F8F8FF;
+  --ink: #1F2147;
+  --muted: #64678A;
+  --line: #E6E5F5;
+  --stroke: #D5D4F0;
+  --rose: #5B5FE0;
+  --accent: #5B5FE0;
   --accent-ink: #FFFFFF;
-  --accent-soft: #FDEEF3;
-  --heart: #F2668F;
+  --accent-soft: #EEEDFB;
+  --heart: #D6336C;
   --heart-soft: #FFE3EC;
-  --mint: #C9B8F2;
-  --mint-deep: #8C72D8;
-  --accent2: #9B7FE0;
-  --accent2-soft: #F1ECFC;
-  --lilac: #EEE7FC;
-  --strip: #FDF1F6;
-  --chip: #FDEEF3;
-  --bubble-me: #FFD9E5;
-  --bubble-them: #F5F1F6;
-  --good: #3FA57A;
-  --bad: #E0557A;
-  --bad-soft: #FFE8EE;
-  --scrim: rgba(47, 38, 51, .35);
-  --shadow: 0 6px 24px rgba(214, 120, 160, .13);
-  --shadow-btn: 0 6px 16px rgba(240, 120, 158, .32);
+  --pink: #FFD3E2;
+  --pink-ink: #A3214F;
+  --mint: #8E91EE;
+  --mint-deep: #3F43C4;
+  --accent2: #4A4ED0;
+  --accent2-soft: #EEEDFB;
+  --lilac: #E7E6FB;
+  --strip: #F6F5FF;
+  --chip: #F1F0FC;
+  --bubble-me: #FFD3E2;
+  --bubble-them: #F0EFFA;
+  --good: #1E7F53;
+  --bad: #C93469;
+  --bad-soft: #FFE6EF;
+  --scrim: rgba(31, 33, 71, .38);
+  --shadow: 0 6px 24px rgba(91, 95, 224, .12);
+  --shadow-btn: 0 6px 16px rgba(91, 95, 224, .30);
   --font-logo: "Dancing Script", cursive;
   --font-display: "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   --font-hand: var(--font-display);
@@ -77,21 +79,21 @@ img { max-width: 100%; }
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #1E1724; --bg-grad: linear-gradient(165deg, #261A28 0%, #1F1B2E 55%, #261C22 100%); --hero-grad: linear-gradient(180deg, #4B3F7A 0%, #7A4A78 50%, #9A5670 80%, #A86A6A 100%);
-    --app: #241C2B; --surface: #2E2436; --paper: #2A2131; --ink: #F7EEF6; --muted: #B9A8BF; --line: #3D3146;
-    --stroke: #6B4A63; --rose: #FF8FB3; --accent: #FF8FB3; --accent-ink: #2A1320; --accent-soft: #47283A; --heart: #FF86AD; --heart-soft: #4F2638;
-    --mint: #8F7BD6; --mint-deep: #C4B3FF; --accent2: #C4B3FF; --accent2-soft: #362C4B; --lilac: #382E4A; --strip: #33283B; --chip: #3E2A3A;
-    --bubble-me: #6A2F49; --bubble-them: #372D3F;
-    --good: #7FD4A4; --bad: #FF8FA8; --bad-soft: #4F2432; --scrim: rgba(0, 0, 0, .55); --shadow: 0 8px 24px rgba(0, 0, 0, .35); --shadow-btn: 0 6px 16px rgba(0, 0, 0, .35); color-scheme: dark;
+    --bg: #0F1024; --bg-grad: linear-gradient(165deg, #14152E 0%, #121331 55%, #1E1428 100%); --hero-grad: linear-gradient(180deg, #2E3190 0%, #45479E 50%, #6A4E8E 80%, #8A4F6E 100%);
+    --app: #15172F; --surface: #1F2245; --paper: #1B1D3D; --ink: #ECEBFF; --muted: #A9ABD0; --line: #2F3260;
+    --stroke: #43478A; --rose: #A3A6FF; --accent: #A3A6FF; --accent-ink: #12132A; --accent-soft: #2A2D5A; --heart: #FF8DB5; --heart-soft: #44263C;
+    --pink: #5A2C45; --pink-ink: #FFC2D6; --mint: #8E91EE; --mint-deep: #C3C5FF; --accent2: #C3C5FF; --accent2-soft: #2A2D5A; --lilac: #2A2D5A; --strip: #23264D; --chip: #272A52;
+    --bubble-me: #5A2C45; --bubble-them: #262950;
+    --good: #7FD4A4; --bad: #FF8FA8; --bad-soft: #4A2634; --scrim: rgba(0, 0, 0, .55); --shadow: 0 8px 24px rgba(0, 0, 0, .35); --shadow-btn: 0 6px 16px rgba(0, 0, 0, .35); color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #1E1724; --bg-grad: linear-gradient(165deg, #261A28 0%, #1F1B2E 55%, #261C22 100%); --hero-grad: linear-gradient(180deg, #4B3F7A 0%, #7A4A78 50%, #9A5670 80%, #A86A6A 100%);
-  --app: #241C2B; --surface: #2E2436; --paper: #2A2131; --ink: #F7EEF6; --muted: #B9A8BF; --line: #3D3146;
-  --stroke: #6B4A63; --rose: #FF8FB3; --accent: #FF8FB3; --accent-ink: #2A1320; --accent-soft: #47283A; --heart: #FF86AD; --heart-soft: #4F2638;
-  --mint: #8F7BD6; --mint-deep: #C4B3FF; --accent2: #C4B3FF; --accent2-soft: #362C4B; --lilac: #382E4A; --strip: #33283B; --chip: #3E2A3A;
-  --bubble-me: #6A2F49; --bubble-them: #372D3F;
-  --good: #7FD4A4; --bad: #FF8FA8; --bad-soft: #4F2432; --scrim: rgba(0, 0, 0, .55); --shadow: 0 8px 24px rgba(0, 0, 0, .35); --shadow-btn: 0 6px 16px rgba(0, 0, 0, .35); color-scheme: dark;
+  --bg: #0F1024; --bg-grad: linear-gradient(165deg, #14152E 0%, #121331 55%, #1E1428 100%); --hero-grad: linear-gradient(180deg, #2E3190 0%, #45479E 50%, #6A4E8E 80%, #8A4F6E 100%);
+  --app: #15172F; --surface: #1F2245; --paper: #1B1D3D; --ink: #ECEBFF; --muted: #A9ABD0; --line: #2F3260;
+  --stroke: #43478A; --rose: #A3A6FF; --accent: #A3A6FF; --accent-ink: #12132A; --accent-soft: #2A2D5A; --heart: #FF8DB5; --heart-soft: #44263C;
+  --pink: #5A2C45; --pink-ink: #FFC2D6; --mint: #8E91EE; --mint-deep: #C3C5FF; --accent2: #C3C5FF; --accent2-soft: #2A2D5A; --lilac: #2A2D5A; --strip: #23264D; --chip: #272A52;
+  --bubble-me: #5A2C45; --bubble-them: #262950;
+  --good: #7FD4A4; --bad: #FF8FA8; --bad-soft: #4A2634; --scrim: rgba(0, 0, 0, .55); --shadow: 0 8px 24px rgba(0, 0, 0, .35); --shadow-btn: 0 6px 16px rgba(0, 0, 0, .35); color-scheme: dark;
 }
 * { box-sizing: border-box; }
 html, body { height: 100%; }
@@ -103,7 +105,7 @@ b { font-weight: 700; }
 .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 .muted { color: var(--muted); }
 
-#app { max-width: 520px; min-height: 100%; margin: 0 auto; background: var(--app); position: relative; display: flex; flex-direction: column; box-shadow: 0 0 60px rgba(214, 120, 160, .10); }
+#app { max-width: 520px; min-height: 100%; margin: 0 auto; background: var(--app); position: relative; display: flex; flex-direction: column; box-shadow: 0 0 60px rgba(91, 95, 224, .10); }
 .pad { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 
 /* 로고: 하트 + 필기체 dul */
@@ -127,7 +129,7 @@ main { flex: 1; padding-block: 8px 108px; display: flex; flex-direction: column;
 .screen-title .muted { font-size: 13px; }
 
 /* 탭바 */
-.tabbar { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 520px; z-index: 6; background: var(--surface); border-radius: 24px 24px 0 0; box-shadow: 0 -6px 24px rgba(214, 120, 160, .12); display: grid; grid-template-columns: repeat(4, 1fr); padding-bottom: env(safe-area-inset-bottom, 0px); padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); }
+.tabbar { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 520px; z-index: 6; background: var(--surface); border-radius: 24px 24px 0 0; box-shadow: 0 -6px 24px rgba(91, 95, 224, .12); display: grid; grid-template-columns: repeat(4, 1fr); padding-bottom: env(safe-area-inset-bottom, 0px); padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); }
 .tabbar button { border: 0; background: none; padding: 11px 4px 9px; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 11px; color: var(--muted); cursor: pointer; position: relative; }
 .tabbar button svg { width: 24px; height: 24px; }
 .tabbar button[aria-current="true"] { color: var(--rose); font-weight: 700; }
@@ -167,7 +169,7 @@ main { flex: 1; padding-block: 8px 108px; display: flex; flex-direction: column;
 .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .ph .ini { font-weight: 800; color: #FFFFFF; opacity: .95; }
 .ph.noimg { background: linear-gradient(150deg, #C9B8F2, #F5A9C2); }
-.av { width: 46px; height: 46px; border-radius: 50%; flex: none; box-shadow: 0 0 0 2px var(--surface), 0 2px 8px rgba(214, 120, 160, .2); }
+.av { width: 46px; height: 46px; border-radius: 50%; flex: none; box-shadow: 0 0 0 2px var(--surface), 0 2px 8px rgba(91, 95, 224, .2); }
 .av .ini { font-size: 18px; }
 .av.mini { width: 32px; height: 32px; }
 .av.mini .ini { font-size: 13px; }
@@ -469,7 +471,7 @@ tr.pen td { color: var(--bad); }
 .ai-wait::after { content: ""; display: inline-block; width: 1.2em; text-align: left; animation: aidots 1.2s steps(4) infinite; }
 @keyframes aidots { 0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75% { content: "..."; } }
 .ai-list { display: flex; flex-direction: column; gap: 6px; }
-.ai-cand { text-align: left; border: 1px solid transparent; background: var(--surface); border-radius: 999px; padding: 10px 16px; box-shadow: 0 2px 8px rgba(214, 120, 160, .08); cursor: pointer; display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.ai-cand { text-align: left; border: 1px solid transparent; background: var(--surface); border-radius: 999px; padding: 10px 16px; box-shadow: 0 2px 8px rgba(91, 95, 224, .08); cursor: pointer; display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
 .ai-cand:hover { border-color: var(--stroke); }
 .ai-cand small { flex: none; color: var(--muted); font-size: 11px; }
 .ai-ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 3px; }
@@ -489,6 +491,54 @@ tr.pen td { color: var(--bad); }
 .ai-alert span { flex: 1 1 160px; }
 .ai-note { font-size: 12px; color: var(--muted); }
 @media (max-width: 380px) { .row2 { grid-template-columns: 1fr; } }
+
+
+/* ---------- 핑크 × 인디고 파스텔: 고른 것·좋아요는 파스텔 핑크 ---------- */
+.btn.heart { background: var(--pink); border-color: var(--pink); color: var(--pink-ink); box-shadow: none; }
+.btn.alt { color: var(--mint-deep); }
+.chip { color: var(--mint-deep); }
+.chip.hit { background: var(--pink); color: var(--pink-ink); }
+.tgl.on, .cat.on { background: var(--pink); border-color: var(--pink); color: var(--pink-ink); }
+.tgl.lv1 { background: var(--heart-soft); border-color: var(--heart-soft); color: var(--pink-ink); }
+.sig-opt.on { background: var(--pink); border-color: var(--pink); color: var(--pink-ink); }
+.rbtn.like { background: var(--pink); border-color: var(--pink); color: var(--heart); box-shadow: 0 6px 16px rgba(214, 51, 108, .22); }
+.badge, .item .unread { background: var(--pink); color: var(--pink-ink); }
+.grade.top { background: var(--pink); color: var(--pink-ink); }
+.send { background: var(--pink); color: var(--pink-ink); box-shadow: none; }
+
+/* ---------- 애프터 체크 ---------- */
+.after { display: flex; flex-direction: column; gap: 8px; border-radius: 20px; padding: 14px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); font-size: 14px; }
+.after > b { font-size: 15px; }
+.after > span { color: var(--muted); font-size: 13px; line-height: 1.5; }
+.after.both { background: var(--pink); border-color: var(--pink); }
+.after.both > b { color: var(--pink-ink); }
+.after.both > span { color: var(--ink); }
+.after-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.after-btns .btn { box-shadow: none; }
+.after-btns .btn.heart:not(.on) { background: var(--surface); border-color: var(--pink); }
+.after-btns .btn.line.on { background: var(--muted); border-color: var(--muted); color: var(--surface); }
+/* ---------- 신규 회원 ---------- */
+.fresh { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--mint-deep); }
+.fresh .new { background: var(--pink); color: var(--pink-ink); border-radius: 6px; padding: 1px 6px; font-size: 11px; letter-spacing: .5px; }
+/* ---------- 만약에 시뮬레이터 ---------- */
+.sim-entry { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; border: 0; background: var(--accent); color: var(--accent-ink); border-radius: 22px; padding: 16px; cursor: pointer; box-shadow: var(--shadow-btn); }
+.sim-entry b { font-size: 16px; white-space: nowrap; }
+.sim-entry span { flex: 1; font-size: 13px; line-height: 1.5; }
+.sim-entry svg { width: 18px; height: 18px; transform: rotate(180deg); flex: none; }
+.sim-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.sim-list li { display: grid; grid-template-columns: 22px 40px minmax(0, 1fr) auto auto; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.sim-list li:last-child { border-bottom: 0; }
+.sim-list .rk { font-weight: 700; color: var(--rose); text-align: center; }
+.sim-list .av { width: 40px; height: 40px; }
+.sim-list .nm { display: flex; flex-direction: column; min-width: 0; }
+.sim-list .nm b, .sim-list .nm small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sim-list .nm small { color: var(--muted); font-size: 12px; }
+.sim-list .sc { display: flex; flex-direction: column; align-items: flex-end; font-family: var(--font-mono); font-size: 14px; font-weight: 700; }
+.sim-list .sc small { font-weight: 400; color: var(--muted); font-size: 11px; text-decoration: line-through; }
+.mv { font-size: 12px; font-weight: 700; color: var(--muted); min-width: 52px; text-align: right; }
+.mv.up { color: var(--good); }
+.mv.down { color: var(--bad); }
+.sim-sum { font-size: 14px; font-weight: 700; }
 </style>
 
 <div id="app"></div>
@@ -761,7 +811,20 @@ function createEngine(cfg) {
     };
   }
 
-  return { computeAll, explain, countFor, itemSims, baseWeights, effWeights, KEYS, LABEL, W0, tagSim, dist, CAT_OF, levelOf, vecOfTags, personVec, cosine, project2D, AXES: cfg.axes };
+  // "만약에" 시뮬레이터: 내 가중치만 바꿔서 내 추천 순위를 다시 계산
+  // 상대가 본 내 점수(ba)와 인기 보정(pop)은 내 가중치와 상관없으니 그대로 씀 → 내 쪽 점수만 새로 계산
+  function rescore(ctx, me, recs, byId, Wraw) {
+    const W = normWeights(Wraw);
+    const va = ctx.VEC[me.id] || personVec(me);
+    return recs.map(r => {
+      const b = byId[r.id];
+      const ab = scoreOne(me, b, r.distance, W, ctx.rarity, va, ctx.VEC[b.id] || personVec(b), false).total;
+      const raw = Math.sqrt(ab * r.ba);
+      return { ...r, ab, raw, score: raw * (r.pop ?? 1) };
+    }).sort((x, y) => (y.score - x.score) || (x.distance - y.distance));
+  }
+
+  return { computeAll, explain, countFor, itemSims, rescore, normWeights, baseWeights, effWeights, KEYS, LABEL, W0, tagSim, dist, CAT_OF, levelOf, vecOfTags, personVec, cosine, project2D, AXES: cfg.axes };
 }
 
 </script>
@@ -916,6 +979,7 @@ const S = {
   pickCat: { su: CAT_NAMES[0], me: CAT_NAMES[0], f: CAT_NAMES[0] }, q: "",
   blocks: {}, reports: {}, mod: {}, verifs: {}, myVerif: null, isAdmin: false,
   menu: null, report: null, legal: null, notifOpen: false, admin: false, adminTab: "stats", planOpen: false, planMood: "auto", planPage: 0,
+  afters: {}, sim: null,
   authError: "",
   ai: {}, aiOpen: false, aiTab: "reply", aiTone: "warm", riskSeen: {}, reportPreset: -1, reportDetail: "",
 };
@@ -1287,6 +1351,19 @@ function statusText() {
 function today() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }
 function hashStr(str) { let h = 0; for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) | 0; return (h >>> 0).toString(36); }
 function prefSig(me) { const s = settingsOf(me.id); return hashStr(JSON.stringify([me.preference, me.purpose, me.gender, s.tags, s.related, s.weights])); }
+// ---------- 신규 회원 첫 주 노출 보장 ----------
+// 새로 가입한 사람은 마음 표현 기록이 없고 다른 사람 추천에도 잘 안 떠서 첫 매칭까지 오래 걸림 → 첫 7일은 하루 추천 1자리를 보장
+const NEW_DAYS = 7, NEW_FLOOR = 0.8, BOOT_T = Date.now();
+function joinedAt(p) {
+  if (!p) return 0;
+  const c = S.users[p.id]?.created;
+  if (c) return c;
+  // 시연판 가상 회원에는 가입일이 없어서, 25명 중 1명꼴(번호 끝이 07, 32, 57, 82)을 "이번 주 가입"으로 가정
+  const n = Number(p.id);
+  return !REAL && Number.isFinite(n) && n % 25 === 7 ? BOOT_T - (n % 6) * 864e5 - 36e5 : 0;
+}
+const isNew = p => { const t = joinedAt(p); return t > 0 && Date.now() - t < NEW_DAYS * 864e5; };
+const daysSince = t => Math.max(1, Math.ceil((Date.now() - t) / 864e5));
 function dailyPicks(me) {
   const recs = world().lists[me.id].recs, valid = new Set(recs.map(r => r.id));
   const d = privOf(me.id).daily, t = today(), sig = prefSig(me);
@@ -1297,8 +1374,21 @@ function dailyPicks(me) {
   const passed = d && d.date === t ? (d.passed || []) : [];
   const order = [...recs.filter(r => !seen[r.id]), ...recs.filter(r => seen[r.id]).sort((a, b) => (seen[a.id] < seen[b.id] ? -1 : 1))];
   const ids = order.filter(r => !passed.includes(r.id)).slice(0, REC_LIMIT).map(r => r.id);
+  // 신규 회원 첫 주 노출 보장: 오늘 고른 사람 중에 이번 주 가입자가 없으면,
+  // 조건(R1~R7)을 통과한 신규 회원 중 가장 잘 맞는 1명을 마지막 자리에 넣음.
+  // 단, 그 자리에 원래 올 사람 점수의 NEW_FLOOR(80%) 이상일 때만 (너무 안 맞는 사람은 안 넣음)
+  let fresh = null;
+  const byId = world().byId, scoreOf = Object.fromEntries(recs.map(r => [r.id, r.score]));
+  if (ids.length && !ids.some(id => isNew(byId[id]))) {
+    const floor = (scoreOf[ids[ids.length - 1]] || 0) * NEW_FLOOR;
+    const cand = order.find(r => !passed.includes(r.id) && !ids.includes(r.id) && isNew(byId[r.id]) && r.score >= floor);
+    if (cand) {
+      fresh = { id: cand.id, rank: recs.indexOf(cand) + 1 };
+      if (ids.length >= REC_LIMIT) ids[ids.length - 1] = cand.id; else ids.push(cand.id);
+    }
+  }
   for (const id of ids) seen[id] = t;
-  const next = { date: t, sig, ids, passed, seen, extra: 0 };
+  const next = { date: t, sig, ids, passed, seen, extra: 0, fresh };
   const ready = !S.fb || S.privLoaded;   // 배포판은 저장된 기록을 받은 뒤에만 새로 저장 (다른 기기 기록을 덮지 않게)
   if (ready && !S.dailyPending) { S.dailyPending = true; setTimeout(() => { S.dailyPending = false; if (S.uid === me.id) savePriv({ daily: next }); }, 0); }
   return next;
@@ -1350,15 +1440,20 @@ function applyRelax(i) {
 
 // ---------- 마음 표현으로 학습: 좋게 본 사람과 잘 맞은 항목은 무게를 올리고, 아니었던 사람과 맞은 항목은 내림 ----------
 const SIG_W = { like: 0.5, interest: 0.7, meet: 1, again: 1.3, fun: 0.8, pass: -1 };
+// 애프터 체크는 실제로 만나 본 뒤의 답이라 마음 표현보다 무겁게 반영
+const AFTER_W = { yes: 1.6, no: -1.3 };
 function computeLearned(me) {
   const w = world();
-  const mine = Object.values(S.signals).filter(x => x.from === me.id && x.kind && SIG_W[x.kind] !== undefined && w.byId[x.to]);
+  const mine = [
+    ...Object.values(S.signals).filter(x => x.from === me.id && x.kind && SIG_W[x.kind] !== undefined && w.byId[x.to]).map(x => ({ to: x.to, sw: SIG_W[x.kind] })),
+    ...Object.values(S.afters).filter(x => x.from === me.id && AFTER_W[x.ans] !== undefined && w.byId[x.to]).map(x => ({ to: x.to, sw: AFTER_W[x.ans] })),
+  ];
   if (mine.length < 2) return null;
   const pool = w.lists[me.id].recs.slice(0, 60).map(r => E.itemSims(w.ctx, me, w.byId[r.id]));
   const avg = k => pool.length ? pool.reduce((t, x) => t + x[k], 0) / pool.length : 0.5;
   const acc = Object.fromEntries(E.KEYS.map(k => [k, 0])); let tot = 0;
   for (const sg of mine) {
-    const sim = E.itemSims(w.ctx, me, w.byId[sg.to]), sw = SIG_W[sg.kind];
+    const sim = E.itemSims(w.ctx, me, w.byId[sg.to]), sw = sg.sw;
     for (const k of E.KEYS) acc[k] += sw * (sim[k] - avg(k));
     tot += Math.abs(sw);
   }
@@ -1377,6 +1472,58 @@ function updateLearning() {
   saveUser(S.uid, { settings: st });
 }
 
+// ---------- 애프터 체크: 만난 뒤 "또 만나고 싶어요?"를 따로 묻고, 둘 다 '예'일 때만 서로에게 알려줌 ----------
+// 저장: afters/{나}_{상대} = { from, to, ans: "yes"|"no", at }
+// 배포판 보안 규칙: 내 답은 나만 읽음. 상대는 "내 답도 yes이고 자기 답도 yes"일 때만 읽을 수 있음
+//  → '아니요'는 물론이고, 상대가 먼저 '예'를 눌렀다는 사실도 내가 '예'를 누르기 전엔 알 수 없음
+const afterOf = (a, b) => S.afters[`${a}_${b}`] || null;
+const metWith = (a, b) => !!(sigOf(a, b)?.met || sigOf(b, a)?.met);
+function metAtWith(a, b) { return Math.max(sigOf(a, b)?.metAt || 0, sigOf(b, a)?.metAt || 0); }
+// "both": 둘 다 예 / "waitYes": 나는 예, 상대 답은 모름 / "no": 나는 아니요 / null: 아직 안 답함
+function afterState(a, b) {
+  const mine = afterOf(a, b);
+  if (!mine) return null;
+  if (mine.ans === "no") return "no";
+  return afterOf(b, a)?.ans === "yes" ? "both" : "waitYes";
+}
+function setAfter(to, ans) {
+  const from = S.uid, key = `${from}_${to}`;
+  const body = { from, to, ans, at: Date.now() };
+  S.afters[key] = body;
+  changed(); scheduleLearning();
+  if (S.db) queueWrite("afters/" + key, () => S.db.doc("afters/" + key).set(plain(body)).then(() => { if (S.fb) pollAfters(); }));
+}
+// 배포판: 상대 답 문서는 규칙상 둘 다 '예'일 때만 열리므로, 내가 '예'인 짝만 가끔 다시 확인
+function pollAfters() {
+  if (!S.fb || !S.db || !S.uid) return;
+  for (const a of Object.values(S.afters)) {
+    if (a.from !== S.uid || a.ans !== "yes") continue;
+    const key = `${a.to}_${S.uid}`;
+    if (S.afters[key]?.ans === "yes") continue;
+    S.db.doc("afters/" + key).get().then(sn => {
+      const ok = typeof sn.exists === "function" ? sn.exists() : sn.exists;
+      if (ok) { S.afters = { ...S.afters, [key]: sn.data() }; changed(); scheduleLearning(); }
+    }).catch(() => {});   // 권한 없음 = 상대가 아직 안 답했거나 '아니요' (둘을 구분하지 않음)
+  }
+}
+setInterval(pollAfters, 60000);
+function afterCard(me, o, compact) {
+  const st = afterState(me.id, o.id), mine = afterOf(me.id, o.id);
+  const btn = (v, label, cls) => `<button type="button" class="btn sm ${cls}${mine?.ans === v ? " on" : ""}" data-act="after" data-id="${o.id}" data-v="${v}" aria-pressed="${mine?.ans === v}">${label}</button>`;
+  const btns = `<div class="after-btns">${btn("yes", "♥ 또 만나고 싶어요", "heart")}${btn("no", "이번엔 여기까지", "line")}</div>`;
+  if (st === "both") return `<div class="after both"><b>애프터 성사! ${esc(o.nickname)}님도 또 만나고 싶대요</b><span>두 분 모두 '또 만나고 싶어요'를 골랐어요. 다음 약속을 잡아보세요.</span></div>`;
+  const head = `<b>${compact ? "" : `${esc(o.nickname)}님과의 `}만남, 어땠어요?</b>`;
+  const note = st === "waitYes" ? `<span>'또 만나고 싶어요'를 남겼어요. ${esc(o.nickname)}님도 같은 답을 고르면 그때 두 분께 알려드려요.</span>`
+    : st === "no" ? `<span>답을 남겼어요. 상대에게는 알리지 않아요. 앞으로 추천을 고를 때 참고할게요.</span>`
+    : `<span>답은 상대에게 보이지 않아요. 두 분 모두 '또 만나고 싶어요'일 때만 서로에게 알려드려요.</span>`;
+  return `<div class="after">${head}${note}${btns}</div>`;
+}
+// 홈에 띄울 것: 만났다고 표시했는데 아직 애프터 체크를 안 한 사람 (만난 날 다음 날부터)
+function pendingAfters(me) {
+  return matchesOf(me.id).filter(m => metWith(me.id, m.id) && !afterOf(me.id, m.id) && today() !== dayOf(metAtWith(me.id, m.id))).map(m => world().byId[m.id]);
+}
+function dayOf(t) { if (!t) return ""; const d = new Date(t); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }
+
 // ---------- 알림 ----------
 function events(me) {
   const w = world(), ev = [], nick = id => w.byId[id]?.nickname || "누군가";
@@ -1387,6 +1534,10 @@ function events(me) {
     const last = [...msgs].reverse().find(x => x.from !== me.id && !x.sig);
     if (last) ev.push({ at: last.at, text: `${nick(m.id)}: ${last.img ? "사진을 보냈어요" : last.text}`, act: "openchat", id: m.id });
   }
+  for (const m of matchesOf(me.id)) {
+    if (afterState(me.id, m.id) === "both") ev.push({ at: Math.max(afterOf(me.id, m.id).at, afterOf(m.id, me.id).at || 0), text: `애프터 성사! ${nick(m.id)}님도 또 만나고 싶대요`, act: "openchat", id: m.id });
+  }
+  for (const o of pendingAfters(me)) ev.push({ at: Math.min(Date.now(), metAtWith(me.id, o.id) + 864e5), text: `${nick(o.id)}님과의 만남은 어땠어요? 애프터 체크를 남겨주세요`, act: "openchat", id: o.id });
   const au = w.auto[me.id];
   if (au) { const k = `gm-auto:${me.id}:${au.partner}`; let t = ls.get(k, 0); if (!t) { t = Date.now(); ls.set(k, t); } ev.push({ at: t, text: `${nick(au.partner)}님과 자동 매칭됐어요`, act: "openchat", id: au.partner }); }
   const md = S.mod[me.id]; if (md && md.verified && md.at) ev.push({ at: md.at, text: "사진 인증이 끝났어요. 프로필에 인증 배지가 붙었어요", act: "tab", v: "me" });
@@ -1643,6 +1794,7 @@ function shell() {
     ${S.admin ? adminView(me) : ""}
     ${S.chat ? chatView(me) : ""}
     ${S.detail ? detailView(me) : ""}
+    ${S.sim ? simView(me) : ""}
     ${S.notifOpen ? notifView(me) : ""}
     ${S.menu ? menuView(me) : ""}
     ${S.report ? reportView() : ""}
@@ -1670,9 +1822,11 @@ function homeView(me) {
       ${sigOf(o.id, me.id)?.kind ? `<div class="sig-their">${esc(o.nickname)}님의 마음 · <b>${SIG[sigOf(o.id, me.id).kind]}</b></div>` : ""}
       <div style="display:flex;gap:8px"><button class="btn sm" data-act="openchat" data-id="${o.id}">메시지 보내기</button><button class="btn line sm" data-act="open" data-id="${o.id}">프로필 보기</button></div></div>`;
   }
+  for (const o of pendingAfters(me)) top += afterCard(me, o, false);
+  for (const m of matchesOf(me.id)) if (afterState(me.id, m.id) === "both" && Date.now() - afterOf(me.id, m.id).at < 3 * 864e5) top += `<div class="after both"><b>애프터 성사! ${esc(w.byId[m.id].nickname)}님도 또 만나고 싶대요</b><button class="btn sm" style="align-self:flex-start" data-act="openchat" data-id="${m.id}">약속 잡으러 가기</button></div>`;
   const searchBar = `<form class="search" id="search-form" role="search"><input type="search" id="q" placeholder="관심사로 찾기 · 예: 야구 맛집, 주말엔 산 타요" autocomplete="off" value="${esc(S.q)}" aria-label="관심사로 사람 찾기">${S.q ? `<button type="button" class="icon-btn" data-act="clearq" aria-label="검색 지우기">${ICON.close}</button>` : ""}</form>`;
   if (S.q.trim()) return searchBar + searchView(me);
-  const cards = shown.length ? shown.map(r => recCard(me, w.byId[r.id], r)).join("") : (recs.length ? "" : emptyRecs(0, rejected));
+  const cards = shown.length ? shown.map(r => recCard(me, w.byId[r.id], r, dp.fresh && dp.fresh.id === r.id ? dp.fresh : null)).join("") : (recs.length ? "" : emptyRecs(0, rejected));
   const d = new Date(), dayLabel = `${d.getMonth() + 1}월 ${d.getDate()}일`;
   const extraLeft = Math.max(0, 3 - dp.extra);
   const doneNote = recs.length && shown.length < REC_LIMIT ? `<div class="daily-note">${EMPTY_ART}<span>${shown.length ? "오늘의 추천은 여기까지예요." : "오늘의 추천을 모두 확인했어요."} 내일 새로운 사람을 골라드릴게요.</span>
@@ -1681,6 +1835,7 @@ function homeView(me) {
   const fewNote = recs.length && recs.length < REC_LIMIT ? relaxHtml(me, true) : "";
   const unpassNote = !doneNote && passed.length ? `<div class="daily-note"><button class="btn line sm" data-act="unpass">넘긴 ${passed.length}명 다시 보기</button></div>` : "";
   return `<div class="screen-title"><h2>오늘도 좋은 인연이<br>기다리고 있어요 <span class="hrt" aria-hidden="true">♥</span></h2><span class="muted">${dayLabel} 오늘의 추천 · 매일 새로 골라드려요</span></div>${searchBar}
+    ${recs.length ? `<button class="sim-entry" data-act="simopen"><b>만약에?</b><span>관심사를 더 보면, 거리를 덜 보면… 순위가 어떻게 바뀌는지 미리 보기</span>${ICON.back}</button>` : ""}
     ${top}${cards}${doneNote}${unpassNote}${fewNote}`;
 }
 function searchView(me) {
@@ -1759,7 +1914,7 @@ function actionButtons(me, o, small) {
   return `<div class="acts"><button class="btn alt${sm}" data-act="pass" data-id="${o.id}">넘기기</button>
     <button class="btn${mine ? " line" : " heart"}${sm}" data-act="like" data-id="${o.id}" aria-pressed="${mine}">${mine ? "좋아요 보냄 · 취소" : "♥ 좋아요"}</button></div>`;
 }
-function recCard(me, o, r) {
+function recCard(me, o, r, fresh) {
   r = full(me.id, r);
   const [g, topg] = grade(r.score);
   const reasons = r.reasons.slice(0, 3).map(reasonText).filter(Boolean);
@@ -1771,10 +1926,11 @@ function recCard(me, o, r) {
     <div class="card-body">
       <div class="card-name"><span><b>${esc(o.nickname)}</b> <span style="font-size:17px">${o.age}세</span>${vb(o)}</span></div>
       <div class="muted" style="font-size:13px;margin-top:-8px">${esc(o.region)} | ${Math.max(1, Math.round(r.distance))}km 이내 · ${esc(o.job)}</div>
+      ${isNew(o) ? `<div class="fresh"><span class="new">NEW</span>${fresh ? "새로 온 회원 · 첫 주에는 하루 한 자리를 먼저 챙겨드려요" : `가입한 지 ${daysSince(joinedAt(o))}일 된 새 회원이에요`}</div>` : ""}
       ${likedMe ? `<div class="state">♥ ${esc(o.nickname)}님이 나에게 좋아요를 보냈어요</div>` : ""}
       ${reasons.length ? `<ul class="reasons">${reasons.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
       <div class="chips">${o.interests.map(t => `<span class="chip${common.has(t) ? " hit" : ""}">${esc(t)}${E.levelOf(o, t) === 3 ? " ★" : ""}</span>`).join("")}</div>
-      ${S.dev ? `<div class="devline">최종 ${f1(r.score)} = √(내 기준 ${f1(r.ab)} × 상대 기준 ${f1(r.ba)})${r.pop < 1 ? ` × 인기 보정 ${r.pop.toFixed(2)}` : ""}</div>` : ""}
+      ${S.dev ? `<div class="devline">최종 ${f1(r.score)} = √(내 기준 ${f1(r.ab)} × 상대 기준 ${f1(r.ba)})${r.pop < 1 ? ` × 인기 보정 ${r.pop.toFixed(2)}` : ""}${fresh ? `<br>신규 회원 노출 보장: 원래 순위 ${fresh.rank}위 → 오늘 추천 ${REC_LIMIT}번째 자리 (그 자리 점수의 ${NEW_FLOOR * 100}% 이상이라 넣었어요)` : ""}</div>` : ""}
       ${matched ? `<button class="btn" data-act="openchat" data-id="${o.id}">${esc(o.nickname)}님과 대화하기</button>`
         : `<div class="round-acts"><button class="rbtn" data-act="pass" data-id="${o.id}" aria-label="넘기기" title="넘기기">${ICON.close}</button>
           <button class="rbtn like${mine ? " on" : ""}" data-act="like" data-id="${o.id}" aria-pressed="${mine}" aria-label="${mine ? "좋아요 취소" : "좋아요"}" title="${mine ? "좋아요 보냄 · 누르면 취소" : "좋아요"}">${ICON.heart}</button></div>`}
@@ -1821,13 +1977,15 @@ function signalPanel(me, o, compact) {
   const both = mine.kind && mine.kind === theirs.kind && ["again", "meet", "interest", "like"].includes(mine.kind);
   const bothText = { again: "두 분 모두 한 번 더 만나고 싶어해요. 애프터 성사!", meet: "두 분 모두 만나보고 싶어해요. 약속을 잡아보세요!", interest: "서로 관심이 있어요. 대화를 이어가 보세요", like: "서로 좋아요를 눌렀어요" }[mine.kind];
   const their = theirs.kind ? `${esc(o.nickname)}님의 마음 · <b>${SIG[theirs.kind]}</b>` : `<span class="muted">${esc(o.nickname)}님은 아직 마음을 표현하지 않았어요</span>`;
-  if (compact && !S.sigOpen) return `<div class="sig"><div class="sig-head"><span class="sig-their">${their}</span><button class="btn sm${mine.kind ? " line" : " heart"}" data-act="sigopen">${mine.kind ? "내 마음 · " + SIG[mine.kind] : "마음 표현하기"}</button></div>${both ? `<div class="sig-both">${bothText}</div>` : ""}</div>`;
+  const after = met ? afterCard(me, o, true) : "";
+  if (compact && !S.sigOpen) return `<div class="sig"><div class="sig-head"><span class="sig-their">${their}</span><button class="btn sm${mine.kind ? " line" : " heart"}" data-act="sigopen">${mine.kind ? "내 마음 · " + SIG[mine.kind] : "마음 표현하기"}</button></div>${both ? `<div class="sig-both">${bothText}</div>` : ""}${after}</div>`;
   return `<div class="sig">
     <div class="sig-head"><b>마음 표현하기</b>
       <label class="metsw"><input type="checkbox" id="met-${o.id}" data-met="${o.id}"${met ? " checked" : ""}> 실제로 만났어요</label></div>
     <div class="sig-opts">${opts.map(k => `<button type="button" class="sig-opt${k === "pass" ? " soft" : ""}${mine.kind === k ? " on" : ""}" data-act="sig" data-id="${o.id}" data-k="${k}" aria-pressed="${mine.kind === k}">${k === "pass" ? "" : "♥ "}${SIG[k]}</button>`).join("")}</div>
     <div class="sig-their">${their}</div>
     ${both ? `<div class="sig-both">${bothText}</div>` : ""}
+    ${after}
     ${compact ? `<button class="btn line sm" style="align-self:flex-start" data-act="sigopen">접기</button>` : ""}
   </div>`;
 }
@@ -1844,6 +2002,47 @@ function devSheet(r) {
     <tbody>${rows}${pa}${pb}<tr class="sum"><td>합계</td><td class="n">100</td><td class="n">${f1(r.ab)}</td><td class="n">${f1(r.ba)}</td><td></td></tr></tbody></table></div>
     <div class="formula">최종 = √(${f1(r.ab)} × ${f1(r.ba)})${r.pop < 1 ? ` × 인기 보정 ${r.pop.toFixed(2)}` : ""} = ${f1(r.score)}점</div>
     <span class="muted" style="font-size:12px">가중치는 만남 목적(${KO[world().byId[S.uid].purpose]}) 기본값${settingsOf(S.uid).learned ? "에 마음 표현으로 배운 배율을 곱한 값" : ""}이에요.</span></div>`;
+}
+
+// ---------- "만약에" 시뮬레이터: 가중치를 움직이면 내 추천 순위가 바로 다시 정렬됨 (저장 전까지는 미리보기) ----------
+function simOpen(me) { S.sim = { W: { ...E.baseWeights(me, settingsOf(me.id)) } }; }
+function simEff(me) {
+  const L = settingsOf(me.id).learned || {};
+  return Object.fromEntries(E.KEYS.map(k => [k, (S.sim.W[k] || 0) * (L[k] ?? 1)]));
+}
+function simList(me) {
+  const w = world(), now = w.lists[me.id].recs;
+  if (!now.length) return `<div class="empty" style="padding:10px">지금은 조건에 맞는 후보가 없어서 순위를 비교할 수 없어요.</div>`;
+  const next = E.rescore(w.ctx, me, now, w.byId, simEff(me));
+  const before = Object.fromEntries(now.map((r, i) => [r.id, i]));
+  const N = Math.min(5, next.length);
+  const rows = next.slice(0, N).map((r, i) => {
+    const b = before[r.id], d = b - i, o = w.byId[r.id];
+    const mv = b >= N ? `<span class="mv up">새로 · 원래 ${b + 1}위</span>` : d > 0 ? `<span class="mv up">▲ ${d}</span>` : d < 0 ? `<span class="mv down">▼ ${-d}</span>` : `<span class="mv">그대로</span>`;
+    return `<li><span class="rk">${i + 1}</span>${photo(o, "av")}<span class="nm"><b>${esc(o.nickname)}</b><small>${esc(o.region)} · ${o.age}세</small></span><span class="sc">${f1(r.score)}<small>${f1(now[b].score)}</small></span>${mv}</li>`;
+  }).join("");
+  const out = now.slice(0, N).filter(r => !next.slice(0, N).some(x => x.id === r.id)).map(r => esc(w.byId[r.id].nickname));
+  const changedN = next.slice(0, N).filter((r, i) => before[r.id] !== i).length;
+  return `<ol class="sim-list">${rows}</ol>
+    <div class="sim-sum">${changedN ? `상위 ${N}명 중 ${changedN}명의 순서가 바뀌어요.` : "상위 순서는 그대로예요."}${out.length ? ` 빠지는 사람: ${out.join(", ")}` : ""}</div>
+    <span class="muted" style="font-size:12px">오른쪽 작은 숫자는 지금 점수예요. 바뀌는 건 '내가 본 상대' 점수뿐이고, '상대가 본 나' 점수와 인기 보정은 그대로 써서 √(내 점수 × 상대 점수)로 다시 계산해요.</span>`;
+}
+function simView(me) {
+  const W = S.sim.W, sum = E.KEYS.reduce((t, k) => t + W[k], 0) || 1;
+  const L = settingsOf(me.id).learned;
+  return `<div class="overlay" role="dialog" aria-modal="true" aria-label="만약에 시뮬레이터">
+    <div class="scrim" data-act="simclose"></div>
+    <div class="sheet${S.enter ? " enter" : ""}">
+      <div class="sheet-head pad"><b>만약에, 이걸 더 중요하게 보면?</b><button class="icon-btn" data-act="simclose" aria-label="닫기">${ICON.close}</button></div>
+      <div class="sheet-body pad">
+        <span class="muted" style="font-size:13px">막대를 움직이면 내 추천 순위가 바로 다시 정렬돼요. 저장하기 전에는 실제 추천이 바뀌지 않아요.${L ? " 마음 표현으로 배운 배율도 함께 곱해서 계산해요." : ""}</span>
+        <div class="chips">${PRESET_NAMES.map(n => `<button type="button" class="tgl" data-act="simpreset" data-v="${n}">${n}</button>`).join("")}</div>
+        <div class="sliders">${E.KEYS.map(k => `<label class="sl" for="sw-${k}"><span>${E.LABEL[k]}</span><input type="range" id="sw-${k}" min="0" max="40" step="1" value="${W[k]}" data-sw="${k}"><span class="v" data-swv="${k}">${weightLabel(W[k], sum)}</span></label>`).join("")}</div>
+        <h3 style="font-size:17px;margin-top:4px">이렇게 바뀌어요</h3>
+        <div id="sim-list">${simList(me)}</div>
+      </div>
+      <div class="sheet-foot pad" style="display:flex;gap:8px"><button class="btn line" style="flex:1" data-act="simreset">처음 값으로</button><button class="btn" style="flex:1.6" data-act="simsave">이 기준으로 추천받기</button></div>
+    </div></div>`;
 }
 
 function personRow(o, sub, side, act = "open") {
@@ -1923,8 +2122,8 @@ function meView(me) {
   const L = s.learned || null;
   const learnHtml = L ? `<div class="learn">${E.KEYS.map(k => { const m = L[k] ?? 1, pct = Math.min(50, Math.abs(m - 1) / 0.6 * 50);
       return `<div class="learn-row"><span>${E.LABEL[k]}</span><span class="learn-bar"><span class="mid"></span><i style="${m >= 1 ? `left:50%;width:${pct}%;background:var(--rose)` : `right:50%;width:${pct}%;background:var(--muted)`}"></i></span><span class="v">×${m.toFixed(2)}</span></div>`; }).join("")}</div>
-      <span class="muted" style="font-size:12px">마음 표현 ${s.learnedN || 0}번을 바탕으로 배웠어요. 오른쪽은 더 중요하게, 왼쪽은 덜 중요하게 봐요.</span>`
-    : `<span class="muted" style="font-size:13px">매칭된 사람에게 마음 표현을 2번 이상 하면, 좋게 본 사람과 잘 맞았던 항목을 더 중요하게 보도록 추천이 스스로 바뀌어요.</span>`;
+      <span class="muted" style="font-size:12px">마음 표현과 애프터 체크 ${s.learnedN || 0}번을 바탕으로 배웠어요. 애프터 체크는 실제로 만나 본 결과라 더 크게 반영해요. 오른쪽은 더 중요하게, 왼쪽은 덜 중요하게 봐요.</span>`
+    : `<span class="muted" style="font-size:13px">매칭된 사람에게 마음 표현이나 애프터 체크를 2번 이상 하면, 좋게 본 사람과 잘 맞았던 항목을 더 중요하게 보도록 추천이 스스로 바뀌어요.</span>`;
   const vf = myVerif(), verified = isVerified(me.id);
   const verifHtml = verified ? `<span class="vbadge" style="align-self:flex-start;font-size:13px;padding:3px 10px">✓ 사진 인증 완료</span><span class="muted" style="font-size:13px">프로필에 인증 배지가 보여요.</span>`
     : !me.photo && !BASE.profiles.some(b => b.id === me.id) ? `<span class="muted" style="font-size:13px">먼저 프로필 사진을 올려주세요. 셀카와 비교해서 같은 사람인지 확인해요.</span>`
@@ -1985,6 +2184,7 @@ function meView(me) {
       <label class="check"><input type="checkbox" id="set-related"${s.related ? " checked" : ""}> 비슷한 관심사도 인정 (등산 ≈ 캠핑)</label>
       <div class="fld"><span>중요하게 보는 것</span><div class="chips">${PRESET_NAMES.map(n => `<button type="button" class="tgl${n === activePreset ? " on" : ""}" data-act="preset" data-v="${n}" aria-pressed="${n === activePreset}">${n}</button>`).join("")}</div>
         <small class="muted" style="font-size:12px">${esc(PURPOSE_NOTE[me.purpose] || "")}</small></div>
+      <button type="button" class="btn line sm" style="align-self:flex-start" data-act="simopen">바꾸면 순위가 어떻게 달라지는지 미리 보기</button>
       <div class="sliders">${E.KEYS.map(k => `<label class="sl" for="w-${k}"><span>${E.LABEL[k]}</span><input type="range" id="w-${k}" min="0" max="40" step="1" value="${curW[k]}" data-w="${k}"><span class="v" data-wv="${k}">${weightLabel(curW[k], sum)}</span></label>`).join("")}</div>
     </section>
     <section class="panel f"><h3 style="font-size:18px">마음 표현으로 배운 내 취향</h3>${learnHtml}</section>
@@ -2011,12 +2211,13 @@ function meView(me) {
 async function deleteAccount() {
   const uid = S.uid;
   const mine = col => Object.entries(col).filter(([, d]) => d && d.from === uid).map(([id]) => id);
-  const likeIds = mine(S.likes), sigIds = mine(S.signals), blockIds = mine(S.blocks);
+  const likeIds = mine(S.likes), sigIds = mine(S.signals), blockIds = mine(S.blocks), afterIds = mine(S.afters);
   try {
     if (S.db) {
       for (const id of likeIds) await S.db.doc("likes/" + id).delete();
       for (const id of sigIds) await S.db.doc("signals/" + id).delete();
       for (const id of blockIds) await S.db.doc("blocks/" + id).delete();
+      for (const id of afterIds) await S.db.doc("afters/" + id).delete();
       if (myVerif()) await S.db.doc("verifications/" + uid).delete().catch(() => {});
       if (S.fb) await S.db.doc("priv/" + uid).delete().catch(() => {});
       await S.db.doc("users/" + uid).delete();
@@ -2029,6 +2230,7 @@ async function deleteAccount() {
   for (const id of likeIds) delete S.likes[id];
   for (const id of sigIds) delete S.signals[id];
   for (const id of blockIds) delete S.blocks[id];
+  for (const id of afterIds) delete S.afters[id];
   delete S.verifs[uid]; S.myVerif = null;
   delete S.users[uid]; ver++;
   if (!S.fb) try { localStorage.removeItem("gm-priv:" + uid); } catch (e) {}
@@ -2344,6 +2546,25 @@ document.addEventListener("click", e => {
       toast(th === k && (k === "again" || k === "meet") ? (k === "again" ? "애프터 성사! 다시 만나요" : "두 분 모두 만나보고 싶어해요") : `'${SIG[k]}'를 전했어요`);
       break;
     }
+    case "simopen": simOpen(world().byId[me]); S.detail = null; render(); break;
+    case "simclose": S.sim = null; render(); break;
+    case "simreset": simOpen(world().byId[me]); render(); break;
+    case "simpreset": { const p = world().byId[me]; S.sim.W = { ...(presetWeights(t.dataset.v, p) || E.baseWeights(p, null)) }; render(); break; }
+    case "simsave": {
+      if (!S.canWrite) return toast("보기 전용이라 저장할 수 없어요");
+      saveUser(me, { settings: { ...plain(settingsOf(me)), weights: { ...S.sim.W } } });
+      S.sim = null; S.tab = "home"; render(); window.scrollTo(0, 0);
+      toast("새 기준으로 오늘의 추천을 다시 골랐어요");
+      break;
+    }
+    case "after": {
+      if (!S.canWrite) return toast("보기 전용이라 저장할 수 없어요");
+      if (!isMatched(me, id) || !metWith(me, id)) return toast("실제로 만난 사람에게만 남길 수 있어요");
+      const v = t.dataset.v;
+      setAfter(id, v);
+      toast(v === "yes" ? (afterOf(id, me)?.ans === "yes" ? "애프터 성사! 두 분 모두 또 만나고 싶어해요" : "남겼어요. 상대도 같은 답이면 알려드릴게요") : "남겼어요. 상대에게는 알리지 않아요");
+      break;
+    }
     case "like": {
       if (!S.canWrite) return toast("보기 전용이라 저장할 수 없어요");
       const on = !liked(me, id);
@@ -2552,7 +2773,7 @@ document.addEventListener("change", async e => {
   }
   if (el.dataset && el.dataset.met) {
     if (!S.canWrite) return toast("보기 전용이라 저장할 수 없어요");
-    setSignal(S.uid, el.dataset.met, { met: el.checked });
+    setSignal(S.uid, el.dataset.met, { met: el.checked, metAt: el.checked ? Date.now() : null });
     toast(el.checked ? "만난 뒤의 마음을 표현할 수 있어요" : "만나기 전 단계로 돌렸어요");
     return;
   }
@@ -2583,6 +2804,14 @@ document.addEventListener("change", async e => {
 let qTimer;
 document.addEventListener("input", e => {
   if (e.target.id === "q") { const v = e.target.value; clearTimeout(qTimer); qTimer = setTimeout(() => { S.q = v; render(); }, 180); return; }
+  const sk = e.target.dataset?.sw;
+  if (sk && S.sim) {
+    S.sim.W[sk] = +e.target.value;
+    const sum = E.KEYS.reduce((t, kk) => t + S.sim.W[kk], 0) || 1;
+    for (const kk of E.KEYS) { const lab = document.querySelector(`[data-swv="${kk}"]`); if (lab) lab.textContent = weightLabel(S.sim.W[kk], sum); }
+    const box = document.getElementById("sim-list"); if (box) box.innerHTML = simList(world().byId[S.uid]);
+    return;
+  }
   const k = e.target.dataset?.w;
   if (!k) return;
   const ws = { ...E.baseWeights(world().byId[S.uid], settingsOf(S.uid)), [k]: +e.target.value };
@@ -2590,6 +2819,7 @@ document.addEventListener("input", e => {
   for (const kk of E.KEYS) { const lab = document.querySelector(`[data-wv="${kk}"]`); if (lab) lab.textContent = weightLabel(ws[kk], sum); }
 });
 document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && S.sim) { S.sim = null; render(); return; }
   if (e.key === "Escape") { if (S.legal || S.report || S.menu || S.notifOpen) { S.legal = S.report = S.menu = null; S.notifOpen = false; render(); } else if (S.lightbox) { S.lightbox = null; render(); } else if (S.admin && !S.chat && !S.detail) { S.admin = false; render(); } else if (S.chat) { S.chat = null; render(); } else if (S.detail) { S.detail = null; render(); } }
 });
 
@@ -2598,12 +2828,13 @@ function subscribe(db, fail) {
   const watch = (name, apply) => db.collection(name).onSnapshot(snap => {
     const m = {}; for (const d of snap.docs) m[d.id] = d.data();
     apply(m); changed(name === "users" || name === "blocks" || name === "moderation");
-    if (name === "signals") scheduleLearning();
+    if (name === "signals" || name === "afters") scheduleLearning();
   }, fail);
   watch("users", m => { S.users = m; S.usersLoaded = true; });
   watch("likes", m => { S.likes = m; });
   watch("chatimgs", m => { S.imgs = { ...S.imgs, ...m }; });
   watch("signals", m => { S.signals = m; });
+  watch("afters", m => { S.afters = m; });
   watch("chats", m => { S.chats = m; });
   watch("blocks", m => { S.blocks = m; ver++; });
   watch("reports", m => { S.reports = m; });
@@ -2626,6 +2857,8 @@ function subscribeFB(uid) {
   watch("likes:to", db.collection("likes").where("to", "==", uid), n => { S.likes = merged(n); });
   watch("signals:from", db.collection("signals").where("from", "==", uid), n => { S.signals = merged(n); scheduleLearning(); });
   watch("signals:to", db.collection("signals").where("to", "==", uid), n => { S.signals = merged(n); });
+  // 애프터 체크: 내 답만 구독. 상대 답은 pollAfters()가 규칙이 허락할 때(둘 다 '예')만 가져옴
+  watch("afters:from", db.collection("afters").where("from", "==", uid), n => { S.afters = { ...Object.fromEntries(Object.entries(S.afters).filter(([, a]) => a.from !== uid)), ...merged(n) }; scheduleLearning(); setTimeout(pollAfters, 0); });
   watch("blocks:from", db.collection("blocks").where("from", "==", uid), n => { S.blocks = merged(n); }, true);
   watch("blocks:to", db.collection("blocks").where("to", "==", uid), n => { S.blocks = merged(n); }, true);
   watch("moderation:all", db.collection("moderation"), n => { S.mod = merged(n); }, true);

@@ -26,7 +26,7 @@ head = f'''<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>둘 - 동네친구, 데이트, 새로운 시작</title>
 <meta name="description" content="둘 - 동네친구, 데이트, 새로운 시작. 취향이 가까운 사람을 찾아주는 매칭 앱">
-<meta name="theme-color" content="#FDE6EE">
+<meta name="theme-color" content="#F4F3FF">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z' fill='%23FF6F9C'/%3E%3C/svg%3E">
 <style>
 :root {{ padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }}
@@ -111,6 +111,17 @@ service cloud.firestore {
     match /signals/{id} {
       allow read: if member() && (resource.data.from == me() || resource.data.to == me());
       allow create, update: if member() && request.resource.data.from == me() && id == me() + '_' + request.resource.data.to;
+      allow delete: if member() && resource.data.from == me();
+    }
+    // 애프터 체크: 만난 뒤 "또 만나고 싶어요?" 답. 내 답은 나만 읽음.
+    // 상대는 '내 답도 yes이고 자기 답도 yes'일 때만 읽을 수 있음 → 둘 다 예일 때만 서로 알게 됨
+    // (상대 문서가 없거나 no면 읽기가 막혀서, '아직 안 답함'과 '아니요'를 구분할 수 없음)
+    match /afters/{id} {
+      allow read: if member() && (resource.data.from == me()
+                    || (resource.data.to == me() && resource.data.ans == 'yes'
+                        && get(/databases/$(database)/documents/afters/$(me() + '_' + resource.data.from)).data.ans == 'yes'));
+      allow create, update: if member() && request.resource.data.from == me() && id == me() + '_' + request.resource.data.to
+                            && request.resource.data.ans in ['yes', 'no'];
       allow delete: if member() && resource.data.from == me();
     }
     match /chats/{id} {
