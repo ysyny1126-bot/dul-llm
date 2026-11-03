@@ -19,6 +19,48 @@ AI_URL = os.getenv("DUL_AI_URL", "").rstrip("/")
 ai_script = f'<script>window.DUL_AI_URL = "{AI_URL}";</script>\n' if AI_URL else ""
 if not AI_URL:
     print("  (DUL_AI_URL이 없어서 AI 기능은 같은 주소의 /api 로 요청해요. Hosting 리라이트를 쓰지 않으면 AI 서버 주소를 넣어 다시 빌드하세요)")
+# 홈 화면 앱(PWA): 서비스워커 등록 + 핸드폰에서 "홈 화면에 추가" 안내 (한 번 닫으면 다시 안 띄움)
+pwa = '''<script>
+(function () {
+  if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost"))
+    addEventListener("load", function () { navigator.serviceWorker.register("sw.js").catch(function () {}); });
+  if (matchMedia("(display-mode: standalone)").matches || navigator.standalone) return;   // 이미 앱으로 열었음
+  var ua = navigator.userAgent;
+  var ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  if (!ios && !/Android/.test(ua)) return;   // 핸드폰에서만
+  try { if (localStorage.getItem("dul-install-hide")) return; } catch (e) {}
+  var deferred = null, box = null;
+  function hide(forever) {
+    if (box) { box.remove(); box = null; }
+    if (forever) try { localStorage.setItem("dul-install-hide", "1"); } catch (e) {}
+  }
+  function show(text, btn) {
+    if (box) return;
+    box = document.createElement("div");
+    box.setAttribute("role", "status");
+    box.style.cssText = "position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 76px);width:min(488px,calc(100% - 32px));z-index:15;display:flex;align-items:center;gap:10px;padding:12px 12px 12px 16px;border-radius:18px;background:#1F2147;color:#FFFFFF;font:14px/1.45 Pretendard Variable,system-ui,sans-serif;box-shadow:0 10px 30px rgba(31,33,71,.35)";
+    var t = document.createElement("span"); t.style.flex = "1"; t.textContent = text; box.appendChild(t);
+    if (btn) {
+      var b = document.createElement("button"); b.type = "button"; b.textContent = btn;
+      b.style.cssText = "border:0;border-radius:999px;padding:9px 16px;min-height:40px;background:#A3A6FF;color:#12132A;font:inherit;font-weight:700";
+      b.onclick = function () { if (!deferred) return; deferred.prompt(); deferred.userChoice.then(function () { deferred = null; hide(true); }); };
+      box.appendChild(b);
+    }
+    var x = document.createElement("button"); x.type = "button"; x.textContent = "\\u2715"; x.setAttribute("aria-label", "안내 닫기");
+    x.style.cssText = "border:0;background:none;color:#C3C5FF;font-size:16px;min-width:40px;min-height:40px";
+    x.onclick = function () { hide(true); };
+    box.appendChild(x);
+    document.body.appendChild(box);
+  }
+  // 안드로이드(크롬·삼성 인터넷): 브라우저가 설치 가능하다고 알려주면 설치 버튼
+  addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); deferred = e; show("둘을 홈 화면에 설치하면 앱처럼 바로 열려요", "설치"); });
+  addEventListener("appinstalled", function () { hide(true); });
+  // 아이폰: 설치 버튼이 없어서 방법을 알려줌
+  if (ios) addEventListener("load", function () { setTimeout(function () { show("아래 공유 버튼 → '홈 화면에 추가'를 누르면 앱처럼 쓸 수 있어요"); }, 1500); });
+})();
+</script>
+'''
+
 head = f'''<!doctype html>
 <html lang="ko">
 <head>
@@ -26,7 +68,15 @@ head = f'''<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>둘 - 동네친구, 데이트, 새로운 시작</title>
 <meta name="description" content="둘 - 동네친구, 데이트, 새로운 시작. 취향이 가까운 사람을 찾아주는 매칭 앱">
-<meta name="theme-color" content="#F4F3FF">
+<meta name="theme-color" content="#F4F3FF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#15172F" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="둘">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="format-detection" content="telephone=no">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z' fill='%23FF6F9C'/%3E%3C/svg%3E">
 <style>
 :root {{ padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }}
@@ -34,7 +84,7 @@ body {{ margin: 0; }}
 img {{ max-width: 100%; }}
 [hidden] {{ display: none !important; }}
 </style>
-{ai_script}<!-- Firebase 연결
+{pwa}{ai_script}<!-- Firebase 연결
      - Firebase Hosting(*.web.app)에서 열면: Hosting이 자동으로 넣어주는 설정을 씀 (따로 넣을 것 없음)
      - GitHub Pages 등 다른 곳에서 열면: firebase-config.js에 적힌 설정을 씀 (비어 있으면 서버 없이 미리보기) -->
 <script src="firebase-config.js"></script>
@@ -66,16 +116,39 @@ subprocess.run(["python3", "build_app.py"], check=True)
 demo = open("gyeol_app.html", encoding="utf-8").read()
 demo = re.sub(r"^<title>.*?</title>\n", "", demo)
 demo = re.sub(r'^<meta name="claude:viewport-fit-sides"[^>]*>\n', "", demo)
-demo_head = head.split("<!-- Firebase 연결")[0].replace("<title>둘 - 동네친구, 데이트, 새로운 시작</title>", "<title>둘 시연판 - 가상 회원 500명</title>") + "</head>\n<body>\n"
+demo_head = head.split("<!-- Firebase 연결")[0].replace("<title>둘 - 동네친구, 데이트, 새로운 시작</title>", "<title>둘 시연판 - 가상 회원 500명</title>").replace('href="manifest.webmanifest"', 'href="demo.webmanifest"') + "</head>\n<body>\n"
 open(out_dir + "/public/demo.html", "w", encoding="utf-8").write(demo_head + demo + "\n</body>\n</html>\n")
 open(out_dir + "/public/.nojekyll", "w").write("")
+
+# 홈 화면 앱(PWA) 파일: 설치 정보 2개(실제 서비스, 시연판), 아이콘, 서비스워커
+import json, time
+os.makedirs(out_dir + "/public/icons")
+for n in (180, 192, 512):
+    shutil.copy(f"icons/icon-{n}.png", out_dir + f"/public/icons/icon-{n}.png")
+def manifest(name, short, start):
+    return json.dumps({
+        "id": start, "name": name, "short_name": short,
+        "description": "취향이 가까운 사람을 찾아주는 매칭 앱",
+        "start_url": start, "scope": "./", "display": "standalone", "orientation": "portrait",
+        "lang": "ko", "background_color": "#F7F6FF", "theme_color": "#F4F3FF",
+        "icons": [
+            {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png"},
+            {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png"},
+            {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"},
+        ],
+    }, ensure_ascii=False, indent=2)
+open(out_dir + "/public/manifest.webmanifest", "w", encoding="utf-8").write(manifest("둘 - 동네친구, 데이트, 새로운 시작", "둘", "./"))
+open(out_dir + "/public/demo.webmanifest", "w", encoding="utf-8").write(manifest("둘 시연판", "둘 시연", "./demo.html"))
+# 배포할 때마다 버전이 바뀌어서 핸드폰에 저장된 옛 파일이 새 것으로 교체됨
+open(out_dir + "/public/sw.js", "w", encoding="utf-8").write(open("sw.js", encoding="utf-8").read().replace("__VER__", time.strftime("%Y%m%d%H%M%S")))
 
 open(out_dir + "/firebase.json", "w", encoding="utf-8").write('''{
   "hosting": {
     "public": "public",
     "ignore": ["firebase.json", "**/.*"],
     "headers": [
-      { "source": "**/*.html", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] }
+      { "source": "**/*.html", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
+      { "source": "**/@(sw.js|*.webmanifest)", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] }
     ]
   },
   "firestore": {

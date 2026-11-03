@@ -5,7 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>둘 시연판 - 가상 회원 500명</title>
 <meta name="description" content="둘 - 동네친구, 데이트, 새로운 시작. 취향이 가까운 사람을 찾아주는 매칭 앱">
-<meta name="theme-color" content="#F4F3FF">
+<meta name="theme-color" content="#F4F3FF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#15172F" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="demo.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="둘">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="format-detection" content="telephone=no">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z' fill='%23FF6F9C'/%3E%3C/svg%3E">
 <style>
 :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
@@ -13,6 +21,45 @@ body { margin: 0; }
 img { max-width: 100%; }
 [hidden] { display: none !important; }
 </style>
+<script>
+(function () {
+  if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost"))
+    addEventListener("load", function () { navigator.serviceWorker.register("sw.js").catch(function () {}); });
+  if (matchMedia("(display-mode: standalone)").matches || navigator.standalone) return;   // 이미 앱으로 열었음
+  var ua = navigator.userAgent;
+  var ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  if (!ios && !/Android/.test(ua)) return;   // 핸드폰에서만
+  try { if (localStorage.getItem("dul-install-hide")) return; } catch (e) {}
+  var deferred = null, box = null;
+  function hide(forever) {
+    if (box) { box.remove(); box = null; }
+    if (forever) try { localStorage.setItem("dul-install-hide", "1"); } catch (e) {}
+  }
+  function show(text, btn) {
+    if (box) return;
+    box = document.createElement("div");
+    box.setAttribute("role", "status");
+    box.style.cssText = "position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 76px);width:min(488px,calc(100% - 32px));z-index:15;display:flex;align-items:center;gap:10px;padding:12px 12px 12px 16px;border-radius:18px;background:#1F2147;color:#FFFFFF;font:14px/1.45 Pretendard Variable,system-ui,sans-serif;box-shadow:0 10px 30px rgba(31,33,71,.35)";
+    var t = document.createElement("span"); t.style.flex = "1"; t.textContent = text; box.appendChild(t);
+    if (btn) {
+      var b = document.createElement("button"); b.type = "button"; b.textContent = btn;
+      b.style.cssText = "border:0;border-radius:999px;padding:9px 16px;min-height:40px;background:#A3A6FF;color:#12132A;font:inherit;font-weight:700";
+      b.onclick = function () { if (!deferred) return; deferred.prompt(); deferred.userChoice.then(function () { deferred = null; hide(true); }); };
+      box.appendChild(b);
+    }
+    var x = document.createElement("button"); x.type = "button"; x.textContent = "\u2715"; x.setAttribute("aria-label", "안내 닫기");
+    x.style.cssText = "border:0;background:none;color:#C3C5FF;font-size:16px;min-width:40px;min-height:40px";
+    x.onclick = function () { hide(true); };
+    box.appendChild(x);
+    document.body.appendChild(box);
+  }
+  // 안드로이드(크롬·삼성 인터넷): 브라우저가 설치 가능하다고 알려주면 설치 버튼
+  addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); deferred = e; show("둘을 홈 화면에 설치하면 앱처럼 바로 열려요", "설치"); });
+  addEventListener("appinstalled", function () { hide(true); });
+  // 아이폰: 설치 버튼이 없어서 방법을 알려줌
+  if (ios) addEventListener("load", function () { setTimeout(function () { show("아래 공유 버튼 → '홈 화면에 추가'를 누르면 앱처럼 쓸 수 있어요"); }, 1500); });
+})();
+</script>
 </head>
 <body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -322,6 +369,28 @@ tr.pen td { color: var(--bad); }
 .attach input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
 .lightbox { position: fixed; inset: 0; z-index: 40; background: rgba(15, 12, 30, .86); display: grid; place-items: center; padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); cursor: zoom-out; }
 .lightbox img { max-width: 100%; max-height: 100%; border-radius: 8px; }
+
+/* 모바일: 핸드폰에서 주로 쓰니까 손가락·키보드 기준으로 */
+html { -webkit-text-size-adjust: 100%; }
+body { -webkit-tap-highlight-color: transparent; overscroll-behavior-y: none; }
+body.locked { overflow: hidden; }   /* 시트가 열려 있으면 뒤 화면은 안 움직이게 */
+button, a, label, select, summary, [data-act] { touch-action: manipulation; }   /* 두 번 탭 확대 대기 없이 바로 반응 */
+.sheet-body, .log { overscroll-behavior: contain; }
+/* 키보드가 올라오면 보이는 높이(--vvh)만큼만 시트를 그려서 입력창이 가려지지 않게 */
+.overlay { bottom: auto; top: var(--vvt, 0px); height: var(--vvh, 100%); }
+@media (pointer: coarse) {
+  /* 아이폰은 글자가 16px보다 작은 입력칸을 누르면 화면을 확대해 버려서 16px로 */
+  input:not([type=range]):not([type=checkbox]):not([type=radio]), select, textarea { font-size: 16px; }
+  /* 손가락으로 누르기 쉬운 크기 (최소 44px) */
+  .icon-btn { min-width: 44px; min-height: 44px; }
+  .btn.sm { min-height: 40px; }
+  .tgl, .sig-opt, .radios label { min-height: 40px; }
+  .send, .attach { width: 44px; height: 44px; }
+}
+@media (display-mode: standalone) {
+  /* 홈 화면 앱으로 열었을 때: 당겨서 새로고침으로 화면이 튀지 않게 */
+  html, body { overscroll-behavior: none; }
+}
 
 /* 내 정보 */
 .sliders { display: flex; flex-direction: column; gap: 6px; }
@@ -1229,8 +1298,8 @@ function authView() {
     </div>
     ${isLogin ? `
     <form class="f" id="login-form" autocomplete="off">
-      <label class="fld"><span>아이디</span><input type="text" id="login-id" placeholder="${REAL ? "가입할 때 만든 아이디" : "예: user001"}" autocapitalize="off"></label>
-      <label class="fld"><span>비밀번호</span><input type="password" id="login-pw" placeholder="비밀번호"></label>
+      <label class="fld"><span>아이디</span><input type="text" id="login-id" autocomplete="username" autocorrect="off" spellcheck="false" placeholder="${REAL ? "가입할 때 만든 아이디" : "예: user001"}" autocapitalize="off"></label>
+      <label class="fld"><span>비밀번호</span><input type="password" id="login-pw" autocomplete="current-password" enterkeyhint="go" placeholder="비밀번호"></label>
       ${S.authError ? `<p class="err">${esc(S.authError)}</p>` : ""}
       <button class="btn" type="submit">로그인</button>
     </form>
@@ -1254,8 +1323,8 @@ function signupForm() {
       <div><div class="fld"><span>프로필 사진 <small>· 사진이 있어야 추천에 나와요</small></span></div>
       <label class="btn alt sm file-btn">사진 고르기<input type="file" id="su-photo" accept="image/*"></label></div></div>
     <div class="row2">
-      <label class="fld"><span>아이디</span><input type="text" id="su-id" placeholder="영문, 숫자 4자 이상" autocapitalize="off"></label>
-      <label class="fld"><span>비밀번호</span><input type="password" id="su-pw" placeholder="${S.fb ? 6 : 4}자 이상"></label>
+      <label class="fld"><span>아이디</span><input type="text" id="su-id" autocomplete="username" autocorrect="off" spellcheck="false" placeholder="영문, 숫자 4자 이상" autocapitalize="off"></label>
+      <label class="fld"><span>비밀번호</span><input type="password" id="su-pw" autocomplete="new-password" placeholder="${S.fb ? 6 : 4}자 이상"></label>
     </div>
     <label class="fld"><span>닉네임</span><input type="text" id="su-nick" maxlength="12" placeholder="다른 사람에게 보이는 이름"></label>
     <div class="fld"><span>성별</span><div class="radios">
@@ -1271,15 +1340,15 @@ function signupForm() {
     </div>
     <div class="row2">
       <label class="fld"><span>직업</span><input type="text" id="su-job" maxlength="16" placeholder="예: 대학생"></label>
-      <label class="fld"><span>키 (cm)</span><input type="number" id="su-height" min="140" max="210" value="170"></label>
+      <label class="fld"><span>키 (cm)</span><input type="number" inputmode="numeric" id="su-height" min="140" max="210" value="170"></label>
     </div>
     <label class="fld"><span>만남 목적</span><select id="su-purpose">${selectOpts("purpose", "serious")}</select></label>
     <div class="fld"><span>생활 패턴 <small>· 잘 맞는 사람을 찾는 데 쓰여요</small></span>
       <div class="row2">${LIFE.map(f => `<label class="fld"><span style="font-weight:400;font-size:12px">${FIELD_KO[f]}</span><select id="su-${f}">${selectReq(f)}</select></label>`).join("")}</div></div>
     <div class="fld"><span>원하는 상대 <small>· 나이를 비우면 내 나이 ±4살</small></span>
       <div class="row2">
-        <label class="fld"><span style="font-weight:400;font-size:12px">나이 (최소)</span><input type="number" id="su-amin" min="19" max="60" placeholder="자동"></label>
-        <label class="fld"><span style="font-weight:400;font-size:12px">나이 (최대)</span><input type="number" id="su-amax" min="19" max="60" placeholder="자동"></label>
+        <label class="fld"><span style="font-weight:400;font-size:12px">나이 (최소)</span><input type="number" inputmode="numeric" id="su-amin" min="19" max="60" placeholder="자동"></label>
+        <label class="fld"><span style="font-weight:400;font-size:12px">나이 (최대)</span><input type="number" inputmode="numeric" id="su-amax" min="19" max="60" placeholder="자동"></label>
         <label class="fld"><span style="font-weight:400;font-size:12px">최대 거리</span><select id="su-dist">${[5, 10, 15, 20, 30, 50].map(k => `<option value="${k}"${k === 15 ? " selected" : ""}>${k}km</option>`).join("")}</select></label>
         <label class="fld"><span style="font-weight:400;font-size:12px">거리 중요도</span><select id="su-dimp"><option value="1">멀어도 괜찮아요</option><option value="2" selected>가까우면 좋아요</option><option value="3">꼭 지켜야 해요</option></select></label>
       </div></div>
@@ -1808,7 +1877,7 @@ function homeView(me) {
   }
   for (const o of pendingAfters(me)) top += afterCard(me, o, false);
   for (const m of matchesOf(me.id)) if (afterState(me.id, m.id) === "both" && Date.now() - afterOf(me.id, m.id).at < 3 * 864e5) top += `<div class="after both"><b>애프터 성사! ${esc(w.byId[m.id].nickname)}님도 또 만나고 싶대요</b><button class="btn sm" style="align-self:flex-start" data-act="openchat" data-id="${m.id}">약속 잡으러 가기</button></div>`;
-  const searchBar = `<form class="search" id="search-form" role="search"><input type="search" id="q" placeholder="관심사로 찾기 · 예: 야구 맛집, 주말엔 산 타요" autocomplete="off" value="${esc(S.q)}" aria-label="관심사로 사람 찾기">${S.q ? `<button type="button" class="icon-btn" data-act="clearq" aria-label="검색 지우기">${ICON.close}</button>` : ""}</form>`;
+  const searchBar = `<form class="search" id="search-form" role="search"><input type="search" id="q" enterkeyhint="search" placeholder="관심사로 찾기 · 예: 야구 맛집, 주말엔 산 타요" autocomplete="off" value="${esc(S.q)}" aria-label="관심사로 사람 찾기">${S.q ? `<button type="button" class="icon-btn" data-act="clearq" aria-label="검색 지우기">${ICON.close}</button>` : ""}</form>`;
   if (S.q.trim()) return searchBar + searchView(me);
   const cards = shown.length ? shown.map(r => recCard(me, w.byId[r.id], r, dp.fresh && dp.fresh.id === r.id ? dp.fresh : null)).join("") : (recs.length ? "" : emptyRecs(0, rejected));
   const d = new Date(), dayLabel = `${d.getMonth() + 1}월 ${d.getDate()}일`;
@@ -2092,7 +2161,7 @@ function chatView(me) {
       <div class="log pad" id="chat-log">${hint ? `<div class="notice" style="font-size:13px">${hint}</div>` : ""}
         ${log || `<div class="empty">${EMPTY_ART}<b>${esc(o.nickname)}님과 매칭됐어요</b>공통 관심사로 먼저 말을 걸어보세요.</div>`}</div>
       ${ok ? riskAlert(o, key, hits) + aiChatPanel(me, o, key, hits) : ""}
-      ${ok ? `<form class="composer pad" id="chat-form"><label class="attach" title="사진 보내기">${ICON.clip}<input type="file" id="chat-photo" accept="image/*" aria-label="사진 보내기"></label><input type="text" id="chat-input" placeholder="메시지를 입력하세요" maxlength="500" autocomplete="off"><button class="btn line sm" type="button" data-act="ai-open" aria-pressed="${S.aiOpen}" title="AI 답장 추천·대화 주제·안전 점검">AI</button><button class="send" type="submit" aria-label="보내기">${ICON.send}</button></form>`
+      ${ok ? `<form class="composer pad" id="chat-form"><label class="attach" title="사진 보내기">${ICON.clip}<input type="file" id="chat-photo" accept="image/*" aria-label="사진 보내기"></label><input type="text" id="chat-input" enterkeyhint="send" placeholder="메시지를 입력하세요" maxlength="500" autocomplete="off"><button class="btn line sm" type="button" data-act="ai-open" aria-pressed="${S.aiOpen}" title="AI 답장 추천·대화 주제·안전 점검">AI</button><button class="send" type="submit" aria-label="보내기">${ICON.send}</button></form>`
         : `<div class="composer pad"><span class="muted" style="font-size:14px">${isBlocked(me.id, o.id) ? "차단한 사람과는 대화할 수 없어요" : "매칭된 사람과만 대화할 수 있어요"}</span></div>`}
     </div></div>`;
 }
@@ -2151,9 +2220,9 @@ function meView(me) {
       </div>
       <h3 style="font-size:18px;margin-top:6px">원하는 상대</h3>
       <div class="row2">
-        <label class="fld"><span>나이 (최소)</span><input type="number" id="me-amin" min="19" max="60" value="${pr.age_min}"></label>
-        <label class="fld"><span>나이 (최대)</span><input type="number" id="me-amax" min="19" max="60" value="${pr.age_max}"></label>
-        <label class="fld"><span>최대 거리 (km)</span><input type="number" id="me-dist" min="1" max="100" value="${pr.max_distance_km}"></label>
+        <label class="fld"><span>나이 (최소)</span><input type="number" inputmode="numeric" id="me-amin" min="19" max="60" value="${pr.age_min}"></label>
+        <label class="fld"><span>나이 (최대)</span><input type="number" inputmode="numeric" id="me-amax" min="19" max="60" value="${pr.age_max}"></label>
+        <label class="fld"><span>최대 거리 (km)</span><input type="number" inputmode="numeric" id="me-dist" min="1" max="100" value="${pr.max_distance_km}"></label>
         <label class="fld"><span>거리 중요도</span><select id="me-dimp">${[[1, "멀어도 괜찮아요"], [2, "가까우면 좋아요"], [3, "꼭 지켜야 해요"]].map(([v, l]) => `<option value="${v}"${pr.distance_importance === v ? " selected" : ""}>${l}</option>`).join("")}</select></label>
       </div>
       <div class="fld"><span>좋아하는 머리 <small>· 안 고르면 상관없음</small></span><div class="chips">${["short", "medium", "long"].map(v => tg("hair", v, KO[v], d.hair.includes(v))).join("")}</div></div>
@@ -2431,6 +2500,8 @@ function render() {
   if (nlog && (nearBottom || screen !== lastScreen)) nlog.scrollTop = nlog.scrollHeight;
   if (S.chat && authed) markRead(pk(S.uid, S.chat));
   lastScreen = screen;
+  document.body.classList.toggle("locked", anyOpen());
+  syncBack();
 }
 let toastTimer;
 function toast(t) { S.toast = t; render(); clearTimeout(toastTimer); toastTimer = setTimeout(() => { S.toast = null; render(); }, 2600); }
@@ -2802,10 +2873,51 @@ document.addEventListener("input", e => {
   const sum = E.KEYS.reduce((t, kk) => t + ws[kk], 0) || 1;
   for (const kk of E.KEYS) { const lab = document.querySelector(`[data-wv="${kk}"]`); if (lab) lab.textContent = weightLabel(ws[kk], sum); }
 });
-document.addEventListener("keydown", e => {
-  if (e.key === "Escape" && S.sim) { S.sim = null; render(); return; }
-  if (e.key === "Escape") { if (S.legal || S.report || S.menu || S.notifOpen) { S.legal = S.report = S.menu = null; S.notifOpen = false; render(); } else if (S.lightbox) { S.lightbox = null; render(); } else if (S.admin && !S.chat && !S.detail) { S.admin = false; render(); } else if (S.chat) { S.chat = null; render(); } else if (S.detail) { S.detail = null; render(); } }
+// 맨 위에 열린 것 하나 닫기 (Esc, 핸드폰 뒤로 가기 공통)
+function closeTop() {
+  if (S.sim) S.sim = null;
+  else if (S.legal || S.report || S.menu || S.notifOpen) { S.legal = S.report = S.menu = null; S.notifOpen = false; }
+  else if (S.lightbox) S.lightbox = null;
+  else if (S.admin && !S.chat && !S.detail) S.admin = false;
+  else if (S.chat) S.chat = null;
+  else if (S.detail) S.detail = null;
+  else return false;
+  render();
+  return true;
+}
+const anyOpen = () => !!(S.uid && (S.sim || S.legal || S.report || S.menu || S.notifOpen || S.lightbox || S.admin || S.chat || S.detail));
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeTop(); });
+
+// 안드로이드 뒤로 가기: 시트가 열려 있으면 앱을 나가지 않고 시트만 닫음
+// 시트가 열릴 때 방문 기록을 하나 쌓고, 뒤로 가기(popstate)가 오면 맨 위 시트를 닫음
+let backPushed = false, skipPop = false;
+function syncBack() {
+  try {
+    const open = anyOpen();
+    if (open && !backPushed) { history.pushState({ dulSheet: 1 }, ""); backPushed = true; }
+    else if (!open && backPushed) { backPushed = false; skipPop = true; history.back(); }   // X 버튼으로 닫았으면 쌓아 둔 기록도 지움
+  } catch (e) { /* 기록을 못 쓰는 곳(미리보기 등)에서는 그냥 둠 */ }
+}
+window.addEventListener("popstate", () => {
+  if (skipPop) { skipPop = false; return; }
+  backPushed = false;
+  closeTop();   // 아직 열린 시트가 남으면 render → syncBack이 기록을 다시 쌓음
 });
+
+// 키보드가 올라오면 실제로 보이는 높이를 CSS 변수로 (아이폰은 키보드가 화면을 덮어서)
+if (window.visualViewport) {
+  const vv = window.visualViewport;
+  const fit = () => {
+    const r = document.documentElement.style;
+    r.setProperty("--vvh", vv.height + "px");
+    r.setProperty("--vvt", vv.offsetTop + "px");
+    const log = document.getElementById("chat-log");
+    if (log && document.activeElement?.closest?.(".composer")) log.scrollTop = log.scrollHeight;   // 입력 중이면 마지막 메시지가 보이게
+  };
+  vv.addEventListener("resize", fit);
+  vv.addEventListener("scroll", fit);
+  fit();
+}
 
 // ---------------- 시작 ----------------
 function subscribe(db, fail) {
