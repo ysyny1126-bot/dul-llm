@@ -103,6 +103,7 @@ def _ollama(system, prompt, schema, max_tokens):
                      {"role": "user", "content": prompt}],
         "format": schema,  # Ollama도 JSON 스키마로 답 모양을 고정할 수 있음
         "stream": False,
+        "keep_alive": "2h",   # 시연 중에 모델이 내려가지 않게 (다시 올리면 첫 답이 10초 넘게 늦어짐)
         "options": {"temperature": 0.7, "num_predict": max_tokens},
     }
     for attempt in range(3):

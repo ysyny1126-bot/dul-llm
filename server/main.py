@@ -51,6 +51,10 @@ _hits: dict[str, deque] = defaultdict(deque)
 
 def guard(request: Request) -> None:
     who = request.client.host if request.client else "?"
+    # 공유 링크(Cloudflare 터널)로 들어오면 모두 이 컴퓨터(127.0.0.1)에서 온 것처럼 보여서,
+    # 터널이 붙여 주는 실제 접속 주소로 사람을 나눔 (이 컴퓨터에서 온 요청일 때만 믿음)
+    if who in ("127.0.0.1", "::1") and request.headers.get("cf-connecting-ip"):
+        who = request.headers["cf-connecting-ip"]
     if FIREBASE_PROJECT_ID:
         h = request.headers.get("authorization", "")
         if not h.startswith("Bearer "):
@@ -150,6 +154,16 @@ BASE_RULES = """너는 매칭 앱 '둘'의 AI 도우미야. 한국어 존댓말�
   상대가 대화에서 직접 말한 내용은 써도 돼. 상대를 알아 가는 재미를 남겨 둬."""
 
 
+def ask_filled(system: str, prompt: str, schema: dict, key: str) -> dict:
+    """작은 로컬 모델(Ollama)이 가끔 빈 목록을 돌려줘서, key 목록이 비면 두 번까지 다시 물어봄"""
+    out = llm.ask_json(system, prompt, schema)
+    for _ in range(2):
+        if out.get(key):
+            break
+        out = llm.ask_json(system, prompt + f"\n\n(중요: {key} 목록을 비우지 말고 꼭 채워줘.)", schema)
+    return out
+
+
 def person_text(p: Person, title: str) -> str:
     lines = [f"[{title}] {p.nickname} ({p.age or '?'}세, {p.region or '지역 비공개'}, {p.job or '직업 비공개'})"]
     if p.mbti:
@@ -192,7 +206,7 @@ def match_insight(b: MatchIn, request: Request):
 - common: 비슷한 점 2~4개, 한 문장씩.
 - differences: 서로 다른 점 1~3개. 단점처럼 말하지 말고 "서로 맞춰 가면 좋은 점"으로 부드럽게.
 - questions: 서로 알아 가는 데 도움이 되는 첫 질문 3개. 상대에게 바로 보낼 수 있는 자연스러운 문장으로."""
-    out = llm.ask_json(BASE_RULES, prompt, schema)
+    out = ask_filled(BASE_RULES, prompt, schema, "common")
     return {"summary": out["summary"], "common": out["common"][:4], "differences": out["differences"][:3],
             "questions": out["questions"][:3]}
 
@@ -228,7 +242,7 @@ def chat_coach(b: CoachIn, request: Request):
 - followups: 대화가 끊기거나 어색할 때 꺼낼 수 있는 후속 질문 2개. 상대 프로필의 관심사나 지난 대화에서 이어지는 것으로.
 - tip: 지금 대화에 대한 짧은 조언 한 문장 (예: 질문만 연달아 하기보다 내 얘기도 하나 덧붙이기).
 - 만남을 서두르거나, 연락처·사진·돈 얘기를 꺼내는 답장은 만들지 마."""
-    out = llm.ask_json(BASE_RULES, prompt, schema)
+    out = ask_filled(BASE_RULES, prompt, schema, "replies")
     return {"replies": out["replies"][:3], "followups": out["followups"][:2], "tip": out["tip"]}
 
 
@@ -247,7 +261,7 @@ def first_meet(b: FirstMeetIn, request: Request):
   공통 관심사가 있으면 그걸 먼저. 예) 둘 다 여행을 좋아하면 "지금까지 갔던 여행지 중 다시 가고 싶은 곳은 어디예요?"
 - flow: 어색함을 줄이는 자연스러운 대화 흐름 3~4단계 (예: 오늘 장소 이야기로 가볍게 → 공통 관심사 → 요즘 빠진 것 → 다음에 같이 해 볼 것).
 - avoid: 첫 만남에서 피하면 좋은 질문이나 주제 3개와 짧은 이유 (예: 연봉·재산, 전 연인, 결혼 시기 재촉)."""
-    out = llm.ask_json(BASE_RULES, prompt, schema)
+    out = ask_filled(BASE_RULES, prompt, schema, "topics")
     return {"topics": out["topics"][:4], "flow": out["flow"][:4], "avoid": out["avoid"][:3]}
 
 
@@ -282,7 +296,7 @@ def profile_bio(b: BioIn, request: Request):
 - 각 후보는 공백 포함 {BIO_MAX - 10}자 이내, 1~3문장, '~해요' 체. 세 후보는 분위기를 다르게 (담백 / 다정 / 위트).
 - point: 그 후보의 특징을 8자 안팎으로 (예: "담백한 일상형").
 - tip: 자기소개를 더 좋게 만드는 짧은 조언 한 문장."""
-    out = llm.ask_json(BASE_RULES, prompt, schema)
+    out = ask_filled(BASE_RULES, prompt, schema, "candidates")
     return {"candidates": [{"text": _fit(c["text"]), "point": c["point"]} for c in out["candidates"][:3]],
             "tip": out["tip"]}
 
