@@ -39,7 +39,9 @@ for city in ["부산", "대구", "광주", "제주"]:
     cand = [p for p in people if p["location"]["region"].startswith(city)]
     if cand:
         showcase.append(str(max(cand, key=lambda p: len(results.get(p["id"], {}).get("recommendations", [])))["id"]))
-data = {"profiles": profiles, "cfg": cfg, "real": REAL, "showcase": showcase}
+# 대화 데이터: 시연판 가상 회원 답장용 (AI 코치 예시는 서버만 쓰니 빼고)
+dlg = {k: v for k, v in json.load(open("dialogues.json", encoding="utf-8")).items() if k not in ("coach_examples", "_설명")}
+data = {"profiles": profiles, "cfg": cfg, "real": REAL, "showcase": showcase, "dlg": dlg}
 if not REAL:
     json.dump({"data": data, "py": results}, open("app_data.json", "w", encoding="utf-8"), ensure_ascii=False)
 

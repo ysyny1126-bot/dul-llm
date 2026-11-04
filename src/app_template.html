@@ -831,7 +831,7 @@ const S = {
   blocks: {}, reports: {}, mod: {}, verifs: {}, myVerif: null, isAdmin: false,
   menu: null, report: null, legal: null, notifOpen: false, admin: false, adminTab: "stats", planOpen: false, planMood: "auto", planPage: 0,
   afters: {}, sim: null,
-  celebrate: null, thinking: {}, typing: {}, prefill: null, menuEnd: false,
+  celebrate: null, thinking: {}, typing: {}, prefill: null, menuEnd: false, aiLive: null,
   hot: null, hotSel: 0, hotPage: 0,
   authError: "",
   ai: {}, aiOpen: false, aiTab: "reply", aiTone: "warm", riskSeen: {}, reportPreset: -1, reportDetail: "",
@@ -994,32 +994,76 @@ function botLikeBack(me, id) {
     } else toast(`${o.nickname}님은 아직 답이 없어요. 다른 분도 둘러보세요`);
   }, 1400 + unit(id + me) * 1400);
 }
+// 대화 데이터(src/dialogues.json)로 답장: 내 마지막 말의 의도(질문 종류·만남 제안·짧은 답…)와 관심사를 알아듣고,
+// 반응 → 답 → 되묻기 순서로. 이미 한 말은 되도록 다시 안 하고, 같은 대화면 늘 같은 답 (시연이 매번 같게)
+const DLG = BASE.dlg || null;
+const fillT = (t, v) => t.replace(/\{(\w+)\}/g, (_, k) => v[k] ?? "");
 function botReply(me, o, msgs) {
-  const mine = msgs.filter(m => m.from === me.id && m.text), n = msgs.filter(m => m.from === o.id && !m.sig).length;
-  const last = mine[mine.length - 1]?.text || "";
-  const common = me.interests.find(t => o.interests.includes(t)), fav = o.interests[0], myTag = me.interests[n % me.interests.length];
-  const pick = arr => arr[parseInt(hashStr(o.id + n + last), 36) % arr.length];
+  const D = DLG;
+  const mine = msgs.filter(m => m.from === me.id && m.text && !m.sig), theirs = msgs.filter(m => m.from === o.id && m.text && !m.sig);
+  const n = theirs.length, last = (mine[mine.length - 1]?.text || "").trim();
+  const job = o.job || "회사원", region = shortRegion(o.region);   // 받침에 맞춘 말: 공무원으로/디자이너로, 동래구예요/마포구예요
+  const v = { me: me.nickname, fav: o.interests[0], fav_yeyo: josa(o.interests[0], "이에요", "예요"), job, job_ro: josa(job, "으로", "로"), job_yeyo: josa(job, "이에요", "예요"),
+    region, region_yeyo: josa(region, "이에요", "예요"), mbti: o.mbti || "ENFP", time: o.chronotype === "morning" ? "주말 오전" : "평일 저녁" };
   const hp = /^\[핫플 제안\] (.+?) 어때요/.exec(last);
-  if (hp) return `${n ? "" : `안녕하세요 ${me.nickname}님! `}오 ${hp[1]} 좋아요! 저도 가보고 싶었어요 :) ${o.chronotype === "morning" ? "주말 오전" : "평일 저녁"} 어떠세요?`;
-  if (!n) return `안녕하세요 ${me.nickname}님! 반가워요 :) ${common ? `저도 ${josa(common, "을", "를")} 정말 좋아해요.` : `저는 요즘 ${fav}에 빠져 있어요.`} ${me.nickname}님은 주말에 주로 뭐 하세요?`;
-  if (/만나|커피|약속|언제|볼래|보실래/.test(last)) return `좋아요! 저는 ${o.chronotype === "morning" ? "주말 오전" : "평일 저녁"}이 편해요. ${o.region} 근처 어떠세요?`;
-  if (/주말|쉬는 날|뭐 하/.test(last)) return o.weekend === "out" ? `주말엔 거의 밖에 있어요. 요즘은 ${fav} 하러 자주 나가요!` : `주말엔 집에서 쉬는 편이에요. ${fav} 하면서 충전해요 ㅎㅎ`;
-  if (/무슨 일|직업|회사|일하/.test(last)) return `저는 ${o.job}로 일하고 있어요. ${me.nickname}님은요?`;
-  if (/어디 살|동네|사세요/.test(last)) return `${o.region}에 살아요! 가까우면 좋겠네요`;
-  if (/술|맥주|와인/.test(last)) return o.drinking === "none" ? "저는 술은 거의 안 마셔요. 대신 카페 가는 거 좋아해요!" : "가볍게 한잔하는 거 좋아해요 ㅎㅎ";
-  if (n >= 4) return "얘기하다 보니 더 궁금해지네요 ㅎㅎ 이번 주에 커피 한잔 어떠세요?";
-  return pick([`오 그렇군요! ${josa(myTag, "은", "는")} 언제부터 좋아하셨어요?`, `ㅎㅎ 공감돼요. ${o.bio || `저는 ${fav} 좋아해요.`}`, `와 재밌네요! ${myTag} 하면 어디가 제일 좋았어요?`]);
+  if (hp) return `${n ? "" : `안녕하세요 ${me.nickname}님! `}오 ${hp[1]} 좋아요! 저도 가보고 싶었어요 :) ${v.time} 어떠세요?`;
+  if (!D) return "ㅎㅎ 그렇군요! 더 얘기해 주세요";
+  const seed = parseInt(hashStr(o.id + "|" + n + "|" + last), 36);
+  const said = theirs.map(m => m.text).join("\n");
+  const pick = (arr, salt = 0) => { const pool = arr.filter(x => !said.includes(fillT(x, v).slice(0, 14))); const a = pool.length ? pool : arr; return a[(seed + salt) % a.length]; };
+  const F = (t, extra) => fillT(t, { ...v, ...extra });
+  const cat = (a, b) => a + (/[.!?~)ㅎㅋ]$/.test(a) ? " " : ". ") + b;   // 두 문장 잇기 (마침표 없으면 붙여 줌)
+  const askAbout = t => D.topic_questions[t] ? pick(D.topic_questions[t], 3) : `${josa(t, "은", "는")} 언제부터 좋아하셨어요?`;
+  // 아직 안 물어본 관심사 (내 관심사 중에서 → 상대 쪽 관심사)
+  const nextTopic = () => [...me.interests, ...o.interests].find(t => !(D.topic_questions[t] || []).some(q => said.includes(q.slice(0, 10)))) || me.interests[0];
+  if (!n) {   // 첫 답장: 같이 좋아하는 관심사로 인사 + 질문
+    const common = me.interests.find(t => o.interests.includes(t));
+    return common ? F(pick(D.openers.common), { tag: common, question: askAbout(common) }) : F(pick(D.openers.none));
+  }
+  const isQ = /\?|나요|까요|세요|어때|뭐|언제|어디|무슨|어떤/.test(last);
+  // 질문 종류 의도(주말·직업·사는 곳…)는 내 말이 질문일 때만 ("주말에 산책해요"는 질문이 아니라 산책 얘기)
+  const intent = D.intents.find(it => (!it.question || isQ) && it.patterns.some(p => new RegExp(p, "i").test(last)));
+  const tags = parseQuery(last).tags;
+  const tag = tags.find(t => o.interests.includes(t)) || tags[0];
+  const react = t => F(pick(D.reactions[o.interests.includes(t) ? "same" : "new"]), { tag: t });
+  const proposed = /커피 한잔|만나 ?볼래|만나 ?봬요/.test(said);
+  if (intent) switch (intent.id) {
+    case "meet": case "time": return F(pick(intent.replies));
+    case "weekend": return cat(F(pick(D.self_talk[o.weekend === "out" ? "out" : "home"])), `${me.nickname}님은 주말에 뭐 하세요?`);
+    case "drink": return F(pick(intent[o.drinking === "none" ? "replies_none" : o.drinking === "often" ? "replies_often" : "replies_some"]));
+    case "laugh": case "short": return `ㅎㅎ 그나저나 ${askAbout(nextTopic())}`;
+    default: if (intent.replies) { const r = F(pick(intent.replies)); return tag && !/bye|thanks|tired/.test(intent.id) && !isQ ? cat(r, askAbout(tag)) : r; }
+  }
+  if (tag) return cat(react(tag), askAbout(tag));   // 관심사 얘기: 반응 + 그 얘기로 질문
+  if (isQ) return cat(F(pick(D.self_talk[o.weekend === "out" ? "out" : "home"])), `${me.nickname}님은요?`);
+  if (n >= 5 && !proposed) return "얘기하다 보니 더 궁금해지네요 ㅎㅎ 이번 주에 커피 한잔 어떠세요?";
+  const plain = D.reactions.plain.filter(r => !last.includes(r.replace(/[!.?ㅎ ]+$/, "")));   // 내 말을 그대로 따라 하지 않게
+  return cat(F(pick(plain.length ? plain : D.reactions.plain)), askAbout(nextTopic()));
 }
-function botAnswer(me, id) {
+// 가상 회원 답장: AI 서버가 켜져 있으면 AI가 그 회원(프로필대로)이 되어 답하고, 없거나 늦으면 대화 데이터로 답장
+async function botAnswer(me, id) {
   if (!isBot(id) || S.typing[id]) return;
   S.typing[id] = true;
   setTimeout(() => { if (S.chat === id) render(); }, 450);
+  const t0 = Date.now(), key = pk(me, id);
+  let text = null;
+  if (S.aiLive !== false) {
+    try {
+      const w = world(), o = w.byId[id], meP = w.byId[me];
+      const msgs = (S.chats[key]?.messages || []).filter(m => m.text && !m.sig).slice(-20);
+      const r = await Promise.race([
+        aiFetch("persona-reply", { persona: aiPerson(o), other: aiPerson(meP, o), messages: msgs.map(m => ({ who: m.from === id ? "me" : "them", text: m.text.slice(0, 500) })) }),
+        new Promise((_, no) => setTimeout(() => no(new Error("timeout")), 45000)),
+      ]);
+      text = String(r.reply || "").trim() || null; S.aiLive = true;
+    } catch (e) { if (!S.aiLive) S.aiLive = false; }   // 처음부터 안 되면(깃허브 페이지 등) 이번엔 계속 데이터 답장
+  }
   setTimeout(() => {
     delete S.typing[id];
-    const w = world(), key = pk(me, id);
+    const w = world();
     if (S.uid !== me || !isMatched(me, id)) return render();
-    sendMsg(key, id, botReply(w.byId[me], w.byId[id], S.chats[key]?.messages || []));
-  }, 1600 + unit(id + Date.now()) * 1200);
+    sendMsg(key, id, text || botReply(w.byId[me], w.byId[id], S.chats[key]?.messages || []));
+  }, Math.max(0, 1600 + unit(id + t0) * 1200 - (Date.now() - t0)));
 }
 
 // ---------------- 매칭 성사 ----------------
@@ -2391,7 +2435,7 @@ function chatView(me) {
     lastFrom = m.from;
   }
   const base = BASE.profiles.find(p => p.id === o.id);
-  const hint = base && !REAL ? `${esc(o.nickname)}님은 가상 회원이라 시연용으로 자동 답장해요. 직접 답해보려면 로그아웃한 뒤 <span class="num">${base.login_id}</span> / <span class="num">1234</span>로 로그인하세요.` : "";
+  const hint = base && !REAL ? `${esc(o.nickname)}님은 가상 회원이라 시연용으로 자동 답장해요 (AI 서버가 켜져 있으면 AI가 이 회원이 되어 답해요). 직접 답해보려면 로그아웃한 뒤 <span class="num">${base.login_id}</span> / <span class="num">1234</span>로 로그인하세요.` : "";
   const notes = [[o, S.likes[`${o.id}_${me.id}`]], [me, S.likes[`${me.id}_${o.id}`]]].filter(([, l]) => l?.note)
     .map(([p, l]) => `<div class="msg-sys note">♥ ${p.id === me.id ? "내가" : esc(p.nickname) + "님이"} 좋아요와 함께 보낸 한마디 · “${esc(l.note)}”</div>`).join("");
   if (S.typing[o.id]) log += `<div class="msg-row">${lastFrom === o.id ? `<span class="spacer"></span>` : photo(o, "av mini")}<div class="msg them typing" aria-label="입력 중"><i></i><i></i><i></i></div></div>`;
