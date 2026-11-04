@@ -6,6 +6,9 @@ set -e
 ROOT=$(git rev-parse --show-toplevel); cd "$ROOT"
 MSG=$(git log -1 --format='%h %s')
 git push -q origin HEAD:main
+# 바탕화면 원래 폴더(시연 시작 .command가 쓰는 곳)도 같은 버전으로
+SHA=$(git rev-parse HEAD); MAIN=$(git worktree list --porcelain | awk '/^worktree /{print substr($0,10); exit}')
+if [ "$MAIN" != "$ROOT" ] && [ "$(git -C "$MAIN" rev-parse --abbrev-ref HEAD)" = main ]; then git -C "$MAIN" merge -q --ff-only "$SHA" && echo "원래 폴더: 최신으로 맞췄어요"; fi
 TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
 for REPO in ysyny1126-bot/dul-llm ysyny1126-bot/dul; do
   DIR="$TMP/${REPO#*/}"

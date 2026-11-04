@@ -101,6 +101,8 @@ dul/
 ├── public/index.html      배포되는 앱, 실제 회원 전용 (src에서 만들어짐)
 ├── public/demo.html       시연판 (가상 회원 500명)
 ├── public/manual.html     앱 매뉴얼 (화면 6장, 아이폰 틀 안에 실제 앱을 띄워 설명)
+├── 발표 정리.md          발표용 요약 (시연 순서, 기능, 로직, 예상 질문)
+├── publish.sh           GitHub main + 두 사이트(dul-llm, dul) 배포 한 번에
 ├── public/sw.js, *.webmanifest, icons/   홈 화면 앱(PWA) 파일 (src에서 만들어짐)
 ├── firebase.json          Firebase Hosting 설정
 ├── firestore.rules        Firestore 보안 규칙
