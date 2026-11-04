@@ -121,6 +121,10 @@ open(out_dir + "/public/demo.html", "w", encoding="utf-8").write(demo_head + dem
 open(out_dir + "/public/.nojekyll", "w").write("")
 # 앱 매뉴얼: 아이폰 틀 안에 시연판을 띄워 화면별로 설명 (원본은 src/manual.html)
 shutil.copy("manual.html", out_dir + "/public/manual.html")
+# 홍보 영상 (만들기: src/promo/record.py, 화면은 src/promo/promo.html)
+import os
+if os.path.exists("promo/dul_promo.mp4"):
+    shutil.copy("promo/dul_promo.mp4", out_dir + "/public/promo.mp4")
 
 # 홈 화면 앱(PWA) 파일: 설치 정보 2개(실제 서비스, 시연판), 아이콘, 서비스워커
 import json, time

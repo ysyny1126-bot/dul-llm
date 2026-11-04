@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>둘 홍보 영상</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root { --ink: #111216; --heart: #FF2D55; }
+* { box-sizing: border-box; margin: 0; }
+html, body { width: 1920px; height: 1080px; overflow: hidden; background: #F2F2F7; font-family: "Noto Sans KR", -apple-system, sans-serif; color: var(--ink); }
+.bg { position: absolute; inset: 0; background: radial-gradient(900px 700px at 78% 30%, #FFD9E4 0%, transparent 60%), radial-gradient(800px 700px at 15% 90%, #DCE4FF 0%, transparent 60%), #F5F4F8; }
+.phone { position: absolute; left: 1080px; top: 50%; width: 462px; height: 960px; transform: translateY(-50%); border-radius: 70px; background: #111; padding: 14px; box-shadow: 0 50px 120px rgba(30, 20, 50, .28), inset 0 0 0 2px #333; }
+.screen { position: relative; width: 434px; height: 932px; border-radius: 57px; overflow: hidden; background: #F2F2F7; }
+.screen iframe { position: absolute; left: 0; top: 0; width: 390px; height: 838px; border: 0; transform: scale(1.1128); transform-origin: 0 0; }
+.island { position: absolute; left: 50%; top: 12px; width: 120px; height: 34px; margin-left: -60px; border-radius: 20px; background: #000; z-index: 3; }
+.tap { position: absolute; width: 56px; height: 56px; margin: -28px 0 0 -28px; border-radius: 50%; background: rgba(255, 45, 85, .35); border: 3px solid rgba(255, 45, 85, .8); pointer-events: none; z-index: 4; opacity: 0; transform: scale(.4); transition: transform .35s, opacity .35s; }
+.tap.on { opacity: 1; transform: scale(1); }
+.cap { position: absolute; left: 150px; top: 50%; width: 820px; transform: translateY(-50%); }
+.cap .k { display: inline-flex; gap: 12px; align-items: center; font-size: 26px; font-weight: 700; color: var(--heart); letter-spacing: .02em; }
+.cap .k i { font-style: normal; display: inline-grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; background: var(--heart); color: #fff; font-size: 20px; }
+.cap h1 { font-size: 76px; font-weight: 900; line-height: 1.16; letter-spacing: -.03em; margin-top: 22px; }
+.cap p { font-size: 32px; line-height: 1.55; color: #55535C; margin-top: 26px; }
+.cap > * { transition: opacity .5s, transform .5s; }
+.cap.out > * { opacity: 0; transform: translateY(18px); }
+.cap.out h1 { transition-delay: .05s; }
+.over { position: absolute; inset: 0; z-index: 10; display: grid; place-items: center; text-align: center; background: #111216; color: #fff; transition: opacity .8s; }
+.over.hide { opacity: 0; pointer-events: none; }
+.over .logo { font: italic 900 190px/1 Georgia, serif; letter-spacing: -.04em; }
+.over .logo span { color: var(--heart); }
+.over h2 { font-size: 54px; font-weight: 700; margin-top: 18px; letter-spacing: -.02em; }
+.over p { font-size: 30px; color: #B9B7C2; margin-top: 22px; }
+.over .url { display: inline-block; margin-top: 40px; font-size: 34px; font-weight: 700; padding: 18px 40px; border-radius: 999px; background: #fff; color: #111216; }
+</style></head>
+<body>
+<div class="bg"></div>
+<div class="cap out" id="cap"><div class="k"><i id="cn">1</i><span id="ck"></span></div><h1 id="ct"></h1><p id="cs"></p></div>
+<div class="phone"><div class="screen"><div class="island"></div><iframe id="f" src="demo.html?manual"></iframe><div class="tap" id="tap"></div></div></div>
+<div class="over" id="over"><div><div class="logo">둘<span>.</span></div><h2>취향이 가까운 사람과, 더 좋은 날을</h2><p>궁합을 계산하는 소개팅 웹앱 · 동네친구 · 데이트 · 새로운 시작</p></div></div>
+<script>
+const f = document.getElementById("f"), $ = id => document.getElementById(id);
+const wait = ms => new Promise(r => setTimeout(r, ms));
+const W = () => f.contentWindow, D = () => f.contentDocument;
+const run = js => W().eval(js);
+const SCALE = 434 / 390;
+async function cap(n, k, t, s) {
+  $("cap").classList.add("out"); await wait(450);
+  $("cn").textContent = n; $("ck").textContent = k; $("ct").innerHTML = t; $("cs").innerHTML = s;
+  $("cap").classList.remove("out");
+}
+async function tap(sel, i = 0) {
+  const el = typeof sel === "string" ? D().querySelectorAll(sel)[i] : sel;
+  if (!el) { console.log("no el", sel); return; }
+  el.scrollIntoView({ block: "nearest", behavior: "smooth" }); await wait(500);
+  const r = el.getBoundingClientRect(), t = $("tap");
+  t.style.left = (r.left + r.width / 2) * SCALE + "px"; t.style.top = (r.top + r.height / 2) * SCALE + "px";
+  t.classList.add("on"); await wait(380); el.click(); await wait(220); t.classList.remove("on"); await wait(300);
+}
+async function scroll(y, el) { (el || W()).scrollTo({ top: y, behavior: "smooth" }); await wait(1100); }
+async function type(text) {
+  const inp = D().getElementById("chat-input"); inp.focus();
+  for (const ch of text) { inp.value += ch; await wait(70); }
+  await wait(300);
+}
+async function show() {
+  await new Promise(r => f.complete || f.contentWindow.S ? r() : f.addEventListener("load", r));
+  await wait(800);
+  run(`(function(){var mem={};ls.get=function(k,d){return k in mem?mem[k]:d};ls.set=function(k,v){mem[k]=v};
+    document.documentElement.dataset.theme="light";S.theme="light";S.dev=false;S.intro=false;S.notifOpen=false;S.uid=null;S.authTab="login";render();})();`);
+  await wait(2600);
+  $("over").classList.add("hide"); await wait(600);
+
+  // 1. 로그인
+  await cap(1, "시작", "누르면 바로 입장", "가상 회원 10명 · 프로필은<br>외모 정보로 그린 일러스트");
+  await wait(1200);
+  await scroll(D().documentElement.scrollHeight);
+  await wait(1400);
+  await tap(".demo", 0); await wait(600);
+
+  // 2. 추천
+  await cap(2, "오늘의 추천", "궁합 점수로<br>하루 3명만", "관심사 · 가치관 · 생활 습관을<br>항목마다 비교해서 100점 만점으로");
+  await wait(1800);
+  await scroll(560); await wait(1600);
+
+  // 3. 상세: 임베딩
+  await cap(3, "취향 임베딩", "단어가 달라도<br>취향이 비슷하면", "관심사를 8개 축(활동성·야외·집콕…)의 좌표로 바꿔<br>취향 방향이 가까운지 계산해요");
+  await tap(".pcard", 0); await wait(1500);
+  const sb = D().querySelector(".sheet-body, .detail, .sheet");
+  if (sb) { await scroll(420, sb); await wait(1200); await scroll(900, sb); }
+  await wait(1200);
+  run(`S.detail=null;render();`); await scroll(0); await wait(400);
+
+  // 4. 만약에
+  await cap(4, "만약에?", "비중을 바꾸면<br>순위가 바로 바뀌어요", "관심사를 더 보면, 거리를 덜 보면…<br>추천 순위를 미리 확인");
+  await tap(".sim-entry"); await wait(1200);
+  await tap(".sheet .tgl", 1); await wait(1500);
+  await tap(".sheet .tgl", 3); await wait(1600);
+  run(`S.sim=null;render();`); await wait(300);
+
+  // 5. 자동 매칭
+  await cap(5, "자동 매칭", "서로가 서로의 1순위면<br>바로 연결", "최종 궁합 = √(내가 본 점수 × 상대가 본 점수)<br>한쪽만 좋아하는 조합은 낮게");
+  run(`var O=(matchesOf(S.uid)[0]||{}).id;S.celebrate={id:O,via:"auto",fresh:true};render();`);
+  await wait(4200);
+
+  // 6. 핫플
+  await cap(6, "취향 핫플", "첫 만남 장소까지<br>추천해요", "두 사람의 위치와 취향으로 지도에 핫플 추천<br>네이버 · 카카오맵으로 바로 연결");
+  run(`var O=(matchesOf(S.uid)[0]||{}).id;S.celebrate=null;S.tab="chat";S.chat=O;S.hot=O;S.hotSel=0;S.hotPage=0;render();`);
+  await wait(3000);
+  const hs = D().querySelectorAll(".hot-card");
+  if (hs[1]) await tap(hs[1]);
+  await wait(1800);
+
+  // 7. 대화 + AI
+  await cap(7, "대화 + AI", "AI가 대화를<br>이어줘요", "답장 추천 · 대화 주제 · 데이트 코스 · 안전 점검<br>AI 7가지 기능");
+  run(`S.hot=null;render();`); await wait(900);
+  await type("안녕하세요! 카페 좋아하신다고 해서 반가웠어요 ☕");
+  await tap(".composer .send"); await wait(2600);
+  await tap("[data-act='ai-open']"); await wait(3200);
+  run(`S.aiOpen=false;render();`);
+
+  // 8. 내 정보 + 다크 모드
+  await cap(8, "내 정보", "등급은 외모가 아니라<br>프로필 관리 점수", "비슷한 등급끼리 추천 · 다크 · 라이트 모드");
+  run(`S.chat=null;S.tab="me";render();window.scrollTo(0,0);`); await wait(2200);
+  await scroll(500); await wait(900);
+  run(`S.theme="dark";document.documentElement.dataset.theme="dark";applyTheme&&applyTheme();render();`); await wait(1200);
+  run(`S.tab="home";render();window.scrollTo(0,0);`); await wait(2200);
+
+  // 끝
+  $("cap").classList.add("out");
+  $("over").innerHTML = `<div><div class="logo">둘<span>.</span></div><h2>임베딩으로 취향을 읽고, 서로 맞는 사람을 이어줘요</h2><div class="url">ysyny1126-bot.github.io/dul</div></div>`;
+  $("over").classList.remove("hide");
+  await wait(4200);
+  window.DONE = true;
+}
+show().catch(e => { console.log("ERR " + e.stack); window.DONE = true; });
+</script>
+</body></html>

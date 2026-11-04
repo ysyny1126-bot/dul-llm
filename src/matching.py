@@ -138,7 +138,7 @@ def load(path="profiles.json"):
     people = json.load(open(path, encoding="utf-8"))
     for p in people:
         s = SUPPLEMENT.get(p["id"])
-        if s:   # 처음 20명은 보충 데이터로 외모·최애 등을 채움
+        if s and "appearance" not in p:   # 처음 20명은 보충 데이터로 외모·최애 등을 채움
             hair, eyelid, glasses, style = s["app"]
             p["appearance"] = {"hair": hair, "eyelid": eyelid, "glasses": glasses, "style": style}
             p["preference"]["appearance"] = s["want"]

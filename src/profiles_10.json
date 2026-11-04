@@ -1,0 +1,665 @@
+[
+ {
+  "id": 1,
+  "nickname": "산책러버",
+  "photos": [
+   "avatar"
+  ],
+  "gender": "M",
+  "birth_date": "1999-05-12",
+  "location": {
+   "region": "서울 강서구",
+   "lat": 37.5509,
+   "lng": 126.8495
+  },
+  "job": "회사원",
+  "height": 178,
+  "bio": "저녁에 한강 걷는 거 좋아해요.",
+  "interests": [
+   "산책",
+   "카페",
+   "영화"
+  ],
+  "mbti": "ENFP",
+  "smoking": "no",
+  "drinking": "sometimes",
+  "religion": "none",
+  "chronotype": "night",
+  "contact_style": "frequent",
+  "weekend": "out",
+  "pet": "likes",
+  "purpose": "serious",
+  "marriage_view": "positive",
+  "spending": "balanced",
+  "preference": {
+   "gender": [
+    "F"
+   ],
+   "age_min": 22,
+   "age_max": 32,
+   "max_distance_km": 30,
+   "conditions": {
+    "smoking": {
+     "value": "no",
+     "importance": 3
+    }
+   },
+   "appearance": {
+    "hair": [
+     "medium",
+     "long"
+    ],
+    "eyelid": "any"
+   },
+   "distance_importance": 3
+  },
+  "appearance": {
+   "hair": "short",
+   "eyelid": "single",
+   "glasses": false,
+   "style": "street"
+  },
+  "favorite_tag": "산책",
+  "interest_level": {
+   "산책": 3,
+   "카페": 2,
+   "영화": 2
+  },
+  "searchable": true
+ },
+ {
+  "id": 2,
+  "nickname": "기타치는곰",
+  "photos": [
+   "avatar"
+  ],
+  "gender": "M",
+  "birth_date": "2001-02-03",
+  "location": {
+   "region": "서울 마포구",
+   "lat": 37.5663,
+   "lng": 126.9019
+  },
+  "job": "대학생",
+  "height": 175,
+  "bio": "홍대 버스킹 구경 자주 가요.",
+  "interests": [
+   "기타",
+   "음악",
+   "공연"
+  ],
+  "mbti": "INFP",
+  "smoking": "no",
+  "drinking": "sometimes",
+  "religion": "none",
+  "chronotype": "night",
+  "contact_style": "occasional",
+  "weekend": "home",
+  "pet": "likes",
+  "purpose": "casual",
+  "marriage_view": "neutral",
+  "spending": "saver",
+  "preference": {
+   "gender": [
+    "F"
+   ],
+   "age_min": 20,
+   "age_max": 30,
+   "max_distance_km": 30,
+   "conditions": {
+    "smoking": {
+     "value": "no",
+     "importance": 2
+    }
+   },
+   "appearance": {
+    "hair": [
+     "long"
+    ],
+    "style": [
+     "casual",
+     "street"
+    ]
+   },
+   "distance_importance": 2
+  },
+  "appearance": {
+   "hair": "short",
+   "eyelid": "single",
+   "glasses": true,
+   "style": "casual"
+  },
+  "favorite_tag": "기타",
+  "interest_level": {
+   "기타": 3,
+   "음악": 2,
+   "공연": 2
+  },
+  "searchable": true
+ },
+ {
+  "id": 3,
+  "nickname": "야구덕후",
+  "photos": [
+   "avatar"
+  ],
+  "gender": "M",
+  "birth_date": "1998-07-08",
+  "location": {
+   "region": "서울 송파구",
+   "lat": 37.5145,
+   "lng": 127.1059
+  },
+  "job": "은행원",
+  "height": 173,
+  "bio": "잠실 직관이 인생의 낙.",
+  "interests": [
+   "야구",
+   "맛집",
+   "여행"
+  ],
+  "mbti": "ESFP",
+  "smoking": "no",
+  "drinking": "often",
+  "religion": "none",
+  "chronotype": "night",
+  "contact_style": "frequent",
+  "weekend": "out",
+  "pet": "dislikes",
+  "purpose": "casual",
+  "marriage_view": "neutral",
+  "spending": "spender",
+  "preference": {
+   "gender": [
+    "F"
+   ],
+   "age_min": 22,
+   "age_max": 33,
+   "max_distance_km": 30,
+   "conditions": {
+    "drinking": {
+     "value": "often",
+     "importance": 2
+    }
+   },
+   "appearance": {
+    "eyelid": [
+     "double"
+    ]
+   },
+   "distance_importance": 2
+  },
+  "appearance": {
+   "hair": "short",
+   "eyelid": "single",
+   "glasses": false,
+   "style": "casual"
+  },
+  "favorite_tag": "야구",
+  "interest_level": {
+   "야구": 3,
+   "맛집": 2,
+   "여행": 2
+  },
+  "searchable": true
+ },
+ {
+  "id": 4,
+  "nickname": "게임하는개발자",
+  "photos": [
+   "avatar"
+  ],
+  "gender": "M",
+  "birth_date": "1997-12-25",
+  "location": {
+   "region": "서울 성동구",
+   "lat": 37.5634,
+   "lng": 127.0369
+  },
+  "job": "개발자",
+  "height": 180,
+  "bio": "같이 게임할 사람 환영.",
+  "interests": [
+   "게임",
+   "애니",
+   "코딩"
+  ],
+  "mbti": "INTP",
+  "smoking": "no",
+  "drinking": "sometimes",
+  "religion": "none",
+  "chronotype": "night",
+  "contact_style": "occasional",
+  "weekend": "home",
+  "pet": "dislikes",
+  "purpose": "casual",
+  "marriage_view": "negative",
+  "spending": "balanced",
+  "preference": {
+   "gender": [
+    "F"
+   ],
+   "age_min": 23,
+   "age_max": 33,
+   "max_distance_km": 30,
+   "conditions": {
+    "weekend": {
+     "value": "home",
+     "importance": 2
+    }
+   },
+   "appearance": {
+    "hair": [
+     "medium",
+     "long"
+    ]
+   },
+   "distance_importance": 3
+  },
+  "appearance": {
+   "hair": "short",
+   "eyelid": "single",
+   "glasses": true,
+   "style": "casual"
+  },
+  "favorite_tag": "게임",
+  "interest_level": {
+   "게임": 3,
+   "애니": 2,
+   "코딩": 2
+  },
+  "searchable": true
+ },
+ {
+  "id": 5,
+  "nickname": "카페투어",
+  "photos": [
+   "avatar"
+  ],
+  "gender": "F",
+  "birth_date": "2000-03-21",
+  "location": {
+   "region": "서울 영등포구",
+   "lat": 37.5264,
+   "lng": 126.8963
+  },
+  "job": "디자이너",
+  "height": 163,
+  "bio": "예쁜 카페 찾아다니는 게 취미.",
+  "interests": [
+   "카페",
+   "전시",
+   "사진"
+  ],
+  "mbti": "ENFJ",
+  "smoking": "no",
+  "drinking": "sometimes",
+  "religion": "none",
+  "chronotype": "night",
+  "contact_style": "frequent",
+  "weekend": "out",
+  "pet": "likes",
+  "purpose": "serious",
+  "marriage_view": "positive",
+  "spending": "balanced",
+  "preference": {
+   "gender": [
+    "M"
+   ],
+   "age_min": 21,
+   "age_max": 31,
+   "max_distance_km": 30,
+   "conditions": {
+    "smoking": {
+     "value": "no",
+     "importance": 3
+    }
+   },
+   "appearance": {
+    "hair": [
+     "short"
+    ],
+    "style": [
+     "casual",
+     "dandy"
+    ]
+   },
+   "distance_importance": 3
+  },
+  "appearance": {
+   "hair": "long",
+   "eyelid": "single",
+   "glasses": false,
+   "style": "casual"
+  },
+  "favorite_tag": "카페",
+  "interest_level": {
+   "카페": 3,
+   "전시": 2,
+   "사진": 2
+  },
+  "searchable": true
+ },
+ {
+  "id": 6,
+  "nickname": "맥주한잔",
+  "photos": [
+   "avatar"
+  ],
+  "gender": "F",
+  "birth_date": "1996-05-27",
+  "location": {
+   "region": "서울 마포구",
+   "lat": 37.555,
+   "lng": 126.923
+  },
+  "job": "PD",
+  "height": 168,
+  "bio": "퇴근 후 수제맥주 한 잔이 행복.",
+  "interests": [
+   "맥주",
+   "공연",
+   "여행"
+  ],
+  "mbti": "ESTP",
+  "smoking": "sometimes",
+  "drinking": "often",
+  "religion": "none",
+  "chronotype": "night",
+  "contact_style": "frequent",
+  "weekend": "out",
+  "pet": "dislikes",
+  "purpose": "casual",
+  "marriage_view": "negative",
+  "spending": "spender",
+  "preference": {
+   "gender": [
+    "M"
+   ],
+   "age_min": 25,
+   "age_max": 35,
+   "max_distance_km": 30,
+   "conditions": {
+    "drinking": {
+     "value": "often",
+     "importance": 2
+    }
+   },
+   "appearance": {
+    "style": [
+     "street",
+     "casual"
+    ]
+   },
+   "distance_importance": 2
+  },
+  "appearance": {
+   "hair": "medium",
+   "eyelid": "single",
+   "glasses": false,
+   "style": "casual"
+  },
+  "favorite_tag": "맥주",
+  "interest_level": {
+   "맥주": 3,
+   "공연": 2,
+   "여행": 2
+  },
+  "searchable": true
+ },
+ {
+  "id": 7,
+  "nickname": "책벌레",
+  "photos": [
+   "avatar"
+  ],
+  "gender": "F",
+  "birth_date": "2001-11-11",
+  "location": {
+   "region": "서울 서대문구",
+   "lat": 37.5791,
+   "lng": 126.9368
+  },
+  "job": "대학생",
+  "height": 158,
+  "bio": "독서모임 같이 할 친구 구해요.",
+  "interests": [
+   "독서",
+   "글쓰기",
+   "전시"
+  ],
+  "mbti": "INFJ",
+  "smoking": "no",
+  "drinking": "none",
+  "religion": "none",
+  "chronotype": "morning",
+  "contact_style": "occasional",
+  "weekend": "home",
+  "pet": "likes",
+  "purpose": "casual",
+  "marriage_view": "neutral",
+  "spending": "saver",
+  "preference": {
+   "gender": [
+    "M"
+   ],
+   "age_min": 19,
+   "age_max": 29,
+   "max_distance_km": 30,
+   "conditions": {
+    "smoking": {
+     "value": "no",
+     "importance": 3
+    }
+   },
+   "appearance": {
+    "glasses": [
+     true
+    ]
+   },
+   "distance_importance": 2
+  },
+  "appearance": {
+   "hair": "medium",
+   "eyelid": "single",
+   "glasses": false,
+   "style": "casual"
+  },
+  "favorite_tag": "독서",
+  "interest_level": {
+   "독서": 3,
+   "글쓰기": 2,
+   "전시": 2
+  },
+  "searchable": true
+ },
+ {
+  "id": 8,
+  "nickname": "등산좋아",
+  "photos": [
+   "avatar"
+  ],
+  "gender": "F",
+  "birth_date": "1995-02-14",
+  "location": {
+   "region": "서울 은평구",
+   "lat": 37.6027,
+   "lng": 126.9291
+  },
+  "job": "간호사",
+  "height": 162,
+  "bio": "북한산이 앞마당이에요.",
+  "interests": [
+   "등산",
+   "캠핑",
+   "사진"
+  ],
+  "mbti": "ISTJ",
+  "smoking": "no",
+  "drinking": "sometimes",
+  "religion": "buddhist",
+  "chronotype": "morning",
+  "contact_style": "occasional",
+  "weekend": "out",
+  "pet": "has",
+  "purpose": "serious",
+  "marriage_view": "positive",
+  "spending": "balanced",
+  "preference": {
+   "gender": [
+    "M"
+   ],
+   "age_min": 26,
+   "age_max": 36,
+   "max_distance_km": 35,
+   "conditions": {
+    "pet": {
+     "value": "likes",
+     "importance": 2
+    }
+   },
+   "appearance": {
+    "hair": [
+     "short"
+    ]
+   },
+   "distance_importance": 2
+  },
+  "appearance": {
+   "hair": "medium",
+   "eyelid": "single",
+   "glasses": false,
+   "style": "casual"
+  },
+  "favorite_tag": "등산",
+  "interest_level": {
+   "등산": 3,
+   "캠핑": 2,
+   "사진": 2
+  },
+  "searchable": true
+ },
+ {
+  "id": 9,
+  "nickname": "덕질중",
+  "photos": [
+   "avatar"
+  ],
+  "gender": "F",
+  "birth_date": "1999-12-01",
+  "location": {
+   "region": "서울 성동구",
+   "lat": 37.548,
+   "lng": 127.045
+  },
+  "job": "웹툰 작가",
+  "height": 159,
+  "bio": "집에서 그림 그리고 게임해요.",
+  "interests": [
+   "애니",
+   "게임",
+   "굿즈"
+  ],
+  "mbti": "INTP",
+  "smoking": "no",
+  "drinking": "none",
+  "religion": "none",
+  "chronotype": "night",
+  "contact_style": "occasional",
+  "weekend": "home",
+  "pet": "dislikes",
+  "purpose": "casual",
+  "marriage_view": "negative",
+  "spending": "balanced",
+  "preference": {
+   "gender": [
+    "M"
+   ],
+   "age_min": 21,
+   "age_max": 31,
+   "max_distance_km": 30,
+   "conditions": {
+    "weekend": {
+     "value": "home",
+     "importance": 2
+    }
+   },
+   "appearance": {},
+   "distance_importance": 3
+  },
+  "appearance": {
+   "hair": "medium",
+   "eyelid": "single",
+   "glasses": false,
+   "style": "casual"
+  },
+  "favorite_tag": "애니",
+  "interest_level": {
+   "애니": 3,
+   "게임": 2,
+   "굿즈": 2
+  },
+  "searchable": true
+ },
+ {
+  "id": 10,
+  "nickname": "아침러너",
+  "photos": [
+   "avatar"
+  ],
+  "gender": "F",
+  "birth_date": "2003-04-04",
+  "location": {
+   "region": "서울 동작구",
+   "lat": 37.5124,
+   "lng": 126.9393
+  },
+  "job": "대학생",
+  "height": 165,
+  "bio": "아침 러닝 후 카페가 루틴.",
+  "interests": [
+   "러닝",
+   "축구",
+   "카페"
+  ],
+  "mbti": "ENFP",
+  "smoking": "no",
+  "drinking": "sometimes",
+  "religion": "none",
+  "chronotype": "morning",
+  "contact_style": "frequent",
+  "weekend": "out",
+  "pet": "likes",
+  "purpose": "casual",
+  "marriage_view": "neutral",
+  "spending": "balanced",
+  "preference": {
+   "gender": [
+    "M"
+   ],
+   "age_min": 18,
+   "age_max": 28,
+   "max_distance_km": 30,
+   "conditions": {},
+   "appearance": {
+    "hair": [
+     "short"
+    ]
+   },
+   "distance_importance": 2
+  },
+  "appearance": {
+   "hair": "long",
+   "eyelid": "double",
+   "glasses": false,
+   "style": "casual"
+  },
+  "favorite_tag": "러닝",
+  "interest_level": {
+   "러닝": 3,
+   "축구": 2,
+   "카페": 2
+  },
+  "searchable": true
+ }
+]

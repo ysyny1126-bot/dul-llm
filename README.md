@@ -13,7 +13,7 @@
 - **좋아요·넘기기**: 서로 좋아요를 누르면 매칭. 프로필 상세에서 **좋아요와 함께 한마디**(60자)를 보낼 수 있어서 매칭 전에도 마음을 전할 수 있음
 - **페르소나 추천 카드**: 오늘의 추천을 A·B·C 카드로. 유형 이름(예: "아웃도어 탐험가형"), 한 줄 소개, 궁합 막대(관심사·생활 리듬·가치관 %), #태그, "이래서 추천했어요"
 - **매칭 성사 화면**: 서로 좋아요(또는 자동 매칭)가 되면 축하 화면. 공통점, 첫 인사 추천 3개(누르면 입력창에), 대화 시작 / 집중하기 / 계속 둘러보기
-- **전국 서비스**: 사는 곳은 17개 시·도 92개 시·군·구 중에서 (가입 화면에서 시·도별로 묶어서 고름, `src/regions.py` 한 곳에서 관리). 시연판 가상 회원 500명도 전국에 퍼져 있고, 수도권은 가까이·광역시는 중간·도 지역은 멀리까지 원하는 거리를 다르게. 등급으로 나눠 추천하는 건 주변에 회원이 40명 이상인 사람끼리만 (지방에서 추천이 비지 않게). 시연판 로그인 화면에 부산·대구·광주·제주 회원도
+- **전국 서비스**: 사는 곳은 17개 시·도 92개 시·군·구 중에서 (가입 화면에서 시·도별로 묶어서 고름, `src/regions.py` 한 곳에서 관리). 시연판 가상 회원은 서울 10명(남 4·여 6, 프로필 사진은 외모 정보로 그린 일러스트). 가입하면 수도권은 가까이·광역시는 중간·도 지역은 멀리까지 원하는 거리를 다르게. 등급으로 나눠 추천하는 건 주변에 회원이 40명 이상인 사람끼리만 (지방에서 추천이 비지 않게).
 - **상대 정보는 점수에만**: 직업·키·MBTI·생활 습관·가치관은 궁합 계산에만 쓰고 상대 프로필에 보여주지 않음 ("🔒 대화하면서 직접 알아가 보세요"). 추천 이유도 "술자리 취향이 잘 맞아요"처럼 맞는지만 말하고 값은 숨김. AI 서버 프롬프트도 같은 규칙. 보이는 건 사진·닉네임·나이·동네·거리·자기소개·관심사·등급
 - **프로필 등급**: 브론즈·실버·골드·플래티넘·다이아. 외모가 아니라 프로필 관리로만 매기는 100점 (사진 20, 사진 인증 20, 자기소개 길이 20, 관심사 15, 직업·키·MBTI 15, 최근 활동 10). **등급이 2단계 이상 차이 나면 서로 추천하지 않아서** 비슷한 등급끼리 만남 (회원 40명 이상일 때). 내 정보 맨 위에 등급 카드와 "자기소개를 60자 넘게 쓰면 올라가요" 같은 올리는 방법, 카드·상세·성사 화면에 등급 배지
 - **매칭 성사 화면**: 상대 사진을 크게(손가락을 따라 3D로 기울고 빛 반사), 궁합 점수가 0부터 올라가고 하트가 터짐, 나머지는 #카페 #둘다아침형 같은 작은 키워드. "대화 시작하기"를 누르면 첫 인사 추천이 입력창에 들어가 있음
@@ -84,7 +84,7 @@
 | | 실제 서비스 (배포판) | 시연판 |
 |---|---|---|
 | 파일 | `public/index.html` | `src/gyeol_app.html` (빌드해서 생성) |
-| 회원 | 가입한 실제 사람만 | 가상 회원 500명 (user001~user500 / 1234) |
+| 회원 | 가입한 실제 사람만 | 가상 회원 10명 (user001~user010 / 1234) |
 | 만들기 | `python3 build_deploy.py ..` | `python3 build_app.py` |
 
 배포판의 개인정보 보호 (Firestore 보안 규칙):
@@ -99,8 +99,9 @@
 ```
 dul/
 ├── public/index.html      배포되는 앱, 실제 회원 전용 (src에서 만들어짐)
-├── public/demo.html       시연판 (가상 회원 500명)
+├── public/demo.html       시연판 (가상 회원 10명)
 ├── public/manual.html     앱 매뉴얼 (화면 6장, 아이폰 틀 안에 실제 앱을 띄워 설명)
+├── public/promo.mp4       홍보 시연 영상 (1분 10초, 만들기: src/promo/record.py)
 ├── 발표 정리.md          발표용 요약 (시연 순서, 기능, 로직, 예상 질문)
 ├── publish.sh           GitHub main + 두 사이트(dul-llm, dul) 배포 한 번에
 ├── public/sw.js, *.webmanifest, icons/   홈 화면 앱(PWA) 파일 (src에서 만들어짐)
@@ -120,7 +121,8 @@ dul/
     ├── app_template.html  앱 화면
     ├── gen_profiles.py    가상 회원 480명 생성
     ├── profiles.json      처음 만든 가상 회원 20명
-    ├── profiles_500.json  가상 회원 500명
+    ├── profiles_10.json   가상 회원 10명 (시연판 기본)
+    ├── profiles_500.json  예전 가상 회원 500명 (python3 build_app.py profiles_500.json)
     ├── build_app.py       데이터 + 엔진 + 화면 → 앱 한 파일로
     ├── sw.js              서비스워커 원본 (오프라인·빠른 열기)
     ├── icons/             앱 아이콘 원본 icon.svg + PNG 180/192/512
@@ -133,7 +135,7 @@ dul/
 cd src
 python3 matching.py               # 처음 20명으로 매칭 결과 확인
 python3 gen_profiles.py           # 가상 회원 500명 다시 만들기 (결과는 항상 같음)
-python3 build_app.py              # 시연판 gyeol_app.html (가상 회원 500명)
+python3 build_app.py              # 시연판 gyeol_app.html (가상 회원 10명)
 python3 build_deploy.py ..        # 배포판 public/index.html (실제 회원 전용)
 ```
 
@@ -166,7 +168,7 @@ run_ai.bat                  # Mac/Linux: ./run_ai.sh  →  http://localhost:8000
 
 ## 배포
 
-**바로 열어보기 (GitHub Pages)**: 저장소 Settings → Pages → Branch `gh-pages` / `(root)` 저장 → `https://ysyny1126-bot.github.io/dul-llm/demo.html` (시연판). 앱 매뉴얼은 `https://ysyny1126-bot.github.io/dul-llm/manual.html`. 실제 서비스(`/dul/`)는 Firebase 설정을 넣어야 저장돼요.
+**바로 열어보기 (GitHub Pages)**: 저장소 Settings → Pages → Branch `gh-pages` / `(root)` 저장 → `https://ysyny1126-bot.github.io/dul-llm/demo.html` (시연판). 앱 매뉴얼은 `https://ysyny1126-bot.github.io/dul-llm/manual.html`, 홍보 영상은 `https://ysyny1126-bot.github.io/dul/promo.mp4`. 실제 서비스(`/dul/`)는 Firebase 설정을 넣어야 저장돼요.
 
 [docs/DEPLOY.md](docs/DEPLOY.md)를 보세요. 요약하면 Firebase 프로젝트를 만들고 이메일/비밀번호·익명 로그인과 Firestore를 켠 뒤, 이 폴더에서 `firebase use --add` → `./deploy.sh`(Windows는 `deploy.bat`).
 

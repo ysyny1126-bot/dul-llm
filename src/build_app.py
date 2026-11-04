@@ -1,6 +1,6 @@
 """앱 페이지 생성: 엔진 + 화면 + 데이터
 
-python3 build_app.py                    시연용 (가상 회원 500명 포함) → gyeol_app.html
+python3 build_app.py                    시연용 (가상 회원 10명 포함) → gyeol_app.html
 python3 build_app.py --real             실제 서비스용 (가상 회원 없음) → dul_real.html
 """
 import json
@@ -10,16 +10,23 @@ import sys
 from regions import REGIONS
 REAL = "--real" in sys.argv
 args = [a for a in sys.argv[1:] if not a.startswith("--")]
-SRC = args[0] if args else "profiles_500.json"
+SRC = args[0] if args else "profiles_10.json"
 people = [] if REAL else load(SRC)
 results = {} if REAL else run(people)[0]
+# 시연판 가상 회원 사진: photos/uNN.jpg (AI로 만든 인물 사진)를 페이지에 넣어 둠. 없으면 일러스트 아바타
+import base64, os
+def pic(p):
+    f = next((x for x in p.get("photos", []) if x.startswith("photos/")), None)
+    if f and os.path.exists(f):
+        return "data:image/jpeg;base64," + base64.b64encode(open(f, "rb").read()).decode()
+    return None
 profiles = []
 for p in people:
     profiles.append({
         "id": str(p["id"]), "login_id": f"user{p['id']:03d}", "nickname": p["nickname"], "gender": p["gender"],
         "birth_date": p["birth_date"], "age": age(p),
         "region": p["location"]["region"], "lat": p["location"]["lat"], "lng": p["location"]["lng"],
-        "has_photo": True, "searchable": p.get("searchable", p["id"] not in (3, 12, 18)), "job": p["job"], "height": p["height"], "bio": p["bio"],
+        "has_photo": True, "pic": pic(p), "avatar": not pic(p), "appearance": p["appearance"], "searchable": p.get("searchable", True), "job": p["job"], "height": p["height"], "bio": p["bio"],
         "interests": p["interests"], "favorite_tag": p["favorite_tag"], "interest_level": p["interest_level"], "mbti": p["mbti"],
         "smoking": p["smoking"], "drinking": p["drinking"], "religion": p["religion"],
         "chronotype": p["chronotype"], "contact_style": p["contact_style"], "weekend": p["weekend"],
