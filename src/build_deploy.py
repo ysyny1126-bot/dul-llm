@@ -68,8 +68,8 @@ head = f'''<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>둘 - 동네친구, 데이트, 새로운 시작</title>
 <meta name="description" content="둘 - 동네친구, 데이트, 새로운 시작. 취향이 가까운 사람을 찾아주는 매칭 앱">
-<meta name="theme-color" content="#F4F3FF" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#15172F" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -119,6 +119,8 @@ demo = re.sub(r'^<meta name="claude:viewport-fit-sides"[^>]*>\n', "", demo)
 demo_head = head.split("<!-- Firebase 연결")[0].replace("<title>둘 - 동네친구, 데이트, 새로운 시작</title>", "<title>둘 시연판 - 가상 회원 500명</title>").replace('href="manifest.webmanifest"', 'href="demo.webmanifest"') + "</head>\n<body>\n"
 open(out_dir + "/public/demo.html", "w", encoding="utf-8").write(demo_head + demo + "\n</body>\n</html>\n")
 open(out_dir + "/public/.nojekyll", "w").write("")
+# 앱 매뉴얼: 아이폰 틀 안에 시연판을 띄워 화면별로 설명 (원본은 src/manual.html)
+shutil.copy("manual.html", out_dir + "/public/manual.html")
 
 # 홈 화면 앱(PWA) 파일: 설치 정보 2개(실제 서비스, 시연판), 아이콘, 서비스워커
 import json, time
@@ -130,7 +132,7 @@ def manifest(name, short, start):
         "id": start, "name": name, "short_name": short,
         "description": "취향이 가까운 사람을 찾아주는 매칭 앱",
         "start_url": start, "scope": "./", "display": "standalone", "orientation": "portrait",
-        "lang": "ko", "background_color": "#F7F6FF", "theme_color": "#F4F3FF",
+        "lang": "ko", "background_color": "#F2F2F7", "theme_color": "#F2F2F7",
         "icons": [
             {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png"},
             {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png"},
